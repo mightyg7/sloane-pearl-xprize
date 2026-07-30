@@ -253,6 +253,40 @@ To close this properly before submission, re-run the platform's Shopify
 payout sync for this store so the fee columns populate for all 160 orders,
 then re-run `npm run fill-pnl`.
 
+## Unit economics (not a P&L line — the derivation behind the narrative)
+
+`narrative/business-narrative.md` and `video/script.md` quote a merchandise
+gross margin. It comes from `getSloanePearlUnitEconomics()` in
+`financials/scripts/cogs-and-fees-by-month.ts` (printed by `npm run cogs`),
+not from an ad-hoc query, so a judge can re-derive it.
+
+The cohort is deliberately narrow: orders that are **fully `paid`** (their
+revenue is retained cash) **and** have a **matched supplier invoice** (their
+cost is an invoiced amount, not an estimate). Any wider cohort pairs a known
+revenue with an unknown cost and produces a margin that flatters.
+
+| Metric | Value |
+| --- | --- |
+| Orders in cohort | 130 |
+| Revenue | 11,371.00 |
+| Supplier COGS | 4,030.97 |
+| Merchandise gross margin | **64.6%** |
+| AOV | 87.47 |
+| Supplier COGS per order | 31.01 |
+| Contribution per order, before ad spend | **56.46** |
+
+Against that, ad spend per revenue-bearing order is $15,721.49 / 154 =
+**$102.09**. So each order earns about $56 of merchandise contribution and
+costs about $102 to acquire — the loss is an ad-efficiency problem, not a
+product-margin one. That is the claim the narrative makes, and this is where
+it comes from.
+
+Note this cohort's **130 is not the same 130** as the coverage table's "130
+shipped orders matched" above. The sets are near-identical but not equal
+(this one excludes two refunded orders that were nonetheless invoiced, and
+includes one invoiced order not yet flagged shipped); they coincide in size
+by chance.
+
 ## The xlsx's own formula cells
 
 The blank official template ships every formula cell with a cached value of

@@ -39,9 +39,9 @@ in allocated AI tokens — for a **net loss of $6,117.44 at a blended ROAS of
 0.89x**. That is deliberate early-stage spend: 127 campaigns bought the 6.1x
 month-over-month curve above, and finding out which products and creatives
 work costs money before it earns any. The business is not yet profitable,
-and the real question for viability isn't product margin — the 130 orders
-with matched supplier invoices carry a 64.6% merchandise gross margin,
-about $56 of contribution per order before advertising — but whether ad
+and the real question for viability isn't product margin — the 130 fully
+paid orders with matched supplier invoices carry a 64.6% merchandise gross
+margin, about $56 of contribution per order before advertising — but whether ad
 efficiency improves as it scales, because each order currently costs around
 $102 in ad spend to win. The figure is a floor, not a ceiling: the CS
 contractor's pay isn't in it yet and Shopify has synced payment-processing

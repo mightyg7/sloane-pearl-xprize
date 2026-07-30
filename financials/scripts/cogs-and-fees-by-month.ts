@@ -242,6 +242,66 @@ async function merchandiseCogs(client: Client): Promise<MerchandiseCogsResult> {
   };
 }
 
+/**
+ * Merchandise unit economics on the cohort where both sides of the
+ * margin are real: orders that are fully `paid` (so their revenue is
+ * retained cash) AND have a matched supplier invoice (so their cost is
+ * an invoiced amount, not an estimate). Any other cohort mixes a known
+ * revenue with an unknown cost and produces a margin that flatters.
+ *
+ * This exists as a function rather than a one-off query because its
+ * outputs are quoted in `narrative/business-narrative.md` and
+ * `video/script.md`, and an unsourced margin figure in a financial
+ * submission is exactly the thing a judge should be able to re-derive.
+ */
+export type UnitEconomics = {
+  orders: number;
+  revenueUsd: number;
+  cogsUsd: number;
+  grossMarginPct: number;
+  aovUsd: number;
+  cogsPerOrderUsd: number;
+  contributionPerOrderUsd: number;
+};
+
+export async function getSloanePearlUnitEconomics(): Promise<UnitEconomics> {
+  return withDb(async (client) => {
+    const storeId = await storeIdFor(client, STORES.sloanePearl);
+    const res = await client.query<{
+      orders: string;
+      revenue: string;
+      cogs: string;
+    }>(
+      `WITH lines AS (
+         SELECT l."shopifyOrderId", SUM(l."lineTotalUsd")::float AS cogs
+         FROM "DiscordInvoiceLine" l
+         JOIN "DiscordInvoice" i ON i.id = l."invoiceId"
+         WHERE i."shopDomain" = $2 AND i."deletedAt" IS NULL
+         GROUP BY 1
+       )
+       SELECT COUNT(*)::text                     AS orders,
+              SUM(o."totalPriceUsd")::text       AS revenue,
+              SUM(lines.cogs)::text              AS cogs
+       FROM "Order" o
+       JOIN lines ON lines."shopifyOrderId" = o."shopifyOrderId"
+       WHERE o."storeId" = $1 AND o."financialStatus" = 'paid'`,
+      [storeId, STORES.sloanePearl]
+    );
+    const orders = Number(res.rows[0].orders);
+    const revenueUsd = Number(res.rows[0].revenue);
+    const cogsUsd = Number(res.rows[0].cogs);
+    return {
+      orders,
+      revenueUsd,
+      cogsUsd,
+      grossMarginPct: revenueUsd > 0 ? (1 - cogsUsd / revenueUsd) * 100 : 0,
+      aovUsd: orders > 0 ? revenueUsd / orders : 0,
+      cogsPerOrderUsd: orders > 0 ? cogsUsd / orders : 0,
+      contributionPerOrderUsd: orders > 0 ? (revenueUsd - cogsUsd) / orders : 0,
+    };
+  });
+}
+
 /*
  * Payment-processing fees. `Order.processingFeeShop` /
  * `conversionFeeShop` / `otherFeeShop` are aggregated by the platform
@@ -366,6 +426,20 @@ async function main() {
       console.warn(`    - ${m.orderNumber}: order ${m.orderMonth}, invoice ${m.invoiceMonth}`);
     }
   }
+
+  const ue = await getSloanePearlUnitEconomics();
+  console.log(
+    "\nMerchandise unit economics (fully-paid orders with a matched supplier invoice):"
+  );
+  console.log(
+    `  ${ue.orders} orders, revenue $${ue.revenueUsd.toFixed(2)}, ` +
+      `supplier COGS $${ue.cogsUsd.toFixed(2)}`
+  );
+  console.log(
+    `  gross margin ${ue.grossMarginPct.toFixed(1)}%, AOV $${ue.aovUsd.toFixed(2)}, ` +
+      `COGS/order $${ue.cogsPerOrderUsd.toFixed(2)}, ` +
+      `contribution/order $${ue.contributionPerOrderUsd.toFixed(2)} (before ad spend)`
+  );
 
   const fees = await getSloanePearlPaymentFees();
   console.log("\nSloane & Pearl payment-processing fees by month (USD):");
