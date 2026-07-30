@@ -135,7 +135,18 @@ Where the call lives (surface) is still an open operator decision — "decide
 later." Both candidates already discussed are explicitly validated by the rules'
 own examples of "operated by AI agents": *"an AI agent used for customer
 support"* (→ CS pipeline) or *"an AI tool used to create marketing assets"*
-(→ ad-creative pipeline). This will get its own small design/plan when the
+(→ ad-creative pipeline).
+
+**Technical lift is smaller than it might sound:** per DeepMind DevRel (Paige
+Bailey, technical demo session, 2026-07-30), the `google-genai` SDK is identical
+for both the plain Gemini Developer API and Vertex AI — switching is "one line,"
+adding a region ID and GCP project ID to the client config, not a different
+integration or a rewrite of call sites. Flash-tier Gemini calls are also cheap
+in practice (demoed: ~1.3¢ for a 3-minute video-analysis call, ~0.001¢ for a
+simple image call), so once wired in, the new "tokens" cost line in the P&L will
+be negligible, not a material swing in the disclosed estimate.
+
+This will get its own small design/plan when the
 operator is ready to decide the surface; it is out of scope for the work this
 repo's implementation plan covers.
 
