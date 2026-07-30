@@ -12,10 +12,17 @@ order data at that time.
   `financials/scripts/revenue-by-month.ts`'s underlying order data (e.g. most
   recent N paid orders, or a spread across the order history) — script to be
   extended with a `--sample` flag when needed, not built speculatively now.
-- **Aggregate summary (safe to commit):** as of [DATE], Sloane & Pearl has
-  [N] unique customers across [N] orders (see
-  `financials/scripts/customer-overlap-check.ts` output). Geographic/other
-  breakdowns can be added here in aggregate form without naming individuals.
+- **Aggregate summary (safe to commit):** as of **2026-07-30**, Sloane &
+  Pearl has **151 unique customer emails** across **160 orders** placed
+  (source: `financials/scripts/customer-overlap-check.ts`, which reports
+  exactly these two figures). Of those 160, **154 are revenue-bearing** on a
+  cash basis — six were refunded, three of them $1.00 operator test orders
+  placed the day before launch (see `financials/pnl-methodology.md`). The
+  metric is unique *emails*, not verified distinct people: one person
+  ordering from two addresses counts twice. Geographic/other breakdowns can
+  be added here in aggregate form without naming individuals. Re-run the
+  script near the deadline — order volume is still growing, so all four
+  numbers will have moved.
 - **Testimonials:** only already-public reviews/testimonials (e.g. from the
   storefront itself) get included by name — solicited or private feedback
   needs the customer's awareness that it's being shared, per the rule

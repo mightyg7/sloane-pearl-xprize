@@ -18,6 +18,13 @@ are different id spaces; a literal `WHERE storeId = (SELECT id FROM
 running it against the real database, catching what would otherwise be a
 false "zero products" finding).
 
+So that this stays a fixed problem rather than a warning someone has to
+remember, `financials/scripts/lib/db.ts` exports both resolvers by name:
+`storeIdFor()` for the `ShopifyStore` id space (orders, line items, refunds,
+`ProductCogs`) and `connectedStoreIdFor()` for the `ConnectedStore` one
+(products, catalog, store config). Pick the one named after the table you
+are querying and the gotcha cannot bite.
+
 ## Currently running (as of 2026-07-30)
 
 - **Product import & catalog enhancement** — 2,529 products have been

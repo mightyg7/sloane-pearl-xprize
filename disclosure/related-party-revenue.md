@@ -11,8 +11,13 @@ underlying business serves arms-length third-party customers."*
    store, NOVA Cape Town. Checked every Sloane & Pearl order's customer email
    and phone against every NOVA Cape Town order's customer email and phone.
    Result (as of 2026-07-30 from customer-overlap-check.ts output): 0 orders
-   overlap by email, 0 by phone, out of 159 Sloane & Pearl orders and
-   150 unique customers.
+   overlap by email, 0 by phone, out of 160 Sloane & Pearl orders and
+   151 unique customer emails. "Unique customer emails" is precisely what
+   the script measures — distinct normalized email addresses on the order
+   records — not verified distinct human beings. One person ordering twice
+   from two addresses would read as two; the same person reusing one address
+   reads as one. That distinction matters in a related-party disclosure
+   specifically, so the metric is named for what it counts.
 
 2. **Team/family/founder purchases.** Operator-confirmed (2026-07-30): no
    known purchases from friends, family, or team members. All traffic is
