@@ -1,0 +1,23 @@
+{
+  "name": "sloane-pearl-xprize",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Build with Gemini XPRIZE submission package for Sloane & Pearl",
+  "scripts": {
+    "revenue": "tsx financials/scripts/revenue-by-month.ts",
+    "overlap": "tsx financials/scripts/customer-overlap-check.ts",
+    "ad-spend": "tsx financials/scripts/ad-spend-by-month.ts",
+    "fill-pnl": "tsx financials/scripts/fill-pnl-template.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/pg": "^8.11.10",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "pg": "^8.13.1",
+    "exceljs": "^4.4.0"
+  }
+}
