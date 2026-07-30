@@ -106,7 +106,24 @@ sloane-pearl-xprize/
                                         Sloane & Pearl's operation, with evidence
                                         pointers (agent logs, API records)
   financials/
-    pnl-sloane-pearl.md              — filled P&L, cash-basis, by month
+    pnl-sloane-pearl.xlsx            — the FILLED official Devpost P&L template
+                                        (operator supplied a fresh copy:
+                                        "Build with Gemini XPRIZE - PL
+                                        Template.xlsx"). This is the real
+                                        submission artifact, not a markdown
+                                        approximation — the template's totals
+                                        are all SUM formulas, so filling it is
+                                        just writing numbers into known input
+                                        cells (Independent Sales / Related
+                                        Party Revenue / COGS Personnel,
+                                        Software Subscriptions, Tokens / SG&A
+                                        same three / Other Expenses, each by
+                                        month May-August)
+    pnl-methodology.md               — short doc explaining where each xlsx
+                                        cell's number comes from, linking to
+                                        the disclosure docs and scripts —
+                                        NOT a duplicate number table (avoids
+                                        two sources of truth)
     scripts/
       revenue-by-month.ts            — Shopify revenue for this store only
       ad-spend-by-month.ts           — Meta ad spend for this store's ad account
@@ -115,6 +132,10 @@ sloane-pearl-xprize/
       token-cost-allocation.md       — methodology for AI-spend allocation (not
                                         directly attributable per store — disclosed
                                         estimate, not fabricated precision)
+      fill-pnl-template.ts           — writes computed numbers into the
+                                        official xlsx template's input cells
+                                        using `exceljs` (preserves the
+                                        template's existing formulas/formatting)
   evidence/
     agent-logs/                      — exported examples: CS replies, ad launches,
                                         import runs, tied to this store
@@ -154,14 +175,28 @@ Two of the three P&L cost lines are cleanly attributable per store; one is not:
   total AI spend for the period and an explicit, stated allocation methodology
   (e.g. pro-rata by order share or by store-count), flagged as an estimate.
 
-The P&L follows the workshop-clarified structure exactly: Total Revenue (independent
-sales only, related-party reported separately) by month; COGS (Personnel / Software
-subscriptions / Tokens used, i.e. production costs); SG&A (Personnel / Software
-subscriptions / Tokens used, i.e. go-to-market costs); Other Expenses; cash-basis
-accounting. Any cost line traceable to pre-existing (pre-May-19) infrastructure gets
-called out per the rule: *"if any expenses correspond to the use of resources that
-existed prior to the hackathon, then you must explain whatever those resources
-might be."*
+**Confirmed against the actual official template** (operator supplied
+`Build with Gemini XPRIZE - PL Template.xlsx`, 2026-07-30), not just the
+workshop's verbal description: columns are Description | May | June | July |
+August | Full 90 Days; rows are Independent Sales, Related Party Revenue,
+TOTAL REVENUE (all under REVENUE), then COGS (Personnel / Software
+Subscriptions / Tokens), SG&A (Personnel / Software Subscriptions / Tokens),
+Other Expenses (under EXPENSES), then TOTAL EXPENSES and PROFIT (LOSS). Every
+total/subtotal cell is a `SUM` formula already built into the template —
+filling it out is only ever writing numbers into the raw input cells
+(Independent Sales/Related Party/each expense line, by month), never
+recomputing totals by hand. Cash-basis accounting is stated explicitly in the
+template's own legend, matching the workshop. Any cost line traceable to
+pre-existing (pre-May-19) infrastructure gets called out per the rule (also in
+the template's legend verbatim): *"if any expenses correspond to the use of
+resources that existed prior to the hackathon, then you must clearly outline
+and explain those expenses in your Devpost submission."*
+
+The template's own header warns: *"Download this form - do not make a copy in
+the cloud or else it could be shared with others."* Read as: don't casually
+duplicate the **blank** template into a shared location — a freshly
+downloaded copy stays local, and only the **filled** output (which is the
+actual submission artifact anyway) gets committed to this repo.
 
 **Personnel line needs a real answer, not a placeholder.** Official FAQ: if any
 pre-existing employee/contractor's time touched Sloane & Pearl (e.g. a CS VA
