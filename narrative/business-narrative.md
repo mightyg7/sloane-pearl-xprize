@@ -43,7 +43,7 @@ and the real question for viability isn't product margin — the 130 fully
 paid orders with matched supplier invoices carry a 64.6% merchandise gross
 margin, about $56 of contribution per order before advertising — but whether ad
 efficiency improves as it scales, because each order currently costs around
-$102 in ad spend to win. The figure is a floor, not a ceiling: the CS
+$102 in ad spend to win. That loss is a floor, not a ceiling: the CS
 contractor's pay isn't in it yet and Shopify has synced payment-processing
 fees for only 14 of 160 orders, so both push the loss wider. Full
 derivation, gaps included, is in `financials/pnl-methodology.md`.
