@@ -1,6 +1,10 @@
 import ExcelJS from "exceljs";
-import { getSloanePearlRevenueByMonth } from "./revenue-by-month.js";
+import { getSloanePearlRevenue } from "./revenue-by-month.js";
 import { getSloanePearlSpendByMonth } from "./lib/meta.js";
+import {
+  getSloanePearlMerchandiseCogs,
+  getSloanePearlPaymentFees,
+} from "./cogs-and-fees-by-month.js";
 
 const MONTH_COLUMNS: Record<string, string> = {
   "2026-05": "C",
@@ -8,6 +12,7 @@ const MONTH_COLUMNS: Record<string, string> = {
   "2026-07": "E",
   "2026-08": "F",
 };
+const COLUMNS = ["C", "D", "E", "F"] as const;
 
 // Sourced from disclosure/related-party-revenue.md — update together.
 const RELATED_PARTY_REVENUE_BY_MONTH: Record<string, number> = {};
@@ -16,6 +21,92 @@ function parseMonthlyJson(envVar: string): Record<string, number> {
   const raw = process.env[envVar];
   if (!raw) return {};
   return JSON.parse(raw) as Record<string, number>;
+}
+
+const round2 = (n: number) => Math.round(n * 100) / 100;
+
+/**
+ * Every numeric input cell this script writes, keyed by address.
+ * The formula-result computation below reads ONLY from here, so the
+ * cached values can never drift from what was actually written.
+ * A missing address means an empty cell, which Excel's SUM treats as 0.
+ */
+type Inputs = Record<string, number>;
+
+const at = (inputs: Inputs, addr: string) => inputs[addr] ?? 0;
+
+/**
+ * Replicates, in JS, the arithmetic the template's own formulas encode,
+ * so each formula cell can be written as `{formula, result}`.
+ *
+ * WHY: exceljs carries the template's cached formula results forward
+ * verbatim, and in the blank official template every one of them is
+ * `<v>0</v>`. `fullCalcOnLoad` makes Excel and Google Sheets recompute
+ * on open, but anything that reads the stored values instead of
+ * evaluating the formulas — macOS Quick Look, most xlsx-to-PDF
+ * converters, an automated parser a judge might run — would show
+ * TOTAL REVENUE, TOTAL EXPENSES and PROFIT (LOSS) as $0. Writing the
+ * real computed value alongside the formula fixes the file itself
+ * rather than relying on the reader to recalculate.
+ *
+ * Totals are computed from the ROUNDED per-month inputs (the values
+ * actually in the cells), so a recalculating reader lands on exactly
+ * the same number this script cached.
+ */
+function computeFormulaCells(inputs: Inputs): { addr: string; formula: string; result: number }[] {
+  const cells: { addr: string; formula: string; result: number }[] = [];
+
+  const rowTotal = (row: number) =>
+    round2(COLUMNS.reduce((sum, col) => sum + at(inputs, `${col}${row}`), 0));
+
+  // Row-total column G for every single-input row.
+  for (const row of [9, 10, 15, 16, 17, 19, 20, 21, 23]) {
+    cells.push({ addr: `G${row}`, formula: `SUM(C${row}:F${row})`, result: rowTotal(row) });
+  }
+
+  // Row 11 TOTAL REVENUE = Independent Sales + Related Party, per column.
+  const totalRevenue: Record<string, number> = {};
+  for (const col of COLUMNS) {
+    totalRevenue[col] = round2(at(inputs, `${col}9`) + at(inputs, `${col}10`));
+    cells.push({
+      addr: `${col}11`,
+      formula: `SUM(${col}9:${col}10)`,
+      result: totalRevenue[col],
+    });
+  }
+  const totalRevenueG = round2(rowTotal(9) + rowTotal(10));
+  cells.push({ addr: "G11", formula: "SUM(G9:G10)", result: totalRevenueG });
+
+  // Row 24 TOTAL EXPENSES = COGS (15,16,17) + SG&A (19,20,21) + Other (23).
+  const expenseRows = [15, 16, 17, 19, 20, 21, 23];
+  const totalExpenses: Record<string, number> = {};
+  for (const col of COLUMNS) {
+    totalExpenses[col] = round2(
+      expenseRows.reduce((sum, row) => sum + at(inputs, `${col}${row}`), 0)
+    );
+    cells.push({
+      addr: `${col}24`,
+      formula: expenseRows.map((row) => `${col}${row}`).join("+"),
+      result: totalExpenses[col],
+    });
+  }
+  const totalExpensesG = round2(expenseRows.reduce((sum, row) => sum + rowTotal(row), 0));
+  cells.push({
+    addr: "G24",
+    formula: expenseRows.map((row) => `G${row}`).join("+"),
+    result: totalExpensesG,
+  });
+
+  // Row 26 PROFIT (LOSS) = TOTAL REVENUE - TOTAL EXPENSES, per column.
+  let profitSum = 0;
+  for (const col of COLUMNS) {
+    const profit = round2(totalRevenue[col] - totalExpenses[col]);
+    profitSum += profit;
+    cells.push({ addr: `${col}26`, formula: `${col}11-${col}24`, result: profit });
+  }
+  cells.push({ addr: "G26", formula: "SUM(C26:F26)", result: round2(profitSum) });
+
+  return cells;
 }
 
 async function main() {
@@ -31,7 +122,7 @@ async function main() {
   // These come from the human-decided methodology docs, not a live query —
   // see financials/scripts/token-cost-allocation.md and
   // disclosure/labor-attestation.md. Pass as JSON env vars, e.g.:
-  //   COGS_TOKENS_JSON='{"2026-06":1.20,"2026-07":4.50}'
+  //   COGS_TOKENS_JSON='{"2026-06":37.65,"2026-07":150.61}'
   const cogsTokens = parseMonthlyJson("COGS_TOKENS_JSON");
   const sgaTokens = parseMonthlyJson("SGA_TOKENS_JSON");
   const cogsPersonnel = parseMonthlyJson("COGS_PERSONNEL_JSON");
@@ -59,49 +150,131 @@ async function main() {
     );
   }
 
-  const revenue = await getSloanePearlRevenueByMonth();
+  const inputs: Inputs = {};
+  const setInput = (addr: string, value: number) => {
+    const rounded = round2(value);
+    inputs[addr] = rounded;
+    sheet.getCell(addr).value = rounded;
+  };
+
+  const { byMonth: revenue, refundDiscrepancies } = await getSloanePearlRevenue();
   for (const { month, revenueUsd } of revenue) {
     const col = MONTH_COLUMNS[month];
     if (!col) continue; // outside the May-Aug window
-    sheet.getCell(`${col}9`).value = Number(revenueUsd.toFixed(2));
-    sheet.getCell(`${col}10`).value = RELATED_PARTY_REVENUE_BY_MONTH[month] ?? 0;
+    setInput(`${col}9`, revenueUsd);
+    setInput(`${col}10`, RELATED_PARTY_REVENUE_BY_MONTH[month] ?? 0);
   }
 
+  // Row 23 "Other Expenses" carries THREE components. The official
+  // template's COGS block only offers Personnel / Software / Tokens, so
+  // it has no home for merchandise cost of goods sold or for payment
+  // processing — and the legend's instruction for row 23 is exactly
+  // this case: "you must explain each expense line in your Devpost
+  // submission". That explanation lives in financials/pnl-methodology.md,
+  // which must be updated alongside any change here.
   const adSpend = await getSloanePearlSpendByMonth();
-  for (const { month, spendUsd } of adSpend) {
+  const cogs = await getSloanePearlMerchandiseCogs();
+  const fees = await getSloanePearlPaymentFees();
+
+  const otherExpenses: Record<string, number> = {};
+  const addOther = (month: string, amount: number) => {
+    otherExpenses[month] = (otherExpenses[month] ?? 0) + amount;
+  };
+  for (const { month, spendUsd } of adSpend) addOther(month, spendUsd);
+  for (const { month, cogsUsd } of cogs.byMonth) addOther(month, cogsUsd);
+  for (const { month, feesUsd } of fees.byMonth) addOther(month, feesUsd);
+
+  for (const [month, amount] of Object.entries(otherExpenses)) {
     const col = MONTH_COLUMNS[month];
     if (!col) continue;
-    sheet.getCell(`${col}23`).value = Number(spendUsd.toFixed(2)); // Other Expenses = ad spend
+    setInput(`${col}23`, amount);
   }
 
   for (const [month, col] of Object.entries(MONTH_COLUMNS)) {
     if (month in cogsPersonnel) {
-      sheet.getCell(`${col}15`).value = Number(cogsPersonnel[month].toFixed(2));
+      setInput(`${col}15`, cogsPersonnel[month]);
     }
     if (month in cogsTokens) {
-      sheet.getCell(`${col}17`).value = Number(cogsTokens[month].toFixed(2));
+      setInput(`${col}17`, cogsTokens[month]);
     }
     if (month in sgaTokens) {
-      sheet.getCell(`${col}21`).value = Number(sgaTokens[month].toFixed(2));
+      setInput(`${col}21`, sgaTokens[month]);
     }
-    // Software Subscriptions (rows 16, 20) intentionally left blank/$0 —
+    // Software Subscriptions (rows 16, 20) intentionally left at $0 —
     // no incremental cost, see disclosure/pre-existing-resources.md.
-    sheet.getCell(`${col}16`).value = 0;
-    sheet.getCell(`${col}20`).value = 0;
+    setInput(`${col}16`, 0);
+    setInput(`${col}20`, 0);
   }
 
-  // ExcelJS preserves the template's cached formula results (all $0, from
-  // the blank form) instead of recomputing them, and doesn't set a
-  // recalc-on-open flag by default. Without this, a non-recalculating
-  // viewer (e.g. macOS Quick Look) shows TOTAL REVENUE / TOTAL EXPENSES /
-  // PROFIT (LOSS) as stale $0 even though the underlying formulas and
-  // input cells are correct. This only affects how formula cells
-  // recalculate on open — it does not change any input cell.
+  // Write each formula back together with its real computed value. This
+  // also expands the template's shared formulas into explicit per-cell
+  // ones, which is what lets a cached result be attached to each.
+  const formulaCells = computeFormulaCells(inputs);
+  for (const { addr, formula, result } of formulaCells) {
+    sheet.getCell(addr).value = { formula, result };
+  }
+
+  // Belt and braces: even with correct cached values, ask Excel /
+  // Google Sheets to recalculate on open so an operator edit to an
+  // input cell propagates immediately.
   workbook.calcProperties.fullCalcOnLoad = true;
 
   const outputPath = "financials/pnl-sloane-pearl.xlsx";
   await workbook.xlsx.writeFile(outputPath);
   console.log(`Wrote ${outputPath}`);
+
+  const sum = (rows: { month: string }[], pick: (r: any) => number) =>
+    rows.filter((r) => MONTH_COLUMNS[r.month]).reduce((a, r) => a + pick(r), 0);
+  const adSpendTotal = sum(adSpend, (r) => r.spendUsd);
+  const cogsTotal = sum(cogs.byMonth, (r) => r.cogsUsd);
+  const feesTotal = sum(fees.byMonth, (r) => r.feesUsd);
+  const revenueTotal = sum(revenue, (r) => r.revenueUsd);
+  const byAddr = new Map(formulaCells.map((c) => [c.addr, c.result]));
+
+  console.log("\nFull 90 days (column G), USD:");
+  console.log(`  TOTAL REVENUE (G11):  ${byAddr.get("G11")!.toFixed(2)}`);
+  console.log(`  TOTAL EXPENSES (G24): ${byAddr.get("G24")!.toFixed(2)}`);
+  console.log(`  PROFIT (LOSS) (G26):  ${byAddr.get("G26")!.toFixed(2)}`);
+  console.log("\nRow 23 'Other Expenses' breakdown (explained in pnl-methodology.md):");
+  console.log(`  Meta ad spend:            ${adSpendTotal.toFixed(2)}`);
+  console.log(`  Merchandise COGS:         ${cogsTotal.toFixed(2)}`);
+  console.log(`  Payment processing fees:  ${feesTotal.toFixed(2)}`);
+  console.log(`  = row 23 total (G23):     ${byAddr.get("G23")!.toFixed(2)}`);
+  if (revenueTotal > 0 && adSpendTotal > 0) {
+    console.log(
+      `\nBlended ROAS (revenue / ad spend): ${(revenueTotal / adSpendTotal).toFixed(2)}x`
+    );
+  }
+
+  const warnings: string[] = [];
+  if (cogs.coverage.shippedOrdersUnmatched.length > 0) {
+    warnings.push(
+      `merchandise COGS is missing for ${cogs.coverage.shippedOrdersUnmatched.length} ` +
+        `shipped order(s) with no matched supplier invoice ` +
+        `(${cogs.coverage.shippedOrdersUnmatched.map((o) => o.orderNumber).join(", ")}) — ` +
+        "run `npm run cogs` for detail"
+    );
+  }
+  if (fees.coverage.ordersWithFeeData < fees.coverage.ordersTotal) {
+    warnings.push(
+      `payment fee data covers only ${fees.coverage.ordersWithFeeData} of ` +
+        `${fees.coverage.ordersTotal} orders, so row 23 UNDERSTATES real fee cost ` +
+        `(observed rate on the covered orders: ` +
+        `${fees.coverage.observedFeeRatePct?.toFixed(2)}%)`
+    );
+  }
+  if (refundDiscrepancies.length > 0) {
+    warnings.push(
+      `${refundDiscrepancies.length} fully-refunded order(s) have an understated ` +
+        `refundAmount mirror (${refundDiscrepancies
+          .map((d) => d.orderNumber)
+          .join(", ")}); the refunded status was treated as authoritative`
+    );
+  }
+  if (warnings.length > 0) {
+    console.warn("\nDATA-QUALITY NOTES (all disclosed in financials/pnl-methodology.md):");
+    for (const w of warnings) console.warn(`  - ${w}`);
+  }
 
   if (missing.length > 0) {
     console.warn(
