@@ -201,8 +201,8 @@ the LLM requirement but **not** the Google Cloud one. The new call must genuinel
 route through Vertex AI, not reuse the existing Gemini Developer API integration.
 
 **Surface, decided:** customer-service email drafting. Sloane & Pearl's tickets
-are currently handled manually by a VA (started ~2-3 weeks before 2026-07-30 —
-see §1). The Gemini/Vertex AI call drafts/triages replies for her review, rather
+are currently handled manually by a VA (engagement start 2026-07-16 — see §1).
+The Gemini/Vertex AI call drafts/triages replies for her review, rather
 than replacing her outright — she stays the human in the loop, sending. This
 still matches the rules' own example of "operated by AI agents" (*"an AI agent
 being used for customer support"*) without displacing work she was just brought
@@ -220,14 +220,15 @@ in practice (demoed: ~1.3¢ for a 3-minute video-analysis call, ~0.001¢ for a
 simple image call), so once wired in, the new "tokens" cost line in the P&L will
 be negligible, not a material swing in the disclosed estimate.
 
-This will get its own small design/plan when the
-operator is ready to decide the surface; it is out of scope for the work this
-repo's implementation plan covers.
+The surface decision is made; the build itself gets its own small design/plan in
+fashion-autopilot when the operator is ready to schedule it — it is out of scope
+for the work this repo's implementation plan covers.
 
 ## 6. Out of scope for this repo (explicitly)
 
-- Writing or modifying any fashion-autopilot product code (Gemini/Vertex AI wiring,
-  `autoSendEnabled` toggling, etc.) — separate follow-on work in that repo.
+- Writing or modifying any fashion-autopilot product code (the Gemini/Vertex AI
+  draft-and-triage call in the CS pipeline, §5) — separate follow-on work in that
+  repo.
 - Actually recording/editing the 3-minute video — this repo produces the script;
   recording is a human task.
 - Filling in final, submission-day numbers — scripts and templates are built now;
