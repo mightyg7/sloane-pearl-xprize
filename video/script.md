@@ -143,16 +143,16 @@ Ties back to the Entrepreneurship & Job Creation category framing from
 - B-roll: admin dashboard overview (non-sensitive view), or continue on the
   storefront.
 
-**VO (optional, ~105 words / ~42s):** "Sloane & Pearl runs on an AI-agent
-commerce platform that existed before this business did — the rules allow
-that, as long as what's built on top is genuinely new. And this is: its own
-store, its own catalog, its own ad account, its own customers, created from
-zero on June 3rd, 2026. What's next is more human roles, not fewer — as order
-volume grows, the next hire is a second customer-service contractor, then
-someone for supplier sourcing and quality control. A Gemini-based assistant to
-help draft and triage customer replies is designed, but it isn't built yet —
-we're not claiming otherwise. AI runs the catalog and the ad engine; a person
-still owns every judgment call and every word a customer reads."
+**VO (optional, 108 words / ~43s):** "Sloane & Pearl runs on an AI-agent
+platform that existed before this business did — the rules allow that, as
+long as what's built on top is genuinely new. And this is: its own store,
+catalog, ad account, and customers, created from zero on June 3rd, 2026.
+What's next is more human roles, not fewer — the next hire is a second
+customer-service contractor, then someone for supplier sourcing and quality
+control. A Gemini-based assistant to draft and triage replies is designed,
+but not built yet — we're not claiming otherwise. AI runs the catalog and the
+ads; a person still owns every judgment call and every word a customer
+reads."
 
 **Footage needed:** none new required beyond b-roll already captured; this
 section can run mostly on caption + VO over continued storefront/admin
@@ -161,8 +161,9 @@ footage.
 ### 2:30–2:45 — Close (15s)
 
 - Restate whichever hook line was chosen at 0:00.
-- On-screen: URL card — "sloaneandpearl.com" — no trademarked or unlicensed
-  music under this or any other section.
+- On-screen: URL card — "sloaneandpearl.com".
+- Reminder: no trademarked or unlicensed music under this or any other
+  section of the video.
 
 **VO (optional, ~24 words / ~10s):** "Seven weeks ago, this store didn't
 exist. Today it's a real business — growing, hiring, and running on AI. See
