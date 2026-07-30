@@ -40,10 +40,14 @@ a feature shipped on an existing store.
   checked by email and phone across all orders in both stores
 - Operator-confirmed: no known friends/family/team purchases. Related-party revenue
   = $0 pending final re-check at submission time (order volume will have grown)
-- A VA started manually handling Sloane & Pearl's CS tickets ~2-3 weeks before
-  2026-07-30 (i.e. mid-to-late July, comfortably after May 19) — clean per the
-  labor-attestation requirement (see §4), but means CS for this store is
-  currently human-handled, not AI-native. See §5.
+- A VA (CS contractor, hired via onlinejobs.ph) manually handles Sloane & Pearl's
+  CS tickets. Verified engagement start: **2026-07-16** — she was interviewed
+  2026-06-24 but explicitly not hired then, re-approached and onboarded 2026-07-16,
+  first logged work that same day. Clean vs. the May 19 cutoff, well-documented.
+  She also handles NOVA Cape Town tickets, so her cost is a shared-across-stores
+  allocation, not a Sloane & Pearl-only cost (same treatment as AI token spend,
+  §4). Pay figure and name-disclosure preference still pending — operator is
+  sending more detail later; `labor-attestation.md` is not yet written.
 
 ## 2. Repo scope
 
@@ -209,7 +213,9 @@ repo's implementation plan covers.
 - Category framing (Entrepreneurship & Job Creation) is a judgment call, not
   dictated by the rules — the narrative needs to make the case explicitly, since
   none of the 5 categories name e-commerce outright.
-- Labor attestation: VA started handling Sloane & Pearl CS tickets ~2-3 weeks
-  before 2026-07-30 (clean vs. the May 19 cutoff) — `labor-attestation.md` can
-  now be written for real rather than left as a placeholder. Still need her name/
-  role and what she's been paid for that work to finish the doc.
+- Labor attestation: engagement start date confirmed clean (2026-07-16, well
+  after May 19) and well-documented. Still blocked on two operator inputs before
+  `labor-attestation.md` can be written: (1) real name vs. anonymized reference
+  in the doc (FAQ explicitly permits redaction), (2) her pay for Sloane & Pearl /
+  NOVA Cape Town work, split across both stores rather than charged wholly to
+  either — operator said more detail is coming later.
