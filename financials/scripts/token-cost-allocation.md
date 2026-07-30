@@ -8,13 +8,14 @@ Sloane & Pearl.
 
 **Methodology:** rather than claim precision the data doesn't support, we
 allocate total platform AI spend for the hackathon window (2026-05-19 to
-2026-08-17) pro-rata by each active store's share of orders placed in that same
+2026-08-17) pro-rata by each store's share of orders placed in that same
 window. This is a disclosed estimate, not exact per-call accounting.
+All figures in USD.
 
-- Total platform `ApiUsage` cost, 2026-05-19–2026-08-17: $504.50
+- Total platform `ApiUsage` cost, 2026-05-19–2026-08-17: $504.50 USD
 - Sloane & Pearl orders in window: 159
 - NOVA Cape Town orders in window: 269
-- Sloane & Pearl's allocated share: 159 / (159 + 269) × $504.50 = $187.42
+- Sloane & Pearl's allocated share: 159 / (159 + 269) × $504.50 USD = $187.42 USD
 
 This allocated figure feeds `COGS_TOKENS_JSON` / `SGA_TOKENS_JSON` in Task 6's
 `fill-pnl-template.ts` run (split across COGS and SG&A per the official
@@ -32,7 +33,7 @@ SELECT SUM(cost) AS total_cost, COUNT(*) AS call_count
 FROM "ApiUsage"
 WHERE timestamp >= '2026-05-19' AND timestamp <= '2026-08-17';
 ```
-Result: $504.50, 143,913 API calls
+Result: $504.50 USD, 143,913 API calls
 
 **Order counts by store (2026-05-19 to 2026-08-17):**
 ```sql
@@ -41,8 +42,8 @@ SELECT
   cs.name,
   COUNT(*) as order_count
 FROM "Order" o
-LEFT JOIN "ConnectedStore" cs ON cs.shop = ss."shopDomain"
 LEFT JOIN "ShopifyStore" ss ON o."storeId" = ss.id
+LEFT JOIN "ConnectedStore" cs ON cs.shop = ss."shopDomain"
 WHERE o."createdAt" >= '2026-05-19' AND o."createdAt" <= '2026-08-17'
 GROUP BY o."storeId", cs.name
 ORDER BY order_count DESC;
