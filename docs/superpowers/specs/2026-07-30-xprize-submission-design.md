@@ -91,7 +91,17 @@ sloane-pearl-xprize/
                                         work as a personnel cost line (required per
                                         official FAQ, not optional)
   narrative/
-    business-narrative.md            — 500–1000 word submission writeup (draft)
+    business-narrative.md            — 500–1000 word submission writeup (draft).
+                                        Required content per the overview page,
+                                        not just "AI usage": (1) how AI is used
+                                        day-to-day, (2) humans vs. AI division of
+                                        labor, (3) jobs/economic opportunity the
+                                        business creates beyond the founding team,
+                                        actual and potential — the CS contractor's VA role
+                                        is real evidence here, and it's a direct
+                                        hit on the Entrepreneurship & Job Creation
+                                        category, (4) the story of building it
+                                        this way
     ai-native-operations.md          — enumerated list of AI-driven decisions in
                                         Sloane & Pearl's operation, with evidence
                                         pointers (agent logs, API records)
@@ -107,11 +117,16 @@ sloane-pearl-xprize/
                                         estimate, not fabricated precision)
   evidence/
     agent-logs/                      — exported examples: CS replies, ad launches,
-                                        import runs, tied to this store. Customer
-                                        identifiers aggregated/anonymized unless a
-                                        testimonial is already public or consent is
-                                        confirmed (rules require users be aware
-                                        their info is being shared)
+                                        import runs, tied to this store
+    customer-evidence.md             — real customer contact info (name, email,
+                                        phone) for a sample of Sloane & Pearl
+                                        buyers, per the overview page's explicit
+                                        ask. Shared privately with judges only
+                                        (NDA-bound per the FAQ), not published —
+                                        covered by the store's existing checkout
+                                        privacy policy, same as any standard
+                                        e-commerce data use. Public testimonials,
+                                        if any exist already, included separately
     testing-access.md                — what judges get to test: the public
                                         storefront (sloaneandpearl.com, no login),
                                         plus the video and evidence exports for
