@@ -28,8 +28,8 @@ false "zero products" finding).
   supplier's original listing text — sampled directly from this store's
   catalog: *"Mamie | Orthopedic Slip-On Leather Sneakers"* opens with "Meet
   the Mamie sneaker — where orthopedic support meets effortless everyday
-  style. Designed for women who refuse to c[ompromise]…"; *"Celeste |
-  Tie-Dye Mesh Long Sleeve Dress"* opens "The Celeste dress is a wearable
+  style. Designed for women who refuse to compromise on comfort…"; *"Celeste
+  | Tie-Dye Mesh Long Sleeve Dress"* opens "The Celeste dress is a wearable
   work of art…". This is generated marketing copy, not scraped text.
 - **Ad-creative generation & campaign launch** — 127 real Meta ad campaigns
   have been launched to Sloane & Pearl's dedicated ad account
