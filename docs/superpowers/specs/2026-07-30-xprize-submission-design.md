@@ -107,7 +107,16 @@ sloane-pearl-xprize/
                                         estimate, not fabricated precision)
   evidence/
     agent-logs/                      — exported examples: CS replies, ad launches,
-                                        import runs, tied to this store
+                                        import runs, tied to this store. Customer
+                                        identifiers aggregated/anonymized unless a
+                                        testimonial is already public or consent is
+                                        confirmed (rules require users be aware
+                                        their info is being shared)
+    testing-access.md                — what judges get to test: the public
+                                        storefront (sloaneandpearl.com, no login),
+                                        plus the video and evidence exports for
+                                        internal AI-ops proof — not live admin
+                                        access to the multi-store platform
   video/
     script.md                        — 3-minute video script/storyboard
   gemini-integration/
@@ -149,6 +158,16 @@ the operator to identify who, if anyone, this applies to before the P&L can be
 finalized.
 
 ## 5. Gemini + Google Cloud technical work (separate, in fashion-autopilot repo)
+
+**This is a pass/fail gate, not just a scoring input.** Per the official rules
+(§6), judging runs in two stages: *"Stage One will determine via pass/fail
+whether the ideas meet a baseline level of viability, in that the Project
+reasonably fits the theme and reasonably applies the required APIs/SDKs featured
+in the Hackathon."* Only submissions that pass Stage One get scored on Business
+Viability / AI-Native Operations / Category Impact at all. A weak or missing
+Gemini/Google Cloud integration risks the whole submission being filtered out
+before the strong revenue and customer evidence is ever weighed — this raises
+the priority of the work below above "one of three criteria."
 
 **Not part of this repo's deliverables** — tracked here as a documented dependency.
 Currently Sloane & Pearl has zero Gemini usage; the only Gemini code path in the
@@ -209,7 +228,12 @@ repo's implementation plan covers.
   grown between now and Aug 17).
 - Gemini/Vertex AI *surface* is decided (CS email drafting, VA-in-the-loop) but
   not yet built — the P&L "tokens" line and the AI-native-operations narrative
-  can't be finalized until the follow-on work in fashion-autopilot lands.
+  can't be finalized until the follow-on work in fashion-autopilot lands. This is
+  now higher priority than "one of three criteria" — see the Stage One gate in §5.
+- Testing access needs a firm decision before submission: default plan is the
+  public storefront URL only, no admin credentials handed to judges. Confirm this
+  is actually sufficient once the video + evidence exports exist, since rules
+  allow judging on the description/video/images alone without live testing.
 - Category framing (Entrepreneurship & Job Creation) is a judgment call, not
   dictated by the rules — the narrative needs to make the case explicitly, since
   none of the 5 categories name e-commerce outright.
