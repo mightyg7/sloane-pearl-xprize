@@ -32,6 +32,14 @@ the name-disclosure decision in `disclosure/labor-attestation.md` is still
 pending. Refer to her only as "a CS contractor" / "she" / "our
 customer-service hire."
 
+**Never show a revenue figure without the loss beside it.** The business is
+not profitable — net loss $6,117.44 on $13,979.18 of revenue, blended ROAS
+0.89x (see `financials/pnl-methodology.md`). The revenue numbers and the
+loss numbers travel together, in the same section, at 1:00–1:45. If a later
+edit cuts for time, the loss beat is **not** the thing to cut: the P&L
+judges receive states the loss plainly, and a revenue-only video would
+contradict our own submitted financials.
+
 ## Structure (target: ~2:45 to leave margin)
 
 Timings below sum to 2:45. VO word counts are sized to roughly 150 words/min
@@ -49,11 +57,11 @@ should be visible in the browser bar at least once in this shot.
 **Hook line candidates** (pick one against the actual footage — this is the
 "stops the scroll" line per the Farza advice, not finalized on paper):
 
-- A. *"Seven weeks ago, this store didn't exist. Today: $13,872.95 in real
+- A. *"Seven weeks ago, this store didn't exist. Today: $13,979.18 in real
   sales, 2,529 products, and one AI-run catalog."*
 - B. *"This is a real fashion brand. Nobody wrote its product copy or built
   its ad creative by hand. AI did — and it already created a real job."*
-- C. *"$13,872.95 in sales. 127 ad campaigns. One new employee. Seven weeks.
+- C. *"$13,979.18 in sales. 127 ad campaigns. One new employee. Seven weeks.
   This is what an AI-run business actually looks like."*
 
 A and C lead with scale; B leads with the job-creation angle that matches this
@@ -108,30 +116,40 @@ visible on screen, no staged or mocked data.
 
 ### 1:00–1:45 — The business is real (45s)
 
-- On-screen graphic: two-bar revenue chart, June $2,076.39 vs. July
-  $11,796.56 (a ~5.7x jump), cumulative $13,872.95 to date. Source:
+- On-screen graphic: two-bar revenue chart, June $1,958.76 vs. July
+  $12,020.42 (a 6.1x jump), cumulative $13,979.18 to date. Source:
   `financials/pnl-sloane-pearl.xlsx`, Independent Sales row (real Shopify
-  order data for `pdmnf1-c0.myshopify.com` only).
-- On-screen caption: *"159 real customer orders since launch — 32 in June,
-  127 in July."*
+  order data for `pdmnf1-c0.myshopify.com` only, net of refunds — these are
+  cash-basis figures, not gross order value).
+- On-screen caption: *"154 revenue-bearing customer orders since launch —
+  28 in June, 126 in July."*
+- **Then, immediately, the cost side — do not let the revenue bar stand
+  alone.** On-screen caption or a second graphic: *"$15,721.49 ad spend.
+  Net loss $6,117.44. Blended ROAS 0.89x. Not profitable yet."* This has to
+  appear in the same breath as the revenue graphic, not be dropped or
+  buried in the close. A revenue-only chart would misrepresent the
+  business, and the P&L judges receive states the loss plainly — the video
+  must not contradict it.
 - Cut to a beat about the CS hire, without naming or showing her
   identifiably: a real customer-service contractor, engaged 2026-07-16
   specifically for this business, reviews and sends every reply to Sloane &
   Pearl's tickets herself. This is the clearest evidence of a job created
   beyond the founding team.
 
-**VO (optional, ~65 words / ~26s):** "This isn't a demo — it's a real
-business. June's first partial month brought in $2,076.39. July: $11,796.56,
-nearly six times as much, across 159 real customer orders. And the growth
-already created a real job: a customer-service contractor, brought on July
-16th specifically for this business, who reviews and sends every single reply
-herself."
+**VO (optional, ~86 words / ~34s):** "This isn't a demo — it's a real
+business. June's first partial month brought in $1,958.76. July: $12,020.42,
+six times as much, across 154 real customer orders. It's also not profitable
+yet — $15,721.49 went out on ads to buy that growth, a net loss of $6,117.44
+at a blended ROAS of 0.89. Product margin is healthy, near 65 percent; what
+has to improve is ad efficiency. And the growth already created a real job: a
+customer-service contractor, brought on July 16th, who reviews and sends
+every reply herself."
 
 **Footage needed:** revenue graphic (built from the two real figures, or a
-capture of the xlsx cell), order-count caption. No identifiable footage of
-the contractor unless she has explicitly consented — a generic/anonymized
-clip or a stat card is the safe default given the pending name-disclosure
-decision.
+capture of the xlsx cell), the loss/ROAS graphic beside it, order-count
+caption. No identifiable footage of the contractor unless she has explicitly
+consented — a generic/anonymized clip or a stat card is the safe default
+given the pending name-disclosure decision.
 
 ### 1:45–2:30 — The story (45s)
 
@@ -183,11 +201,13 @@ it live: sloaneandpearl.com."
 - If any beat uses footage of the CS contractor's workspace or voice, get her
   explicit consent first and keep her un-named/un-identifiable, consistent
   with the pending decision in `disclosure/labor-attestation.md`.
-- Re-check the revenue/order/campaign numbers against the latest narrative
-  docs at actual recording time — this script is grounded in the 2026-07-30
-  snapshot (`narrative/ai-native-operations.md`, `narrative/business-
-  narrative.md`, `financials/pnl-methodology.md`); if recording happens
-  later, pull fresh figures rather than reusing these verbatim.
+- Re-check the revenue/order/campaign numbers **and the loss/ROAS figures**
+  against the latest narrative docs at actual recording time — this script
+  is grounded in the 2026-07-30 snapshot (`narrative/ai-native-operations.md`,
+  `narrative/business-narrative.md`, `financials/pnl-methodology.md`); if
+  recording happens later, pull fresh figures rather than reusing these
+  verbatim. Ad spend accrues live and supplier invoices keep landing, so the
+  loss moves more than the revenue does.
 - If `gemini-integration/write-up.md` ships before recording, revisit the
   "AI in production" section (0:15–1:00) to decide whether it earns a third
   beat there instead of only the verbal mention at 1:45–2:30.

@@ -2,16 +2,17 @@
 
 Sloane & Pearl (sloaneandpearl.com) is a women's fashion storefront that
 opened for orders on 2026-06-09 and, in the roughly seven weeks since, has
-gone from zero revenue to $11,796.56 in independent sales in July alone —
-up from $2,076.39 in its first partial month, a nearly 5.7x jump.
-Cumulative revenue to date is $13,872.95. It runs on fashion-autopilot, an
-AI-agent e-commerce platform that was already operating before the
-submission period began; what's new is the business itself — a distinct
-Shopify store (created 2026-06-03), its own branding and catalog, its own
-dedicated Meta ad account, its own customer base, and its own staffing.
-We're disclosing that platform reuse directly rather than obscuring it,
-because the rules explicitly allow reusing pre-existing infrastructure as
-long as the business running on it is genuinely new — and this one is.
+gone from zero revenue to $12,020.42 in independent sales in July alone —
+up from $1,958.76 in its first partial month, a 6.1x jump. Cumulative
+revenue to date is $13,979.18 across 154 revenue-bearing customer orders.
+It runs on fashion-autopilot, an AI-agent e-commerce platform that was
+already operating before the submission period began; what's new is the
+business itself — a distinct Shopify store (created 2026-06-03), its own
+branding and catalog, its own dedicated Meta ad account, its own customer
+base, and its own staffing. We're disclosing that platform reuse directly
+rather than obscuring it, because the rules explicitly allow reusing
+pre-existing infrastructure as long as the business running on it is
+genuinely new — and this one is.
 
 Day to day, AI does the operational lifting that would otherwise need a
 merchandising team and a media buyer. The catalog — 2,529 products
@@ -30,6 +31,22 @@ ships; 32 are still active, 95 have already been auto-killed by the
 platform's own performance rules, and every live campaign runs in Meta's
 Dynamic Creative mode, so Meta's algorithm keeps testing creative and copy
 combinations inside each one on top of that.
+
+Those campaigns cost money, and the bottom line is a loss. Against
+$13,979.18 of retained revenue the business spent $20,096.62 — $15,721.49
+on Meta ads, $4,145.60 in real supplier invoices for merchandise, $188.26
+in allocated AI tokens — for a **net loss of $6,117.44 at a blended ROAS of
+0.89x**. That is deliberate early-stage spend: 127 campaigns bought the 6.1x
+month-over-month curve above, and finding out which products and creatives
+work costs money before it earns any. The business is not yet profitable,
+and the real question for viability isn't product margin — the 130 orders
+with matched supplier invoices carry a 64.6% merchandise gross margin,
+about $56 of contribution per order before advertising — but whether ad
+efficiency improves as it scales, because each order currently costs around
+$102 in ad spend to win. The figure is a floor, not a ceiling: the CS
+contractor's pay isn't in it yet and Shopify has synced payment-processing
+fees for only 14 of 160 orders, so both push the loss wider. Full
+derivation, gaps included, is in `financials/pnl-methodology.md`.
 
 What AI does not do here is send a customer a reply or decide what to
 spend. Customer service today is fully human: a CS contractor, engaged
@@ -51,22 +68,18 @@ that did, with her first logged ticket work — eight tickets answered — that
 same day. Her role is not hypothetical; it exists because Sloane & Pearl
 generates support volume that needs a person answering it, alongside a
 second store on the same platform whose tickets she also covers. Scaling
-this model is a real next step, not just an aspiration: as order volume
-grows past what one contractor can comfortably handle, the next hire is a
-second CS contractor rather than added headcount on the founding team, and
-as supplier relationships mature past the initial import, sourcing and
-quality-control coordination is the next kind of role this business will
-need a dedicated person for.
+this model is a real next step: as order volume grows past what one
+contractor can comfortably handle, the next hire is a second CS contractor
+rather than added headcount on the founding team, and as supplier
+relationships mature past the initial import, sourcing and quality-control
+coordination is the next kind of role this business will need a dedicated
+person for.
 
 The story of building it this way is less "we wrote an AI agent from
 scratch during the hackathon" and more "we pointed an operating AI-agent
 platform at a brand-new business and watched it run one." Sloane & Pearl
-did not exist before 2026-06-03. Seven weeks later it has a 1,582-item live
-catalog nobody wrote copy for by hand, 127 ad campaigns nobody manually
-assembled creative for, and a real employee whose job exists specifically
-because the business needs a human in the loop at the one place AI stops —
-reviewing and sending every customer reply herself. That is the actual
-state of the business today: AI running the catalog and the ad engine at a
-scale one person could not match on their own, a human owning judgment and
-every customer-facing word, and one new job already created with the shape
-of the next one already visible.
+did not exist before 2026-06-03. Seven weeks later: a live catalog nobody
+wrote copy for by hand, an ad engine nobody manually assembled creative
+for, a human owning judgment and every customer-facing word, one new job
+already created with the shape of the next one already visible — and a
+real, disclosed loss while it buys its first customers.
