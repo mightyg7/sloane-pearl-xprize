@@ -24,6 +24,14 @@ founders and economies thrive."* Framing: an AI agent platform autonomously laun
 and operates a real, profitable retail business from near-zero human headcount — a
 blueprint for what a founder can do without a team.
 
+**What "new" means here (official FAQ, xprize.devpost.com/rules):** it's the
+*business* that must be newly created after May 19, 2026 — not the GitHub repo,
+not the legal entity, not the code. Per the FAQ verbatim: *"a restaurant can't
+release a new menu item, and an app can't release a new feature and be considered
+a new business."* The narrative's job is to establish Sloane & Pearl clears that
+bar — a distinct storefront, catalog, domain, ad account, and customer base, not
+a feature shipped on an existing store.
+
 **Current traction (as of 2026-07-30, verified against prod DB):**
 - 159 orders, 150 unique customers
 - Revenue: June 2026 $2,076 (32 orders), July 2026 $11,797 (127 orders, month
@@ -41,7 +49,11 @@ narrative, evidence-collection scripts, the filled P&L, and the video script. It
 agent, ad pipeline, import pipeline) lives in the private `fashion-autopilot` repo,
 which — per the organizer's confirmation that all reviewers sign NDAs before code
 review — can be shared directly and privately with `testing@devpost.com` and
-`judging@hacker.fund` via GitHub access, decided separately from this repo.
+`judging@hacker.fund` via GitHub access, decided separately from this repo. The
+official FAQ separately confirms the repo itself does not need to be newly created
+("newly created" refers to the business, not the codebase) and that judges "adhere
+to confidentiality and nondisclosure," with PII in the shared repo redactable —
+context for the operator, not a reason to revisit the decision below.
 
 Rationale for not mirroring code here: a mirror is a second copy that drifts from
 the live system the moment either changes, and the fashion-autopilot repo's own
@@ -64,6 +76,12 @@ sloane-pearl-xprize/
     related-party-revenue.md         — customer-overlap findings + disclosure
     pre-existing-resources.md        — which shared costs (hosting, proxies, LLM
                                         keys, operator time) the new brand rides on
+    labor-attestation.md             — for any pre-existing employee/VA/contractor
+                                        whose time touched Sloane & Pearl: attest
+                                        their work on it didn't begin before
+                                        2026-05-19, and disclose their pay for that
+                                        work as a personnel cost line (required per
+                                        official FAQ, not optional)
   narrative/
     business-narrative.md            — 500–1000 word submission writeup (draft)
     ai-native-operations.md          — enumerated list of AI-driven decisions in
@@ -112,6 +130,15 @@ accounting. Any cost line traceable to pre-existing (pre-May-19) infrastructure 
 called out per the rule: *"if any expenses correspond to the use of resources that
 existed prior to the hackathon, then you must explain whatever those resources
 might be."*
+
+**Personnel line needs a real answer, not a placeholder.** Official FAQ: if any
+pre-existing employee/contractor's time touched Sloane & Pearl (e.g. a CS VA
+handling its tickets), the submission must (1) attest their work on *this*
+project didn't begin before 2026-05-19, and (2) disclose what they were paid for
+that work as a personnel cost line — this is a stated requirement, not something
+that can be silently folded into "pre-existing resources" and left vague. Needs
+the operator to identify who, if anyone, this applies to before the P&L can be
+finalized.
 
 ## 5. Gemini + Google Cloud technical work (separate, in fashion-autopilot repo)
 
@@ -174,3 +201,7 @@ repo's implementation plan covers.
 - Category framing (Entrepreneurship & Job Creation) is a judgment call, not
   dictated by the rules — the narrative needs to make the case explicitly, since
   none of the 5 categories name e-commerce outright.
+- Labor attestation is unresolved: need the operator to identify whether any
+  pre-existing employee/VA/contractor time (e.g. CS ticket handling) touched
+  Sloane & Pearl, so `labor-attestation.md` can be written accurately rather than
+  left as a placeholder — this is a stated FAQ requirement, not optional.
