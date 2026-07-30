@@ -14,9 +14,12 @@ specifically is running:
 
 - **Hosting** — Railway (web + worker services), shared across every store on
   the platform. Adding a new store doesn't add incremental hosting spend.
-- **Proxy infrastructure** — per-store stable egress proxies used for Shopify
-  Admin API access and browser automation (isolation requirement, not
-  Sloane & Pearl-specific spend).
+- **Proxy infrastructure** — Sloane & Pearl has not been assigned a dedicated
+  proxy (`ConnectedStore.proxyIp` is null in the platform's records as of
+  2026-07-30) and currently uses a direct/shared connection rather than a
+  purchased dedicated proxy, so there is no proxy cost specifically attributable
+  to this store. If a dedicated proxy is assigned to it later, that would become
+  a real incremental cost requiring disclosure and a line item at that time.
 - **LLM API keys** — Anthropic, OpenAI, and (once wired in, see
   `gemini-integration/write-up.md`) Gemini/Vertex AI credentials are
   account-level, shared across the platform, not provisioned per store. Unlike
