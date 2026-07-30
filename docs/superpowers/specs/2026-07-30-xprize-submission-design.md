@@ -122,16 +122,22 @@ platform is a manual, operator-clicked image-generation toggle, last used in
 rules require *"at least one LLM call [through Gemini] in the deployed
 application"* and *"at least one product from Google Cloud."*
 
-Proposed (pending final confirmation, operator said "decide later"): add a real,
-autonomous Gemini call into Sloane & Pearl's customer-service pipeline (e.g. an
-intent/sentiment/anti-manipulation classification step ahead of the reply draft),
-routed through **Vertex AI** rather than the plain Gemini Developer API key — one
-code change satisfies both the LLM requirement and the Google Cloud requirement
-together, and it's a call that fires continuously and autonomously (no operator
-click), which is strong "AI executing live in production for key decisions"
-evidence. This will get its own small design/plan when the operator is ready to
-decide the surface; it is out of scope for the work this repo's implementation
-plan covers.
+**Confirmed, not just recommended:** at the 2026-07-30 innovation orientation
+workshop, Google's own representative (Rodie) was asked on record *"Does calling
+Gemini via Vertex AI satisfy the Gemini API requirement?"* and answered
+*"Correct."* Vertex AI is explicitly a Google Cloud product; the plain
+AI-Studio-issued `GEMINI_API_KEY` (which is what the platform's existing dormant
+Gemini code uses) is not — so reactivating the old code path as-is would satisfy
+the LLM requirement but **not** the Google Cloud one. The new call must genuinely
+route through Vertex AI, not reuse the existing Gemini Developer API integration.
+
+Where the call lives (surface) is still an open operator decision — "decide
+later." Both candidates already discussed are explicitly validated by the rules'
+own examples of "operated by AI agents": *"an AI agent used for customer
+support"* (→ CS pipeline) or *"an AI tool used to create marketing assets"*
+(→ ad-creative pipeline). This will get its own small design/plan when the
+operator is ready to decide the surface; it is out of scope for the work this
+repo's implementation plan covers.
 
 ## 6. Out of scope for this repo (explicitly)
 
@@ -150,8 +156,10 @@ plan covers.
   treated as final (it's a disclosed estimate, not a precise number).
 - Related-party check should be re-run at submission time (order count will have
   grown between now and Aug 17).
-- Gemini/Vertex AI integration surface is still undecided — the P&L "tokens" line
-  and the AI-native-operations narrative can't be finalized until it lands.
+- Gemini/Vertex AI integration *surface* (which pipeline it lives in) is still
+  undecided — the transport (Vertex AI) is organizer-confirmed, but the P&L
+  "tokens" line and the AI-native-operations narrative can't be finalized until
+  the surface is picked and built.
 - Category framing (Entrepreneurship & Job Creation) is a judgment call, not
   dictated by the rules — the narrative needs to make the case explicitly, since
   none of the 5 categories name e-commerce outright.
