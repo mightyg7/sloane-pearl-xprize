@@ -4,9 +4,9 @@
 
 **Goal:** Build the `sloane-pearl-xprize` repo into a complete Build with Gemini XPRIZE submission package for Sloane & Pearl — disclosure docs, financial evidence scripts + filled P&L, narrative, video script, and evidence/testing-access docs — per the design at `docs/superpowers/specs/2026-07-30-xprize-submission-design.md`.
 
-**Architecture:** A standalone repo with no dependency on the `fashion-autopilot` codebase. Financial scripts talk to the same Postgres database directly via the `pg` package (no Prisma client, no shared node_modules) and to the Meta Graph API directly via `fetch`. Everything else is markdown. Real customer PII never gets committed to this repo — it goes straight into the Devpost submission form at submission time, not into git history.
+**Architecture:** A standalone repo with no dependency on the `fashion-autopilot` codebase. Financial scripts talk to the same Postgres database directly via the `pg` package (no Prisma client, no shared node_modules) and to the Meta Graph API directly via `fetch`. The P&L is the actual official Devpost xlsx template, filled by script via `exceljs` (which preserves the template's built-in SUM formulas), not a hand-rolled markdown table. Everything else is markdown. Real customer PII never gets committed to this repo — it goes straight into the Devpost submission form at submission time, not into git history.
 
-**Tech Stack:** Node.js + TypeScript (via `tsx`), `pg` for Postgres, native `fetch` for Meta Graph API v21.0. No framework, no test runner — verification is "run the script, check the output against known facts."
+**Tech Stack:** Node.js + TypeScript (via `tsx`), `pg` for Postgres, `exceljs` for the xlsx P&L, native `fetch` for Meta Graph API v21.0. No framework, no test runner — verification is "run the script, check the output against known facts."
 
 ## Global Constraints
 
@@ -19,6 +19,18 @@
 - Sloane & Pearl = Shopify store `pdmnf1-c0.myshopify.com`, Meta ad account `act_1115325060591696`. NOVA Cape Town = `whhsw6-ps.myshopify.com` (fashion-autopilot's other, unrelated store — used only for the related-party overlap check).
 - Database access: scripts read `DATABASE_URL` from the environment. Use the **public** Railway proxy URL (`tramway.proxy.rlwy.net:27107`), not the internal `Postgres.railway.internal` hostname, which is unreachable from outside Railway's network. Get the password from `railway variables --service fashion-autopilot --kv` (run from the fashion-autopilot checkout) — never hardcode it or commit it.
 - Meta API access: scripts read `META_ACCESS_TOKEN` from the environment.
+- The official P&L template is `Build with Gemini XPRIZE - PL Template.xlsx`
+  (operator has a copy; confirmed layout 2026-07-30). Its own header warns
+  *"do not make a copy in the cloud or else it could be shared with
+  others"* — never commit the pristine blank template to this repo. Only the
+  **filled** output (`financials/pnl-sloane-pearl.xlsx`) gets committed —
+  that's the actual submission artifact, not a duplicate of their form.
+  Sheet name is `Template`; input cells are C9:F9 (Independent Sales),
+  C10:F10 (Related Party Revenue), C15:F15/C16:F16/C17:F17 (COGS Personnel/
+  Software Subscriptions/Tokens), C19:F19/C20:F20/C21:F21 (SG&A same three),
+  C23:F23 (Other Expenses) — columns C/D/E/F are May/June/July/August. Every
+  other cell (G column, row 11, row 24, row 26) is a pre-built `SUM` formula —
+  never overwrite those, only write into the raw input cells listed above.
 
 ---
 
@@ -45,7 +57,8 @@
   "scripts": {
     "revenue": "tsx financials/scripts/revenue-by-month.ts",
     "overlap": "tsx financials/scripts/customer-overlap-check.ts",
-    "ad-spend": "tsx financials/scripts/ad-spend-by-month.ts"
+    "ad-spend": "tsx financials/scripts/ad-spend-by-month.ts",
+    "fill-pnl": "tsx financials/scripts/fill-pnl-template.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
@@ -54,7 +67,8 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "pg": "^8.13.1"
+    "pg": "^8.13.1",
+    "exceljs": "^4.4.0"
   }
 }
 ```
@@ -85,6 +99,7 @@ node_modules/
 .env.local
 *.local.csv
 evidence/customer-evidence-export*.md
+financials/pl-template-blank.xlsx
 ```
 
 - [ ] **Step 4: Write `README.md`**
@@ -127,6 +142,17 @@ npm run ad-spend
 Get `DATABASE_URL`'s password from `railway variables --service fashion-autopilot --kv`
 in the `fashion-autopilot` checkout — never commit it. Get `META_ACCESS_TOKEN`
 the same way (`META_ACCESS_TOKEN` var on the same service).
+
+## Filling the official P&L
+
+```bash
+export PL_TEMPLATE_PATH="/path/to/a freshly downloaded Build with Gemini XPRIZE - PL Template.xlsx"
+npm run fill-pnl
+```
+
+Writes `financials/pnl-sloane-pearl.xlsx` (committed) from a **fresh, local**
+copy of the template — never commit the blank template itself, only the
+filled output.
 ```
 
 - [ ] **Step 5: Install and verify**
@@ -151,7 +177,7 @@ git commit -m "chore: scaffold repo (package.json, tsconfig, README)"
 
 **Interfaces:**
 - Consumes: nothing (first script task).
-- Produces: `withDb<T>(fn: (client: Client) => Promise<T>): Promise<T>` and `STORES.sloanePearl` / `STORES.novaCapeTown` domain constants from `lib/db.ts`, reused by every later script task.
+- Produces: `withDb<T>(fn: (client: Client) => Promise<T>): Promise<T>` and `STORES.sloanePearl` / `STORES.novaCapeTown` domain constants from `lib/db.ts`, reused by every later script task. Also `getSloanePearlRevenueByMonth(): Promise<{ month: string; count: number; revenueUsd: number }[]>` from `revenue-by-month.ts`, reused by Task 6's xlsx-fill script.
 
 - [ ] **Step 1: Write `financials/scripts/lib/db.ts`**
 
@@ -197,10 +223,10 @@ export async function storeIdFor(client: Client, shopDomain: string): Promise<st
 ```typescript
 import { withDb, storeIdFor, STORES } from "./lib/db.js";
 
-type MonthTotal = { count: number; revenueUsd: number };
+export type MonthRevenue = { month: string; count: number; revenueUsd: number };
 
-async function main() {
-  await withDb(async (client) => {
+export async function getSloanePearlRevenueByMonth(): Promise<MonthRevenue[]> {
+  return withDb(async (client) => {
     const storeId = await storeIdFor(client, STORES.sloanePearl);
 
     const res = await client.query<{
@@ -215,7 +241,7 @@ async function main() {
       [storeId]
     );
 
-    const byMonth: Record<string, MonthTotal> = {};
+    const byMonth: Record<string, { count: number; revenueUsd: number }> = {};
     for (const row of res.rows) {
       const month = row.createdAt.toISOString().slice(0, 7);
       byMonth[month] ??= { count: 0, revenueUsd: 0 };
@@ -223,22 +249,33 @@ async function main() {
       byMonth[month].revenueUsd += Number(row.totalPriceUsd);
     }
 
-    console.log(`Sloane & Pearl (storeId=${storeId}) revenue by month:`);
-    let totalCount = 0;
-    let totalRevenue = 0;
-    for (const [month, data] of Object.entries(byMonth).sort()) {
-      console.log(`  ${month}: ${data.count} orders, $${data.revenueUsd.toFixed(2)} USD`);
-      totalCount += data.count;
-      totalRevenue += data.revenueUsd;
-    }
-    console.log(`  TOTAL: ${totalCount} orders, $${totalRevenue.toFixed(2)} USD`);
+    return Object.entries(byMonth)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([month, data]) => ({ month, ...data }));
   });
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+async function main() {
+  const rows = await getSloanePearlRevenueByMonth();
+  console.log(`Sloane & Pearl revenue by month:`);
+  let totalCount = 0;
+  let totalRevenue = 0;
+  for (const { month, count, revenueUsd } of rows) {
+    console.log(`  ${month}: ${count} orders, $${revenueUsd.toFixed(2)} USD`);
+    totalCount += count;
+    totalRevenue += revenueUsd;
+  }
+  console.log(`  TOTAL: ${totalCount} orders, $${totalRevenue.toFixed(2)} USD`);
+}
+
+// Only run as a CLI report when executed directly, not when imported by
+// fill-pnl-template.ts (Task 6).
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
 ```
 
 - [ ] **Step 3: Run it and verify against known facts**
@@ -336,19 +373,20 @@ git commit -m "feat: add customer-overlap-check script"
 
 ---
 
-### Task 4: `ad-spend-by-month.ts`
+### Task 4: Meta helper + `ad-spend-by-month.ts`
 
 **Files:**
+- Create: `financials/scripts/lib/meta.ts`
 - Create: `financials/scripts/ad-spend-by-month.ts`
 
 **Interfaces:**
 - Consumes: nothing from earlier tasks (talks to Meta Graph API directly, not the DB).
-- Produces: console output of monthly ad spend for Sloane & Pearl, consumed by Task 6 (the P&L).
+- Produces: `getSloanePearlSpendByMonth(): Promise<{ month: string; spendUsd: number }[]>` from `lib/meta.ts`, reused by both this task's CLI script and Task 6's xlsx-fill script — extracted so the Graph API call logic exists in exactly one place.
 
-- [ ] **Step 1: Write `financials/scripts/ad-spend-by-month.ts`**
+- [ ] **Step 1: Write `financials/scripts/lib/meta.ts`**
 
 ```typescript
-const SLOANE_PEARL_AD_ACCOUNT = "act_1115325060591696";
+export const SLOANE_PEARL_AD_ACCOUNT = "act_1115325060591696";
 const GRAPH_API_VERSION = "v21.0";
 
 type InsightRow = {
@@ -357,7 +395,9 @@ type InsightRow = {
   date_stop: string;
 };
 
-async function main() {
+export async function getSloanePearlSpendByMonth(): Promise<
+  { month: string; spendUsd: number }[]
+> {
   const token = process.env.META_ACCESS_TOKEN;
   if (!token) {
     throw new Error("META_ACCESS_TOKEN is required");
@@ -378,12 +418,25 @@ async function main() {
   }
   const json = (await res.json()) as { data: InsightRow[] };
 
+  return json.data.map((row) => ({
+    month: row.date_start.slice(0, 7),
+    spendUsd: Number(row.spend ?? 0),
+  }));
+}
+```
+
+- [ ] **Step 2: Write `financials/scripts/ad-spend-by-month.ts`**
+
+```typescript
+import { getSloanePearlSpendByMonth, SLOANE_PEARL_AD_ACCOUNT } from "./lib/meta.js";
+
+async function main() {
+  const rows = await getSloanePearlSpendByMonth();
   console.log(`Sloane & Pearl (${SLOANE_PEARL_AD_ACCOUNT}) ad spend by month:`);
   let total = 0;
-  for (const row of json.data) {
-    const spend = Number(row.spend ?? 0);
-    total += spend;
-    console.log(`  ${row.date_start.slice(0, 7)}: $${spend.toFixed(2)} USD`);
+  for (const { month, spendUsd } of rows) {
+    total += spendUsd;
+    console.log(`  ${month}: $${spendUsd.toFixed(2)} USD`);
   }
   console.log(`  TOTAL: $${total.toFixed(2)} USD`);
 }
@@ -394,16 +447,16 @@ main().catch((err) => {
 });
 ```
 
-- [ ] **Step 2: Run it and verify**
+- [ ] **Step 3: Run it and verify**
 
 Run: `META_ACCESS_TOKEN="<token>" npx tsx financials/scripts/ad-spend-by-month.ts`
 Expected: prints monthly spend rows starting from whenever the first campaign launched (per the design doc, campaigns for Sloane & Pearl started appearing mid-July 2026) through the current month, all values non-negative and non-zero for months with active campaigns. If the API returns a permissions/token error, get a fresh `META_ACCESS_TOKEN` from `railway variables --service fashion-autopilot --kv` rather than debugging the script — the account ID and query shape are already verified against real campaign data.
 
-- [ ] **Step 3: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
-git add financials/scripts/ad-spend-by-month.ts
-git commit -m "feat: add ad-spend-by-month script for Sloane & Pearl's Meta ad account"
+git add financials/scripts/lib/meta.ts financials/scripts/ad-spend-by-month.ts
+git commit -m "feat: add ad-spend-by-month script and shared Meta API helper"
 ```
 
 ---
@@ -431,7 +484,7 @@ WHERE timestamp >= '2026-05-19' AND timestamp <= '2026-08-17';
 
 `ApiUsage` has no `storeId` (confirmed during design — see the design doc §4), so this cannot be resolved by direct attribution. Use order count in the same window as the allocation basis: query orders for both stores in the `2026-05-19` to `2026-08-17` range (reuse `storeIdFor` + a date-filtered `Order` query, same pattern as Task 2/3) and compute Sloane & Pearl's share of combined orders. If NOVA Cape Town has zero orders in this specific window (it may already be retired — check `ShopifyStore.isActive` / any retirement marker before assuming), Sloane & Pearl's share is 100% of store-attributable spend for the window, not the lifetime 159/(159+411) split.
 
-- [ ] **Step 2: Write `financials/scripts/token-cost-allocation.md`**
+- [ ] **Step 3: Write `financials/scripts/token-cost-allocation.md`**
 
 ```markdown
 # AI Token Cost Allocation Methodology
@@ -452,20 +505,20 @@ window. This is a disclosed estimate, not exact per-call accounting.
 - NOVA Cape Town orders in window: [FILL IN FROM STEP 2 QUERY]
 - Sloane & Pearl's allocated share: [Sloane orders] / [Sloane + NOVA orders] × total cost = $[COMPUTED]
 
-This allocated figure feeds the "Tokens used" line in `financials/pnl-sloane-pearl.md`
-(split across COGS and SG&A per the workshop's P&L structure — production-related
-AI calls, e.g. import/catalog enhancement, are COGS; marketing-related calls,
-e.g. ad-creative generation, are SG&A. If the split between the two isn't
-separable from `ApiUsage.purpose` strings, disclose the combined total under
-COGS and note the SG&A portion is included there rather than inventing a
-precise split the data doesn't support).
+This allocated figure feeds `COGS_TOKENS_JSON` / `SGA_TOKENS_JSON` in Task 6's
+`fill-pnl-template.ts` run (split across COGS and SG&A per the official
+template's structure — production-related AI calls, e.g. import/catalog
+enhancement, are COGS; marketing-related calls, e.g. ad-creative generation,
+are SG&A. If the split between the two isn't separable from
+`ApiUsage.purpose` strings, disclose the combined total under COGS only
+rather than inventing a precise split the data doesn't support).
 ```
 
-- [ ] **Step 3: Fill in the actual numbers from the queries in Step 1 and 2**
+- [ ] **Step 4: Fill in the actual numbers from the queries in Step 1 and 2**
 
 Replace every `[FILL IN...]` bracket with the real query results. Do not leave any bracket in the committed file — if a number genuinely cannot be determined yet, write the actual reason (e.g. "pending META token refresh") as prose, not a bracket placeholder.
 
-- [ ] **Step 4: Commit**
+- [ ] **Step 5: Commit**
 
 ```bash
 git add financials/scripts/token-cost-allocation.md
@@ -474,91 +527,208 @@ git commit -m "docs: AI token cost allocation methodology and figures"
 
 ---
 
-### Task 6: `financials/pnl-sloane-pearl.md`
+### Task 6: `fill-pnl-template.ts` + filled `financials/pnl-sloane-pearl.xlsx`
 
 **Files:**
-- Create: `financials/pnl-sloane-pearl.md`
+- Create: `financials/scripts/fill-pnl-template.ts`
+- Create: `financials/pnl-methodology.md`
+- Generate (not hand-written): `financials/pnl-sloane-pearl.xlsx`
 
 **Interfaces:**
-- Consumes: output of Tasks 2 (revenue), 3 (related-party flags), 4 (ad spend), 5 (token allocation).
-- Produces: the filled P&L referenced by the official Devpost submission form's revenue/expense fields.
+- Consumes: `getSloanePearlRevenueByMonth()` (Task 2), `getSloanePearlSpendByMonth()` (Task 4). Reads token-allocation and VA-personnel figures from environment variables (sourced from Task 5's and Task 10's markdown docs — see Step 1) rather than hardcoding them, since those are human-decided methodology figures, not live-queryable.
+- Produces: `financials/pnl-sloane-pearl.xlsx`, the actual artifact uploaded to the Devpost submission form.
 
-- [ ] **Step 1: Run all three financial scripts fresh and record their output**
+**Row/column mapping in the official template** (sheet name `Template`; confirmed
+2026-07-30 against the operator's copy of `Build with Gemini XPRIZE - PL
+Template.xlsx`): columns C/D/E/F = May/June/July/August. Rows: 9 = Independent
+Sales, 10 = Related Party Revenue, 15/16/17 = COGS Personnel/Software
+Subscriptions/Tokens, 19/20/21 = SG&A Personnel/Software Subscriptions/Tokens,
+23 = Other Expenses. Every other cell (column G, rows 11/24/26) is a
+pre-built `SUM` formula — never write to those.
+
+**Where things go:** the template has no dedicated "ad spend" row. Ad spend is
+a marketing/customer-acquisition cost, so it goes under **Other Expenses**
+(row 23) — matches the legend's *"may include... other expenses not outlined
+in the P&L. If you include them, you must explain each expense line in your
+Devpost submission"* and directly answers the separate submission-form
+question *"Marketing and Customer Acquisition Spend... must be disclosed even
+if zero."* VA CS labor is COGS Personnel (row 15) — customer service is a
+production/service cost, not a go-to-market one, so SG&A Personnel (row 19)
+stays empty for this business.
+
+- [ ] **Step 1: Write `financials/scripts/fill-pnl-template.ts`**
+
+```typescript
+import ExcelJS from "exceljs";
+import { getSloanePearlRevenueByMonth } from "./revenue-by-month.js";
+import { getSloanePearlSpendByMonth } from "./lib/meta.js";
+
+const MONTH_COLUMNS: Record<string, string> = {
+  "2026-05": "C",
+  "2026-06": "D",
+  "2026-07": "E",
+  "2026-08": "F",
+};
+
+// Sourced from disclosure/related-party-revenue.md — update together.
+const RELATED_PARTY_REVENUE_BY_MONTH: Record<string, number> = {};
+
+function parseMonthlyJson(envVar: string): Record<string, number> {
+  const raw = process.env[envVar];
+  if (!raw) return {};
+  return JSON.parse(raw) as Record<string, number>;
+}
+
+async function main() {
+  const templatePath = process.env.PL_TEMPLATE_PATH;
+  if (!templatePath) {
+    throw new Error(
+      "PL_TEMPLATE_PATH is required — point it at a freshly downloaded local " +
+        "copy of the official template, per the header's own warning against " +
+        "duplicating the blank form."
+    );
+  }
+
+  // These come from the human-decided methodology docs, not a live query —
+  // see financials/scripts/token-cost-allocation.md and
+  // disclosure/labor-attestation.md. Pass as JSON env vars, e.g.:
+  //   COGS_TOKENS_JSON='{"2026-06":1.20,"2026-07":4.50}'
+  const cogsTokens = parseMonthlyJson("COGS_TOKENS_JSON");
+  const sgaTokens = parseMonthlyJson("SGA_TOKENS_JSON");
+  const cogsPersonnel = parseMonthlyJson("COGS_PERSONNEL_JSON");
+
+  const missing: string[] = [];
+  if (Object.keys(cogsPersonnel).length === 0) {
+    missing.push(
+      "COGS_PERSONNEL_JSON (VA pay, see disclosure/labor-attestation.md — still pending as of design time)"
+    );
+  }
+  if (Object.keys(cogsTokens).length === 0 && Object.keys(sgaTokens).length === 0) {
+    missing.push(
+      "COGS_TOKENS_JSON / SGA_TOKENS_JSON (see financials/scripts/token-cost-allocation.md)"
+    );
+  }
+
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.readFile(templatePath);
+  const sheet = workbook.getWorksheet("Template");
+  if (!sheet) {
+    throw new Error(
+      `Sheet "Template" not found in ${templatePath} — the template's layout ` +
+        "may have changed since this script was written; re-verify the row/" +
+        "column mapping in this plan's Task 6 before proceeding."
+    );
+  }
+
+  const revenue = await getSloanePearlRevenueByMonth();
+  for (const { month, revenueUsd } of revenue) {
+    const col = MONTH_COLUMNS[month];
+    if (!col) continue; // outside the May-Aug window
+    sheet.getCell(`${col}9`).value = Number(revenueUsd.toFixed(2));
+    sheet.getCell(`${col}10`).value = RELATED_PARTY_REVENUE_BY_MONTH[month] ?? 0;
+  }
+
+  const adSpend = await getSloanePearlSpendByMonth();
+  for (const { month, spendUsd } of adSpend) {
+    const col = MONTH_COLUMNS[month];
+    if (!col) continue;
+    sheet.getCell(`${col}23`).value = Number(spendUsd.toFixed(2)); // Other Expenses = ad spend
+  }
+
+  for (const [month, col] of Object.entries(MONTH_COLUMNS)) {
+    if (month in cogsPersonnel) {
+      sheet.getCell(`${col}15`).value = Number(cogsPersonnel[month].toFixed(2));
+    }
+    if (month in cogsTokens) {
+      sheet.getCell(`${col}17`).value = Number(cogsTokens[month].toFixed(2));
+    }
+    if (month in sgaTokens) {
+      sheet.getCell(`${col}21`).value = Number(sgaTokens[month].toFixed(2));
+    }
+    // Software Subscriptions (rows 16, 20) intentionally left blank/$0 —
+    // no incremental cost, see disclosure/pre-existing-resources.md.
+    sheet.getCell(`${col}16`).value = 0;
+    sheet.getCell(`${col}20`).value = 0;
+  }
+
+  const outputPath = "financials/pnl-sloane-pearl.xlsx";
+  await workbook.xlsx.writeFile(outputPath);
+  console.log(`Wrote ${outputPath}`);
+
+  if (missing.length > 0) {
+    console.warn(
+      "\nWARNING: the following inputs were not provided and their cells were " +
+        "left untouched (not zeroed) — this P&L is NOT submission-ready:"
+    );
+    for (const m of missing) console.warn(`  - ${m}`);
+  }
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
+```
+
+- [ ] **Step 2: Run it once with whatever real figures are currently available**
+
+Get the token-allocation figures from `financials/scripts/token-cost-allocation.md`
+(Task 5) once that's been run and filled in; leave `COGS_PERSONNEL_JSON` unset
+if the VA pay figure is still pending (per `disclosure/labor-attestation.md`,
+Task 10).
 
 ```bash
-DATABASE_URL="<public proxy url>" npx tsx financials/scripts/revenue-by-month.ts
-DATABASE_URL="<public proxy url>" npx tsx financials/scripts/customer-overlap-check.ts
-META_ACCESS_TOKEN="<token>" npx tsx financials/scripts/ad-spend-by-month.ts
+export PL_TEMPLATE_PATH="/path/to/a fresh local copy of Build with Gemini XPRIZE - PL Template.xlsx"
+export DATABASE_URL="<public proxy url>"
+export META_ACCESS_TOKEN="<token>"
+export COGS_TOKENS_JSON='{"2026-06":0,"2026-07":0}'   # replace with real figures from Task 5
+export SGA_TOKENS_JSON='{"2026-06":0,"2026-07":0}'    # replace with real figures from Task 5
+npm run fill-pnl
 ```
 
-- [ ] **Step 2: Write `financials/pnl-sloane-pearl.md`**
+Expected: `financials/pnl-sloane-pearl.xlsx` is written; if `COGS_PERSONNEL_JSON`
+was left unset, the console prints the WARNING block naming it as missing —
+that's correct behavior (never silently write $0 for a genuinely unknown
+personnel cost), not a bug to fix.
+
+- [ ] **Step 3: Write `financials/pnl-methodology.md`**
 
 ```markdown
-# Sloane & Pearl — P&L (Cash Basis)
+# P&L Methodology
 
-Structure per the official Build with Gemini XPRIZE P&L template and the
-2026-07-30 business-viability workshop's walkthrough. Figures below are from
-the scripts in `financials/scripts/`, run on [DATE OF LAST RUN].
+`financials/pnl-sloane-pearl.xlsx` is the filled official Devpost P&L
+template, generated by `financials/scripts/fill-pnl-template.ts`. This file
+explains where each number comes from — it is not a second copy of the
+numbers themselves, to avoid two sources of truth going out of sync.
 
-## Total Revenue (independent sales only — arms-length third-party customers)
+- **Independent Sales** (row 9) — `getSloanePearlRevenueByMonth()`, real
+  Shopify order data for `pdmnf1-c0.myshopify.com` only.
+- **Related Party Revenue** (row 10) — see `disclosure/related-party-revenue.md`.
+  $0 as of last check; re-run `customer-overlap-check.ts` and update before
+  final submission.
+- **COGS Personnel** (row 15) — the CS VA's pay, allocated between
+  Sloane & Pearl and NOVA Cape Town. See `disclosure/labor-attestation.md` —
+  pending operator input as of this writing.
+- **COGS / SG&A Software Subscriptions** (rows 16, 20) — $0. See
+  `disclosure/pre-existing-resources.md` for why (fixed platform overhead,
+  not incremental per-store cost).
+- **COGS / SG&A Tokens** (rows 17, 21) — see
+  `financials/scripts/token-cost-allocation.md` for the allocation
+  methodology and current figures.
+- **Other Expenses** (row 23) — Meta ad spend, `getSloanePearlSpendByMonth()`,
+  Sloane & Pearl's own dedicated ad account (`act_1115325060591696`). This is
+  the same figure that answers the submission form's separate "Marketing and
+  Customer Acquisition Spend" question.
 
-| Month | Orders | Revenue (USD) |
-|---|---|---|
-| 2026-06 | [from revenue-by-month.ts] | $[from revenue-by-month.ts] |
-| 2026-07 | [from revenue-by-month.ts] | $[from revenue-by-month.ts] |
-| 2026-08 | [re-run close to submission] | $[re-run close to submission] |
-| **Total** | | $[sum] |
-
-## Related-Party Revenue (reported separately, per `disclosure/related-party-revenue.md`)
-
-$0 — `customer-overlap-check.ts` found zero overlap with NOVA Cape Town (email
-and phone), and the operator confirmed no known friends/family/team purchases.
-Re-verified as of [DATE].
-
-## Cost of Goods Sold (production costs)
-
-| Line | Amount (USD) | Notes |
-|---|---|---|
-| Personnel | $[pending — see disclosure/labor-attestation.md] | Blocked on operator input: VA pay figure and name-disclosure preference |
-| Software subscriptions | $0 | No incremental cost — runs on existing shared Railway hosting, which exists regardless of Sloane & Pearl. See `disclosure/pre-existing-resources.md`. |
-| Tokens used | $[from token-cost-allocation.md] | Production-side share of the allocated AI spend |
-| **Total COGS** | $[sum] | |
-
-## SG&A (go-to-market costs)
-
-| Line | Amount (USD) | Notes |
-|---|---|---|
-| Personnel | — | (VA is CS, categorized under COGS above, not SG&A — CS is a production/service cost, not marketing) |
-| Software subscriptions | $0 | Same reasoning as COGS above — no incremental cost |
-| Tokens used | $[from token-cost-allocation.md] | Marketing/ad-creative share of the allocated AI spend |
-| Ad spend (Meta) | $[from ad-spend-by-month.ts] | Fully attributable — Sloane & Pearl's own dedicated ad account |
-| **Total SG&A** | $[sum] | |
-
-## Other Expenses
-
-$0 unless identified otherwise — no rent, travel, or other categories apply to
-this business.
-
-## Net (Revenue − COGS − SG&A − Other Expenses)
-
-$[computed]
-
----
-
-**Pre-existing resources note:** per the rule requiring disclosure of any cost
-line tied to pre-existing (pre-2026-05-19) infrastructure, see
-`disclosure/pre-existing-resources.md` for what's shared vs. new.
+Regenerate close to the Aug 17 deadline: re-run Tasks 2-5's scripts for
+current figures, then `npm run fill-pnl` again.
 ```
-
-- [ ] **Step 3: Fill in every bracketed value from the script outputs and the other disclosure docs**
-
-No bracket should remain in the committed file. Where a figure is genuinely blocked (labor personnel cost), write the actual blocking reason in prose (matching Task 5's rule), not an empty bracket.
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add financials/pnl-sloane-pearl.md
-git commit -m "docs: fill P&L with current script-sourced figures"
+git add financials/scripts/fill-pnl-template.ts financials/pnl-methodology.md financials/pnl-sloane-pearl.xlsx
+git commit -m "feat: fill official P&L template from live script data"
 ```
 
 ---
@@ -667,9 +837,10 @@ underlying business serves arms-length third-party customers."*
 
 ## Disclosed related-party revenue
 
-$[0 or the overlap amount, computed from the script output] — see
-`financials/pnl-sloane-pearl.md` for how this is reflected (reported
-separately from Total Revenue, not merged in).
+$[0 or the overlap amount, computed from the script output] — this is what
+feeds `RELATED_PARTY_REVENUE_BY_MONTH` in Task 6's `fill-pnl-template.ts`,
+written into row 10 of `financials/pnl-sloane-pearl.xlsx` separately from row
+9's Independent Sales.
 
 ## Re-verification
 
@@ -713,7 +884,7 @@ Sloane & Pearl runs on shared fashion-autopilot infrastructure that predates
 2026-05-19. None of these are Sloane & Pearl-exclusive costs — they're
 platform overhead the business rides on, and (unlike ad spend or AI tokens,
 which scale with usage and are allocated as real cost lines in
-`financials/pnl-sloane-pearl.md`) they don't get an invented dollar estimate,
+`financials/pnl-sloane-pearl.xlsx`) they don't get an invented dollar estimate,
 because they're fixed costs that exist regardless of whether Sloane & Pearl
 specifically is running:
 
@@ -735,7 +906,7 @@ specifically is running:
 None of this is disclosed to inflate the case for viability — it's disclosed
 because the rule requires it. Sloane & Pearl's own attributable costs (ad
 spend, allocated AI tokens, VA labor) are what actually appear as non-zero
-line items in `financials/pnl-sloane-pearl.md`.
+line items in `financials/pnl-sloane-pearl.xlsx`.
 ```
 
 - [ ] **Step 2: Commit**
@@ -802,13 +973,13 @@ Not yet resolved, blocking this doc's completion:
    send my invoice on Friday"). No invoice amount is available yet. Once
    received, split her pay between Sloane & Pearl and NOVA Cape Town using the
    same order-share methodology as `financials/scripts/token-cost-allocation.md`
-   (not charged wholly to either store), and fill in the personnel cost line
-   in `financials/pnl-sloane-pearl.md`.
+   (not charged wholly to either store), then pass the Sloane & Pearl share as
+   `COGS_PERSONNEL_JSON` the next time Task 6's `fill-pnl-template.ts` runs.
 
 This is a genuine external dependency, not an oversight — do not fabricate a
 name-disclosure decision or a pay figure to close this out. Update this file
-and `financials/pnl-sloane-pearl.md`'s Personnel/COGS line together once the
-operator provides both inputs.
+and re-run `fill-pnl-template.ts` together once the operator provides both
+inputs.
 ```
 
 - [ ] **Step 2: Commit**
@@ -945,8 +1116,9 @@ grounded in the real facts gathered — not generic AI-hackathon copy:
 
 4. The story: Sloane & Pearl launched 2026-06-03 on top of an already-running
    AI agent platform (disclosed per disclosure/pre-existing-platform.md), went
-   from zero to [current revenue from financials/pnl-sloane-pearl.md] in
-   [N] weeks, accelerating month over month (June $[X] -> July $[Y]).
+   from zero to [current revenue — read the Independent Sales row from
+   financials/pnl-sloane-pearl.xlsx, or re-run getSloanePearlRevenueByMonth()]
+   in [N] weeks, accelerating month over month (June $[X] -> July $[Y]).
 
 Keep it factual and specific — real dates, real numbers, real names (or the
 agreed anonymized reference, per disclosure/labor-attestation.md) — not
@@ -1099,8 +1271,8 @@ import/enhancement, ad-creative generation, and (once shipped) the Gemini CS
 draft-and-review flow. Show real timestamps/dates, not staged demos.
 
 **1:00–1:45 — The business is real.** Revenue graph or dashboard screenshot
-(from `financials/pnl-sloane-pearl.md`'s numbers), order count, the VA's role
-as evidence of a job created beyond the founding team.
+(from `financials/pnl-sloane-pearl.xlsx`'s Independent Sales row), order
+count, the VA's role as evidence of a job created beyond the founding team.
 
 **1:45–2:30 — The story.** Why this platform-first approach, what's next,
 tie back to the Entrepreneurship & Job Creation category framing from
@@ -1190,16 +1362,20 @@ git commit -m "docs: Gemini/Vertex AI integration plan (status: not yet built)"
 
 ## Self-Review Notes (for whoever executes this plan)
 
-- Tasks 5, 6, 8, 10, 11, 12 all contain bracketed `[FILL IN...]` placeholders
-  by design — they depend on live script output or on the two pending
-  operator inputs (labor pay figure, name-disclosure preference). This is
-  **not** the same as a lazy placeholder: every bracket has an explicit
-  instruction for what real value replaces it and where that value comes
-  from. Do not leave any bracket in a *committed* file without either filling
-  it from a real query/script run, or replacing it with honest prose
-  explaining why it's still pending (matching Task 5's and Task 10's pattern).
+- Tasks 5, 8, 10, 11, 12 all contain bracketed `[FILL IN...]` placeholders by
+  design — they depend on live script output or on the two pending operator
+  inputs (labor pay figure, name-disclosure preference). This is **not** the
+  same as a lazy placeholder: every bracket has an explicit instruction for
+  what real value replaces it and where that value comes from. Do not leave
+  any bracket in a *committed* file without either filling it from a real
+  query/script run, or replacing it with honest prose explaining why it's
+  still pending (matching Task 5's and Task 10's pattern). Task 6 uses the
+  same principle but enforces it in code instead of prose: unset JSON env
+  vars leave their xlsx cells untouched and print an explicit warning, rather
+  than writing a fake $0.
 - Re-run Tasks 2, 3, 4 close to the actual Aug 17 submission deadline — the
   numbers committed during initial implementation will be stale by then (order
   volume grows daily). This matches the design doc §6's explicit "out of
   scope: filling in final, submission-day numbers" — this plan builds the
-  *tooling*, not the final frozen numbers.
+  *tooling*, not the final frozen numbers. Task 6 should be re-run too, after
+  Tasks 2-4's fresh numbers and Task 5/10's current figures are available.
