@@ -51,11 +51,15 @@ external input, a build, or a recording session.
   between her real name and an anonymized reference
   (`disclosure/labor-attestation.md`). Until decided, do **not** put her name
   in any doc, the narrative, or the video.
-- [ ] **Payment-processing fees are only 14/160 orders** — the platform's
-  Shopify payout sync has not run for this store since 2026-06-14, so row 23
-  carries $41.27 where the observed rate implies roughly $911. Re-run that
-  sync, then `npm run fill-pnl`. This is the single largest known
-  understatement in the P&L (see `pnl-methodology.md`, row 23c).
+- [ ] **Payment-processing fees are only 14/160 orders** — those 14 are the
+  only orders processed via Shopify-native payment, so they're the only ones
+  Shopify's fee data ever covers. The remaining 146 were processed through a
+  **different payment processor, OceanPayments**, whose fee structure isn't
+  known yet and won't show up from re-running Shopify's payout sync (that
+  sync only ever covers Shopify-native orders). Get real OceanPayments fee
+  data from the operator, then `npm run fill-pnl`. This is the single
+  largest known understatement in the P&L — true magnitude unknown, not
+  estimated (see `pnl-methodology.md`, row 23c).
 - [ ] **Shopify plan fee** — genuinely incremental to this store and not in
   the P&L, because no invoice figure is recorded anywhere in the platform.
   Pull the real Shopify charges from 2026-06-03 onward into row 16

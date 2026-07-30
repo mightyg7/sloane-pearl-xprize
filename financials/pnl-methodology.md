@@ -229,29 +229,43 @@ P&L and is called out rather than smoothed over.
 aggregated by the platform from Shopify's `order.transactions.fees`,
 denominated in the store's currency (hence the same `exchangeRate`
 conversion). Fee data is present on only **14 of 160 orders**, all placed
-2026-06-08 to 2026-06-14; the payout sync that populates those columns has
-not run for any order since, and all 14 still read `payoutStatus =
-'PENDING'`. Nothing in the database recovers the rest — there is no
-separate payout or balance-transaction table to fall back on.
+2026-06-08 to 2026-06-14 and all processed via **Shopify-native payment
+processing** — the only rail `order.transactions.fees` actually covers.
+All 14 still read `payoutStatus = 'PENDING'`.
 
-On those 14 orders the observed effective rate is **6.52%** of their
-$633.09 of revenue (4.56% processing + 1.96% FX conversion, settling to
-HKD). Applying that rate to the full $13,979.18 would imply roughly **$911**
-of real fee cost, i.e. about **$870 more** than the P&L carries — which
-would widen the reported loss to roughly **$6,990**.
+The remaining **146 orders were processed through a different payment
+processor, OceanPayments**, not Shopify-native payments. That is why
+Shopify's `order.transactions.fees` has nothing for them — it isn't a
+stalled sync waiting to catch up, it's a rail that was never going to carry
+this data in the first place. Nothing in the platform's database recovers
+it either: there is no OceanPayments fee table to fall back on yet.
 
-That extrapolation is deliberately **not** in the xlsx. The template asks
-for cash actually paid out, and $41.27 is the only fee figure this business
-can evidence; a 14-order sample is too thin to represent 160 orders whose
-mix of order values and card geographies differs. But leaving the estimate
-out of the *disclosure* would be worse than leaving it out of the
-spreadsheet, because the direction of the error flatters us — a missing
-expense makes a loss look smaller. So: the P&L carries the evidenced
-figure, and the magnitude of what is missing is stated here.
+On the 14 Shopify-native orders the observed effective rate is **6.52%**
+of their $633.09 of revenue (4.56% processing + 1.96% FX conversion,
+settling to HKD). **That rate does not carry over to the 146
+OceanPayments orders.** OceanPayments is a different processor and almost
+certainly has its own fee structure (its own percentage, its own fixed
+component, its own FX handling) — applying a Shopify-native rate to
+OceanPayments-processed revenue would not be a defensible estimate, it
+would be comparing two unrelated things and presenting the result as if it
+meant something.
 
-To close this properly before submission, re-run the platform's Shopify
-payout sync for this store so the fee columns populate for all 160 orders,
-then re-run `npm run fill-pnl`.
+So: the true fee cost on those 146 orders — and therefore the true total
+loss — is **unknown, not merely estimated**. No number stands in for it
+here. The direction is still knowable even though the magnitude isn't:
+real OceanPayments fees exist, they are cash actually paid out, and none
+of them are in the P&L yet, so the true loss is higher than the
+$6,117.44 headline above by an amount this repo cannot currently state.
+Inventing a plausible-looking figure from the wrong processor's rate would
+be worse than leaving the gap explicit — it would look precise without
+being true.
+
+This is a genuine external dependency, not an oversight: closing it needs
+real OceanPayments fee data from the operator, which does not exist in
+this repo yet. Re-running Shopify's payout sync will not produce it — that
+sync only ever covers Shopify-native-processed orders, and all 14 of those
+are already reflected in the $41.27 above. Once OceanPayments fee figures
+are obtained, re-run `npm run fill-pnl`.
 
 ## Unit economics (not a P&L line — the derivation behind the narrative)
 
