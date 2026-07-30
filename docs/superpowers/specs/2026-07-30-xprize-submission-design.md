@@ -40,6 +40,10 @@ a feature shipped on an existing store.
   checked by email and phone across all orders in both stores
 - Operator-confirmed: no known friends/family/team purchases. Related-party revenue
   = $0 pending final re-check at submission time (order volume will have grown)
+- A VA started manually handling Sloane & Pearl's CS tickets ~2-3 weeks before
+  2026-07-30 (i.e. mid-to-late July, comfortably after May 19) — clean per the
+  labor-attestation requirement (see §4), but means CS for this store is
+  currently human-handled, not AI-native. See §5.
 
 ## 2. Repo scope
 
@@ -158,11 +162,16 @@ Gemini code uses) is not — so reactivating the old code path as-is would satis
 the LLM requirement but **not** the Google Cloud one. The new call must genuinely
 route through Vertex AI, not reuse the existing Gemini Developer API integration.
 
-Where the call lives (surface) is still an open operator decision — "decide
-later." Both candidates already discussed are explicitly validated by the rules'
-own examples of "operated by AI agents": *"an AI agent used for customer
-support"* (→ CS pipeline) or *"an AI tool used to create marketing assets"*
-(→ ad-creative pipeline).
+**Surface, decided:** customer-service email drafting. Sloane & Pearl's tickets
+are currently handled manually by a VA (started ~2-3 weeks before 2026-07-30 —
+see §1). The Gemini/Vertex AI call drafts/triages replies for her review, rather
+than replacing her outright — she stays the human in the loop, sending. This
+still matches the rules' own example of "operated by AI agents" (*"an AI agent
+being used for customer support"*) without displacing work she was just brought
+on to do. Operator confirmed this framing (2026-07-30): CS drafting is "a very
+obvious thing to do with an LLM," with the exact implementation point in
+fashion-autopilot's CS pipeline left to be found "more elegantly" during that
+follow-on work, not prescribed here.
 
 **Technical lift is smaller than it might sound:** per DeepMind DevRel (Paige
 Bailey, technical demo session, 2026-07-30), the `google-genai` SDK is identical
@@ -194,14 +203,13 @@ repo's implementation plan covers.
   treated as final (it's a disclosed estimate, not a precise number).
 - Related-party check should be re-run at submission time (order count will have
   grown between now and Aug 17).
-- Gemini/Vertex AI integration *surface* (which pipeline it lives in) is still
-  undecided — the transport (Vertex AI) is organizer-confirmed, but the P&L
-  "tokens" line and the AI-native-operations narrative can't be finalized until
-  the surface is picked and built.
+- Gemini/Vertex AI *surface* is decided (CS email drafting, VA-in-the-loop) but
+  not yet built — the P&L "tokens" line and the AI-native-operations narrative
+  can't be finalized until the follow-on work in fashion-autopilot lands.
 - Category framing (Entrepreneurship & Job Creation) is a judgment call, not
   dictated by the rules — the narrative needs to make the case explicitly, since
   none of the 5 categories name e-commerce outright.
-- Labor attestation is unresolved: need the operator to identify whether any
-  pre-existing employee/VA/contractor time (e.g. CS ticket handling) touched
-  Sloane & Pearl, so `labor-attestation.md` can be written accurately rather than
-  left as a placeholder — this is a stated FAQ requirement, not optional.
+- Labor attestation: VA started handling Sloane & Pearl CS tickets ~2-3 weeks
+  before 2026-07-30 (clean vs. the May 19 cutoff) — `labor-attestation.md` can
+  now be written for real rather than left as a placeholder. Still need her name/
+  role and what she's been paid for that work to finish the doc.
