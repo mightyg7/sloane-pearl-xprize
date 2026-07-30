@@ -97,8 +97,8 @@ sloane-pearl-xprize/
                                         day-to-day, (2) humans vs. AI division of
                                         labor, (3) jobs/economic opportunity the
                                         business creates beyond the founding team,
-                                        actual and potential — the CS contractor's VA role
-                                        is real evidence here, and it's a direct
+                                        actual and potential — the CS contractor's
+                                        VA role is real evidence here, a direct
                                         hit on the Entrepreneurship & Job Creation
                                         category, (4) the story of building it
                                         this way

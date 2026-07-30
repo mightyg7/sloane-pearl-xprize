@@ -1108,8 +1108,8 @@ grounded in the real facts gathered — not generic AI-hackathon copy:
    reply — AI drafts, a human approves. Strategic calls (what to launch, ad
    budget) are human. Content generation and catalog operations are AI-driven.
 
-3. Jobs/economic opportunity beyond the founding team: the CS contractor's CS role is
-   real, current evidence — a job created specifically for this business,
+3. Jobs/economic opportunity beyond the founding team: the CS contractor's
+   role is real, current evidence — a job created specifically for this business,
    starting 2026-07-16 (see disclosure/labor-attestation.md for the verified
    timeline). Discuss what scaling this model could mean for future hires
    (more CS contractors, supplier relationships) — actual, not just aspirational.

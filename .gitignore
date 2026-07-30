@@ -3,4 +3,20 @@ node_modules/
 .env.local
 *.local.csv
 evidence/customer-evidence-export*.md
-financials/pl-template-blank.xlsx
+
+# The BLANK official P&L template must never be committed — its own header
+# says "Download this form - do not make a copy in the cloud or else it
+# could be shared with others". Only the FILLED output
+# (financials/pnl-sloane-pearl.xlsx) belongs in git.
+#
+# Patterns are broad on purpose: the real downloaded filename is
+# "Build with Gemini XPRIZE - PL Template.xlsx", which the original
+# `financials/pl-template-blank.xlsx` rule never matched, plus the
+# " (1).xlsx" / " copy.xlsx" variants a second download produces.
+*PL Template*.xlsx
+*PL_Template*.xlsx
+*pl-template*.xlsx
+
+# Scratch space for local probe scripts. The committed, reusable queries
+# live in financials/scripts/.
+.tmp-probe/
