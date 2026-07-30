@@ -17,12 +17,53 @@ numbers themselves, to avoid two sources of truth going out of sync.
   `disclosure/pre-existing-resources.md` for why (fixed platform overhead,
   not incremental per-store cost).
 - **COGS / SG&A Tokens** (rows 17, 21) — see
-  `financials/scripts/token-cost-allocation.md` for the allocation
-  methodology and current figures.
+  `financials/scripts/token-cost-allocation.md` for the full allocation
+  methodology. Summary: platform-wide `ApiUsage` spend for the hackathon
+  window is not separable by store or by production-vs-marketing purpose
+  in the data, so the entire allocated total is disclosed under **COGS
+  Tokens only** (row 17) rather than invented as a COGS/SG&A split the
+  data doesn't support — SG&A Tokens (row 21) is intentionally $0/blank.
+  The $187.42 USD total is itself a pro-rata allocation of total platform
+  AI cost by Sloane & Pearl's share of in-window orders across both
+  stores it shares the platform with (159 of 428 orders, see
+  `token-cost-allocation.md`).
+
+  That $187.42 total is then split across the two months Sloane & Pearl
+  actually has order data for, pro-rata by Sloane & Pearl's OWN monthly
+  order share (a second, narrower pro-rata than the one above — this one
+  distributes Sloane & Pearl's already-allocated total across its own
+  calendar months, not across stores):
+  - June 2026: 32 of Sloane & Pearl's 159 in-window orders →
+    32/159 × $187.42 = **$37.72**
+  - July 2026: 127 of 159 orders → 127/159 × $187.42 = **$149.70**
+  - May 2026 gets **$0** (row 17, column C, left blank): although the
+    compliance window opens May 19, Sloane & Pearl placed zero orders in
+    May, so the order-count basis assigns it zero share. This is
+    consistent with the same basis used for June/July, not a separate
+    decision.
+  - Verify: $37.72 + $149.70 = $187.42 exactly (no rounding remainder).
 - **Other Expenses** (row 23) — Meta ad spend, `getSloanePearlSpendByMonth()`,
   Sloane & Pearl's own dedicated ad account (`act_1115325060591696`). This is
   the same figure that answers the submission form's separate "Marketing and
   Customer Acquisition Spend" question.
 
+  **Currency conversion:** Meta's Insights API returns `spend` in the ad
+  account's own billing currency, not USD. `act_1115325060591696` bills in
+  **EUR** (confirmed via `GET /act_1115325060591696?fields=currency`).
+  `getSloanePearlSpendByMonth()` (`financials/scripts/lib/meta.ts`) fetches
+  the account's currency live and converts EUR → USD using the main
+  fashion-autopilot platform's own cached `FxRate` table (read-only, via
+  `financials/scripts/lib/fx.ts`) — the same rate source the main business
+  uses for its own accounting (see fashion-autopilot's
+  `src/lib/fx/get-rate.ts` / `src/lib/fx/refresh-rates.ts`, sourced from
+  Frankfurter, falling back to open.er-api.com). Rate used in the current
+  fill: **1 EUR = 1.138 USD** (source: `live`, fetched 2026-07-30T02:38 UTC
+  by the platform's own FX refresh, not this script). Because ad spend for
+  the current month is a live, still-accruing figure, re-running the fill
+  script close to the deadline will pick up both a fresher EUR amount and a
+  fresher FX rate — expected, not a bug.
+
 Regenerate close to the Aug 17 deadline: re-run Tasks 2-5's scripts for
-current figures, then `npm run fill-pnl` again.
+current figures, then `npm run fill-pnl` again. The EUR→USD rate and the
+monthly token split above will need re-checking at that time too — they
+are current as of 2026-07-30, not fixed constants.

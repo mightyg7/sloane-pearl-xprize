@@ -56,3 +56,27 @@ Store mapping (ShopifyStore → ConnectedStore):
 Total: 428 orders across both stores in the window.
 
 **Note on NOVA Cape Town's status:** Although NOVA Cape Town was marked as retired on 2026-06-15, it continues to have orders after that date up through 2026-08-17 (269 total in-window orders). Therefore, the allocation uses the actual pro-rata split by order count rather than treating NOVA as inactive for this period.
+
+## Monthly split for `COGS_TOKENS_JSON` (Task 6)
+
+The $187.42 USD figure above is a single hackathon-window total; Task 6's
+`fill-pnl-template.ts` needs it broken out per calendar month. That split
+is computed once, by hand, from `getSloanePearlRevenueByMonth()`'s order
+counts — Sloane & Pearl's OWN monthly orders (not the platform-wide
+159-vs-269 split above, which is a different, store-level pro-rata used
+only to derive the $187.42 total in the first place):
+
+- Sloane & Pearl orders by month: June 32, July 127 (159 total — matches
+  the total used above).
+- June: 32/159 × $187.42 = **$37.72**
+- July: 127/159 × $187.42 = **$149.70**
+- May: **$0** — Sloane & Pearl placed zero orders in May, so it gets zero
+  share under the same order-count basis, even though the compliance
+  window opens May 19.
+- Sum check: $37.72 + $149.70 = $187.42 exactly.
+
+Entire allocation goes to **COGS Tokens only** (not split into SG&A) per
+this doc's own guidance above: the split between production and
+marketing AI calls isn't separable from `ApiUsage.purpose` strings, so
+disclosing the combined total under COGS avoids inventing a precision the
+data doesn't support.

@@ -90,6 +90,15 @@ async function main() {
     sheet.getCell(`${col}20`).value = 0;
   }
 
+  // ExcelJS preserves the template's cached formula results (all $0, from
+  // the blank form) instead of recomputing them, and doesn't set a
+  // recalc-on-open flag by default. Without this, a non-recalculating
+  // viewer (e.g. macOS Quick Look) shows TOTAL REVENUE / TOTAL EXPENSES /
+  // PROFIT (LOSS) as stale $0 even though the underlying formulas and
+  // input cells are correct. This only affects how formula cells
+  // recalculate on open — it does not change any input cell.
+  workbook.calcProperties.fullCalcOnLoad = true;
+
   const outputPath = "financials/pnl-sloane-pearl.xlsx";
   await workbook.xlsx.writeFile(outputPath);
   console.log(`Wrote ${outputPath}`);
