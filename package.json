@@ -8,6 +8,7 @@
     "revenue": "tsx financials/scripts/revenue-by-month.ts",
     "overlap": "tsx financials/scripts/customer-overlap-check.ts",
     "ad-spend": "tsx financials/scripts/ad-spend-by-month.ts",
+    "cogs": "tsx financials/scripts/cogs-and-fees-by-month.ts",
     "fill-pnl": "tsx financials/scripts/fill-pnl-template.ts"
   },
   "devDependencies": {
