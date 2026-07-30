@@ -1,5 +1,18 @@
 import { withDb, storeIdFor, STORES } from "./lib/db.js";
 
+// Normalize phone by stripping all non-digit characters
+function normalizePhone(phone: string | null | undefined): string | null {
+  if (!phone) return null;
+  const digits = phone.replace(/\D/g, '');
+  return digits ? digits : null;
+}
+
+// Normalize email by trimming whitespace and converting to lowercase
+function normalizeEmail(email: string | null | undefined): string | null {
+  if (!email) return null;
+  return email.toLowerCase().trim() || null;
+}
+
 async function main() {
   await withDb(async (client) => {
     const sloaneId = await storeIdFor(client, STORES.sloanePearl);
@@ -19,19 +32,21 @@ async function main() {
     ]);
 
     const novaEmails = new Set(
-      novaRes.rows.map((r) => r.customerEmail?.toLowerCase()).filter(Boolean)
+      novaRes.rows.map((r) => normalizeEmail(r.customerEmail)).filter(Boolean)
     );
-    const novaPhones = new Set(novaRes.rows.map((r) => r.customerPhone).filter(Boolean));
+    const novaPhones = new Set(
+      novaRes.rows.map((r) => normalizePhone(r.customerPhone)).filter(Boolean)
+    );
 
     const overlapByEmail = sloaneRes.rows.filter(
-      (r) => r.customerEmail && novaEmails.has(r.customerEmail.toLowerCase())
+      (r) => r.customerEmail && novaEmails.has(normalizeEmail(r.customerEmail))
     );
     const overlapByPhone = sloaneRes.rows.filter(
-      (r) => r.customerPhone && novaPhones.has(r.customerPhone)
+      (r) => r.customerPhone && novaPhones.has(normalizePhone(r.customerPhone))
     );
 
     const uniqueEmails = new Set(
-      sloaneRes.rows.map((r) => r.customerEmail?.toLowerCase()).filter(Boolean)
+      sloaneRes.rows.map((r) => normalizeEmail(r.customerEmail)).filter(Boolean)
     );
 
     console.log(`Sloane & Pearl total orders: ${sloaneRes.rows.length}`);
