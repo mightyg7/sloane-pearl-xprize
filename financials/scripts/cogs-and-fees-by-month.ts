@@ -80,6 +80,14 @@ export type MonthFees = {
   feesUsd: number;
   ordersWithFeeData: number;
   ordersTotal: number;
+  /**
+   * Estimated OceanPayments fee for this month's gap orders, only
+   * present when a rate was supplied to getSloanePearlPaymentFees.
+   * Kept separate from `feesUsd` (the exact Shopify-native figure) so
+   * callers can report — and the P&L can disclose — evidenced vs.
+   * estimated amounts distinctly rather than blending them silently.
+   */
+  estimatedOceanPaymentFeesUsd?: number;
 };
 
 export type PaymentFeesResult = {
@@ -91,6 +99,17 @@ export type PaymentFeesResult = {
     sampleRevenueUsd: number;
     /** Observed effective fee rate on that sample. NOT extrapolated into the P&L. */
     observedFeeRatePct: number | null;
+    /**
+     * Set only when a rate was supplied. Gross USD of the gap orders
+     * (no Shopify-native fee data) the estimate was applied to, and the
+     * rate itself, so the estimate's basis is always reportable.
+     */
+    oceanPaymentEstimate?: {
+      ratePct: number;
+      gapOrdersGrossUsd: number;
+      gapOrdersCount: number;
+      estimatedFeesUsd: number;
+    };
   };
 };
 
@@ -313,7 +332,19 @@ export async function getSloanePearlUnitEconomics(): Promise<UnitEconomics> {
  * Refunded orders keep their fees: a processor does not refund its own
  * processing fee, so that fee is real cash out either way.
  */
-export async function getSloanePearlPaymentFees(): Promise<PaymentFeesResult> {
+/**
+ * @param oceanPaymentRatePct Optional blended true-cost rate (e.g. 7.835
+ *   for 7.835%) to apply to gap orders' gross revenue as a DISCLOSED
+ *   ESTIMATE, kept separate from the exact Shopify-native figure.
+ *   Sourced from a real, independently-run OceanPayments settlement-export
+ *   analysis (see financials/pnl-methodology.md for the derivation and
+ *   validation) — never invent a rate here. Omit to get exact-only
+ *   behavior (the historical default): gap orders contribute $0, and the
+ *   caller is responsible for disclosing the resulting understatement.
+ */
+export async function getSloanePearlPaymentFees(
+  oceanPaymentRatePct?: number
+): Promise<PaymentFeesResult> {
   return withDb(async (client) => {
     const storeId = await storeIdFor(client, STORES.sloanePearl);
 
@@ -323,6 +354,8 @@ export async function getSloanePearlPaymentFees(): Promise<PaymentFeesResult> {
       orders_with_fee_data: string;
       fees_usd: string;
       sample_revenue_usd: string;
+      gap_orders: string;
+      gap_gross_usd: string;
     }>(
       `SELECT to_char("createdAt", 'YYYY-MM') AS month,
               COUNT(*)::text                  AS orders_total,
@@ -340,7 +373,17 @@ export async function getSloanePearlPaymentFees(): Promise<PaymentFeesResult> {
                 WHERE "processingFeeShop" IS NOT NULL
                    OR "conversionFeeShop" IS NOT NULL
                    OR "otherFeeShop" IS NOT NULL
-              ), 0)::text                     AS sample_revenue_usd
+              ), 0)::text                     AS sample_revenue_usd,
+              COUNT(*) FILTER (
+                WHERE "processingFeeShop" IS NULL
+                  AND "conversionFeeShop" IS NULL
+                  AND "otherFeeShop" IS NULL
+              )::text                         AS gap_orders,
+              COALESCE(SUM("totalPriceUsd") FILTER (
+                WHERE "processingFeeShop" IS NULL
+                  AND "conversionFeeShop" IS NULL
+                  AND "otherFeeShop" IS NULL
+              ), 0)::text                     AS gap_gross_usd
        FROM "Order"
        WHERE "storeId" = $1
          AND ("financialStatus" IS NULL
@@ -350,17 +393,28 @@ export async function getSloanePearlPaymentFees(): Promise<PaymentFeesResult> {
       [storeId]
     );
 
-    const byMonth: MonthFees[] = res.rows.map((r) => ({
-      month: r.month,
-      feesUsd: Number(r.fees_usd),
-      ordersWithFeeData: Number(r.orders_with_fee_data),
-      ordersTotal: Number(r.orders_total),
-    }));
+    const byMonth: MonthFees[] = res.rows.map((r) => {
+      const gapGrossUsd = Number(r.gap_gross_usd);
+      const estimated =
+        oceanPaymentRatePct != null
+          ? Math.round(gapGrossUsd * (oceanPaymentRatePct / 100) * 100) / 100
+          : undefined;
+      return {
+        month: r.month,
+        feesUsd: Number(r.fees_usd) + (estimated ?? 0),
+        ordersWithFeeData: Number(r.orders_with_fee_data),
+        ordersTotal: Number(r.orders_total),
+        ...(estimated !== undefined ? { estimatedOceanPaymentFeesUsd: estimated } : {}),
+      };
+    });
 
     const ordersTotal = byMonth.reduce((a, m) => a + m.ordersTotal, 0);
     const ordersWithFeeData = byMonth.reduce((a, m) => a + m.ordersWithFeeData, 0);
-    const feesUsd = byMonth.reduce((a, m) => a + m.feesUsd, 0);
     const sampleRevenueUsd = res.rows.reduce((a, r) => a + Number(r.sample_revenue_usd), 0);
+    const exactFeesUsd = res.rows.reduce((a, r) => a + Number(r.fees_usd), 0);
+
+    const gapOrdersCount = res.rows.reduce((a, r) => a + Number(r.gap_orders), 0);
+    const gapOrdersGrossUsd = res.rows.reduce((a, r) => a + Number(r.gap_gross_usd), 0);
 
     return {
       byMonth,
@@ -369,7 +423,18 @@ export async function getSloanePearlPaymentFees(): Promise<PaymentFeesResult> {
         ordersWithFeeData,
         sampleRevenueUsd,
         observedFeeRatePct:
-          sampleRevenueUsd > 0 ? (feesUsd / sampleRevenueUsd) * 100 : null,
+          sampleRevenueUsd > 0 ? (exactFeesUsd / sampleRevenueUsd) * 100 : null,
+        ...(oceanPaymentRatePct != null
+          ? {
+              oceanPaymentEstimate: {
+                ratePct: oceanPaymentRatePct,
+                gapOrdersGrossUsd,
+                gapOrdersCount,
+                estimatedFeesUsd:
+                  Math.round(gapOrdersGrossUsd * (oceanPaymentRatePct / 100) * 100) / 100,
+              },
+            }
+          : {}),
       },
     };
   });
@@ -441,12 +506,23 @@ async function main() {
       `contribution/order $${ue.contributionPerOrderUsd.toFixed(2)} (before ad spend)`
   );
 
-  const fees = await getSloanePearlPaymentFees();
+  // OCEANPAY_FEE_RATE_PCT is optional and OFF by default — see
+  // financials/pnl-methodology.md for the sourced rate and its
+  // derivation. Never invented here; if unset, fees.byMonth carries only
+  // the exact Shopify-native figure and the gap stays visibly $0.
+  const oceanPayRateEnv = process.env.OCEANPAY_FEE_RATE_PCT;
+  const oceanPayRate = oceanPayRateEnv ? Number(oceanPayRateEnv) : undefined;
+
+  const fees = await getSloanePearlPaymentFees(oceanPayRate);
   console.log("\nSloane & Pearl payment-processing fees by month (USD):");
   let feeTotal = 0;
   for (const m of fees.byMonth) {
+    const estimateNote =
+      m.estimatedOceanPaymentFeesUsd !== undefined
+        ? ` (includes $${m.estimatedOceanPaymentFeesUsd.toFixed(2)} estimated OceanPayments)`
+        : "";
     console.log(
-      `  ${m.month}: $${m.feesUsd.toFixed(2)} ` +
+      `  ${m.month}: $${m.feesUsd.toFixed(2)}${estimateNote} ` +
         `(fee data present on ${m.ordersWithFeeData} of ${m.ordersTotal} orders)`
     );
     feeTotal += m.feesUsd;
@@ -454,7 +530,7 @@ async function main() {
   console.log(`  TOTAL: $${feeTotal.toFixed(2)}`);
   const fc = fees.coverage;
   console.log(
-    `  Coverage: ${fc.ordersWithFeeData} of ${fc.ordersTotal} orders carry synced fee data.`
+    `  Coverage: ${fc.ordersWithFeeData} of ${fc.ordersTotal} orders carry synced (Shopify-native) fee data.`
   );
   if (fc.observedFeeRatePct !== null) {
     console.log(
@@ -462,11 +538,18 @@ async function main() {
         `${fc.observedFeeRatePct.toFixed(2)}% of $${fc.sampleRevenueUsd.toFixed(2)} revenue.`
     );
   }
-  if (fc.ordersWithFeeData < fc.ordersTotal) {
+  if (fc.oceanPaymentEstimate) {
+    const e = fc.oceanPaymentEstimate;
+    console.log(
+      `  OceanPayments estimate applied: ${e.ratePct}% of $${e.gapOrdersGrossUsd.toFixed(2)} ` +
+        `gross across ${e.gapOrdersCount} gap orders = $${e.estimatedFeesUsd.toFixed(2)}.`
+    );
+  } else if (fc.ordersWithFeeData < fc.ordersTotal) {
     console.warn(
       "\n  WARNING: fee data is incomplete, so the total above UNDERSTATES real " +
         "payment-processing cost. It is reported as-is rather than extrapolated " +
-        "from the observed rate — see financials/pnl-methodology.md."
+        "from the observed rate — see financials/pnl-methodology.md. Set " +
+        "OCEANPAY_FEE_RATE_PCT to apply the sourced OceanPayments estimate instead."
     );
   }
 }

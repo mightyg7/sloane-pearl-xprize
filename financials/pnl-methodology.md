@@ -228,52 +228,68 @@ platform's own resolver uses.
 
 ### Row 23c — Payment processing fees
 
-`getSloanePearlPaymentFees()` in the same script. **$41.27**, and that
-figure is **materially incomplete** — this is the weakest number in the
-P&L and is called out rather than smoothed over.
+`getSloanePearlPaymentFees()` in the same script. **Committed xlsx currently
+carries $41.27** — the exact, Shopify-native-only figure — even though the
+true rate is now known (see below). This is deliberate, not an oversight:
+see "Why the estimate isn't applied yet" below.
 
 `Order.processingFeeShop` / `conversionFeeShop` / `otherFeeShop` are
 aggregated by the platform from Shopify's `order.transactions.fees`,
 denominated in the store's currency (hence the same `exchangeRate`
-conversion). Fee data is present on only **14 of 160 orders**, all placed
-2026-06-08 to 2026-06-14 and all processed via **Shopify-native payment
-processing** — the only rail `order.transactions.fees` actually covers.
-All 14 still read `payoutStatus = 'PENDING'`.
+conversion). This only ever covers orders processed via **Shopify-native
+payment processing** — 14 orders as of the pinned snapshot, all placed
+2026-06-08 to 2026-06-14, all still reading `payoutStatus = 'PENDING'`.
 
-The remaining **146 orders were processed through a different payment
-processor, OceanPayments**, not Shopify-native payments. That is why
-Shopify's `order.transactions.fees` has nothing for them — it isn't a
-stalled sync waiting to catch up, it's a rail that was never going to carry
-this data in the first place. Nothing in the platform's database recovers
-it either: there is no OceanPayments fee table to fall back on yet.
+The remaining orders were processed through a **different payment
+processor, OceanPayments**. That is why Shopify's `order.transactions.fees`
+has nothing for them — it isn't a stalled sync waiting to catch up, it's a
+rail that was never going to carry this data in the first place. On the 14
+Shopify-native orders the observed effective rate is **6.52%** of their
+$633.09 of revenue (4.56% processing + 1.96% FX conversion, settling to
+HKD) — but **that rate does not carry over** to the OceanPayments orders;
+they're a different processor with its own fee structure.
 
-On the 14 Shopify-native orders the observed effective rate is **6.52%**
-of their $633.09 of revenue (4.56% processing + 1.96% FX conversion,
-settling to HKD). **That rate does not carry over to the 146
-OceanPayments orders.** OceanPayments is a different processor and almost
-certainly has its own fee structure (its own percentage, its own fixed
-component, its own FX handling) — applying a Shopify-native rate to
-OceanPayments-processed revenue would not be a defensible estimate, it
-would be comparing two unrelated things and presenting the result as if it
-meant something.
+**The OceanPayments rate is now known, from real settlement data — not
+this project's own derivation.** A separate, independently-run analysis of
+OceanPayments' settlement exports for these same terminals
+(26510611/26510612, sloaneandpearl.com + pdmnf1-c0.myshopify.com) found a
+blended **true cost of 7.835% of gross**: gateway/discount fee (3.83%,
+varies 3.40–4.05% by card brand and wallet), a $0.30 per-transaction fee,
+a 0.35% "Shopify Direct Integration" SaaS fee, a monthly service fee, and
+an extrapolated ~1.31%-of-gross withdrawal fee. Cross-checked here against
+the operator-supplied June transaction report
+(`265106Transaction Report.xls`): that file's June total — 18 approved
+transactions, $1,443.30 gross — matches this repo's own count of June's
+fee-data-gap orders exactly, which is real corroboration that "the
+OceanPayments-processed orders" in this repo's data and "OceanPayments'
+own June report" are the same population. Three discrepancies against
+OceanPayments' signed quotation are still open with their account manager
+(Visa/MC priced above quote, an undisclosed $45 withdrawal fee, the SaaS
+fee not in the quote at all) — the 7.835% is real and independently
+sourced, not settled to the last decimal.
 
-So: the true fee cost on those 146 orders — and therefore the true total
-loss — is **unknown, not merely estimated**. No number stands in for it
-here. The direction is still knowable even though the magnitude isn't:
-real OceanPayments fees exist, they are cash actually paid out, and none
-of them are in the P&L yet, so the true loss is higher than the
-$6,222.44 headline above by an amount this repo cannot currently state.
-August's VA invoice (not yet issued) will widen it further still.
-Inventing a plausible-looking figure from the wrong processor's rate would
-be worse than leaving the gap explicit — it would look precise without
-being true.
+**The capability to apply it is built and ready.**
+`getSloanePearlPaymentFees()` accepts an optional blended rate and returns
+the resulting estimate as a field kept separate from the exact figure —
+never silently blended. Set `OCEANPAY_FEE_RATE_PCT=7.835` (both for
+`npm run cogs`'s standalone report and for `npm run fill-pnl`) to apply it;
+omit it and behavior is unchanged from before — exact-only, gap orders
+contribute $0.
 
-This is a genuine external dependency, not an oversight: closing it needs
-real OceanPayments fee data from the operator, which does not exist in
-this repo yet. Re-running Shopify's payout sync will not produce it — that
-sync only ever covers Shopify-native-processed orders, and all 14 of those
-are already reflected in the $41.27 above. Once OceanPayments fee figures
-are obtained, re-run `npm run fill-pnl`.
+**Why the estimate isn't applied to the committed xlsx yet.** The order
+count backing "the gap" has already grown past the pinned snapshot's 160
+(more July orders have synced in since 2026-07-30, ordinary and expected —
+nothing to do with a "full regenerate" of ad spend/COGS). Applying the
+OceanPayments estimate to today's larger order set while every other P&L
+line still reflects the July-30 snapshot would make the file internally
+inconsistent with itself. The rate is the hard part and is now captured
+here permanently; applying it is one flag away and will happen as part of
+the single final regenerate before submission (`npm run fill-pnl` with
+`OCEANPAY_FEE_RATE_PCT=7.835` set), using one consistent snapshot for
+every line at once. Until then, the true loss is higher than the
+$6,222.44 headline above by an amount this repo can now estimate
+(roughly 7.835% of the OceanPayments-processed gross) but has not yet
+applied. August's VA invoice (not yet issued) will widen it further still.
 
 ## Unit economics (not a P&L line — the derivation behind the narrative)
 

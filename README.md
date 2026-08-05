@@ -53,15 +53,17 @@ external input, a build, or a recording session.
   between her real name and an anonymized reference
   (`disclosure/labor-attestation.md`). Until decided, do **not** put her name
   in any doc, the narrative, or the video.
-- [ ] **Payment-processing fees are only 14/160 orders** — those 14 are the
-  only orders processed via Shopify-native payment, so they're the only ones
-  Shopify's fee data ever covers. The remaining 146 were processed through a
-  **different payment processor, OceanPayments**, whose fee structure isn't
-  known yet and won't show up from re-running Shopify's payout sync (that
-  sync only ever covers Shopify-native orders). Get real OceanPayments fee
-  data from the operator, then `npm run fill-pnl`. This is the single
-  largest known understatement in the P&L — true magnitude unknown, not
-  estimated (see `pnl-methodology.md`, row 23c).
+- [ ] **Apply the OceanPayments fee estimate at final regenerate** — most
+  orders were processed via a different processor, OceanPayments, which
+  Shopify's fee sync never covers. The rate is now known (**7.835%
+  blended**, from real OceanPayments settlement data, cross-checked against
+  the operator's June transaction report — see `pnl-methodology.md`, row
+  23c) and `getSloanePearlPaymentFees()` / `npm run fill-pnl` already
+  support applying it via `OCEANPAY_FEE_RATE_PCT=7.835`. Deliberately **not
+  applied to the committed xlsx yet** — the gap-order count has moved past
+  the pinned 2026-07-30 snapshot, and applying it now would mix a live
+  figure into an otherwise-frozen file. Apply it as part of the single
+  final regenerate before submission, alongside fresh revenue/ad-spend/COGS.
 - [ ] **Shopify plan fee** — genuinely incremental to this store and not in
   the P&L, because no invoice figure is recorded anywhere in the platform.
   Pull the real Shopify charges from 2026-06-03 onward into row 16

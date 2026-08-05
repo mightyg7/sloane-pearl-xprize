@@ -174,7 +174,14 @@ async function main() {
   // which must be updated alongside any change here.
   const adSpend = await getSloanePearlSpendByMonth();
   const cogs = await getSloanePearlMerchandiseCogs();
-  const fees = await getSloanePearlPaymentFees();
+  // OCEANPAY_FEE_RATE_PCT is optional, off by default. Set it to apply
+  // the sourced OceanPayments blended true-cost rate (see
+  // financials/pnl-methodology.md for the rate and its derivation) to
+  // gap orders' gross revenue as a disclosed estimate, on top of the
+  // exact Shopify-native fee figure. Never invent a rate here.
+  const oceanPayRateEnv = process.env.OCEANPAY_FEE_RATE_PCT;
+  const oceanPayRate = oceanPayRateEnv ? Number(oceanPayRateEnv) : undefined;
+  const fees = await getSloanePearlPaymentFees(oceanPayRate);
 
   const otherExpenses: Record<string, number> = {};
   const addOther = (month: string, amount: number) => {
@@ -255,12 +262,21 @@ async function main() {
         "run `npm run cogs` for detail"
     );
   }
-  if (fees.coverage.ordersWithFeeData < fees.coverage.ordersTotal) {
+  if (fees.coverage.oceanPaymentEstimate) {
+    const e = fees.coverage.oceanPaymentEstimate;
+    warnings.push(
+      `row 23 includes a $${e.estimatedFeesUsd.toFixed(2)} OceanPayments fee ESTIMATE ` +
+        `(${e.ratePct}% applied to $${e.gapOrdersGrossUsd.toFixed(2)} gross across ` +
+        `${e.gapOrdersCount} gap orders) — sourced rate, not the exact Shopify-native ` +
+        `figure; see financials/pnl-methodology.md`
+    );
+  } else if (fees.coverage.ordersWithFeeData < fees.coverage.ordersTotal) {
     warnings.push(
       `payment fee data covers only ${fees.coverage.ordersWithFeeData} of ` +
         `${fees.coverage.ordersTotal} orders, so row 23 UNDERSTATES real fee cost ` +
         `(observed rate on the covered orders: ` +
-        `${fees.coverage.observedFeeRatePct?.toFixed(2)}%)`
+        `${fees.coverage.observedFeeRatePct?.toFixed(2)}%) — set OCEANPAY_FEE_RATE_PCT ` +
+        `to apply the sourced OceanPayments estimate instead`
     );
   }
   if (refundDiscrepancies.length > 0) {
