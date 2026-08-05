@@ -33,7 +33,7 @@ pending. Refer to her only as "a CS contractor" / "she" / "our
 customer-service hire."
 
 **Never show a revenue figure without the loss beside it.** The business is
-not profitable — net loss $6,117.44 on $13,979.18 of revenue, blended ROAS
+not profitable — net loss $6,222.44 on $13,979.18 of revenue, blended ROAS
 0.89x (see `financials/pnl-methodology.md`). The revenue numbers and the
 loss numbers travel together, in the same section, at 1:00–1:45. If a later
 edit cuts for time, the loss beat is **not** the thing to cut: the P&L
@@ -125,7 +125,7 @@ visible on screen, no staged or mocked data.
   28 in June, 126 in July."*
 - **Then, immediately, the cost side — do not let the revenue bar stand
   alone.** On-screen caption or a second graphic: *"$15,721.49 ad spend.
-  Net loss $6,117.44. Blended ROAS 0.89x. Not profitable yet."* This has to
+  Net loss $6,222.44. Blended ROAS 0.89x. Not profitable yet."* This has to
   appear in the same breath as the revenue graphic, not be dropped or
   buried in the close. A revenue-only chart would misrepresent the
   business, and the P&L judges receive states the loss plainly — the video
@@ -139,7 +139,7 @@ visible on screen, no staged or mocked data.
 **VO (optional, ~86 words / ~34s):** "This isn't a demo — it's a real
 business. June's first partial month brought in $1,958.76. July: $12,020.42,
 six times as much, across 154 real customer orders. It's also not profitable
-yet — $15,721.49 went out on ads to buy that growth, a net loss of $6,117.44
+yet — $15,721.49 went out on ads to buy that growth, a net loss of $6,222.44
 at a blended ROAS of 0.89. Product margin is healthy, near 65 percent; what
 has to improve is ad efficiency. And the growth already created a real job: a
 customer-service contractor, brought on July 16th, who reviews and sends

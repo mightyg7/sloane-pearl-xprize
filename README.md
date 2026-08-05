@@ -31,8 +31,8 @@ Full context: `docs/superpowers/specs/2026-07-30-xprize-submission-design.md`.
 
 ## Where the business actually stands
 
-As of 2026-07-30: **$13,979.18** revenue, **$20,096.62** expenses, a **net loss
-of $6,117.44** at a blended ROAS of **0.89x**. Stated up front so nothing in
+As of 2026-08-01: **$13,979.18** revenue, **$20,201.62** expenses, a **net loss
+of $6,222.44** at a blended ROAS of **0.89x**. Stated up front so nothing in
 this repo reads as a profitability claim. Derivation and caveats:
 `financials/pnl-methodology.md`.
 
@@ -41,11 +41,13 @@ this repo reads as a profitability claim. Derivation and caveats:
 Genuinely unresolved. None of these are blocked on writing — they need an
 external input, a build, or a recording session.
 
-- [ ] **VA pay figure** — row 15 (COGS Personnel) is blank. Her invoice has
-  not been issued (`disclosure/labor-attestation.md`). Once it arrives, split
-  it between Sloane & Pearl and NOVA Cape Town on the order-share basis in
-  `financials/scripts/token-cost-allocation.md`, pass the share as
-  `COGS_PERSONNEL_JSON`, re-run `npm run fill-pnl`. Widens the loss.
+- [ ] **VA pay for August** — July's invoice ($105.00, verified against the
+  real Airwallex payout, 100% Sloane & Pearl since NOVA had zero orders in
+  that window) is already in row 15. August's invoice hasn't been issued yet.
+  Once it arrives, allocate on the order-share basis in
+  `financials/scripts/token-cost-allocation.md` if NOVA has order volume that
+  month, pass the share as `COGS_PERSONNEL_JSON`, re-run `npm run fill-pnl`.
+  Widens the loss.
 - [ ] **Name-disclosure decision for the CS contractor** — anonymized
   everywhere for now, which the official FAQ permits. Operator has not chosen
   between her real name and an anonymized reference

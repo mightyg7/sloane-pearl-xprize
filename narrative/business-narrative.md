@@ -33,9 +33,10 @@ Dynamic Creative mode, so Meta's algorithm keeps testing creative and copy
 combinations inside each one on top of that.
 
 Those campaigns cost money, and the bottom line is a loss. Against
-$13,979.18 of retained revenue the business spent $20,096.62 — $15,721.49
+$13,979.18 of retained revenue the business spent $20,201.62 — $15,721.49
 on Meta ads, $4,145.60 in real supplier invoices for merchandise, $188.26
-in allocated AI tokens — for a **net loss of $6,117.44 at a blended ROAS of
+in allocated AI tokens, and $105.00 in verified CS-contractor pay for her
+first two weeks — for a **net loss of $6,222.44 at a blended ROAS of
 0.89x**. That is deliberate early-stage spend: 127 campaigns bought the 6.1x
 month-over-month curve above, and finding out which products and creatives
 work costs money before it earns any. The business is not yet profitable,
@@ -44,12 +45,13 @@ paid orders with matched supplier invoices carry a 64.6% merchandise gross
 margin, about $56 of contribution per order before advertising — but whether ad
 efficiency improves as it scales, because each order currently costs around
 $102 in ad spend to win. That loss is a floor, not a ceiling: the CS
-contractor's pay isn't in it yet, and payment-processing fee data is
-incomplete — it's known for only 14 of 160 orders, all processed via
-Shopify-native payment. The other 146 were processed through a different
-payment processor, OceanPayments, whose fees aren't available yet, so
-both gaps push the true loss wider by an amount not yet known. Full
-derivation, gaps included, is in `financials/pnl-methodology.md`.
+contractor's August pay isn't in it yet (only her first invoice, through
+July 31, is), and payment-processing fee data is incomplete — it's known
+for only 14 of 160 orders, all processed via Shopify-native payment. The
+other 146 were processed through a different payment processor,
+OceanPayments, whose fees aren't available yet, so both gaps push the true
+loss wider by an amount not yet known. Full derivation, gaps included, is
+in `financials/pnl-methodology.md`.
 
 What AI does not do here is send a customer a reply or decide what to
 spend. Customer service today is fully human: a CS contractor, engaged
