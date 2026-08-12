@@ -1,39 +1,95 @@
 # Gemini / Google Cloud Integration
 
-**Status: not yet built.** This describes the plan, confirmed during design,
-not a shipped feature. Do not reference this as "live" anywhere else in this
-repo (`narrative/ai-native-operations.md`, `narrative/business-narrative.md`)
-until it actually ships in `fashion-autopilot`.
+**Status: shipped and live (2026-08-13).** Real Gemini calls now run through
+Vertex AI, in production, for Sloane & Pearl's catalog-copy generation.
 
-## What's planned
+## What was actually built (differs from the original plan — see below)
 
-A real, autonomous Gemini call added to Sloane & Pearl's customer-service
-pipeline: drafts/triages a reply for the VA's review (she stays the human
-sender — see `disclosure/labor-attestation.md`). Routed through **Vertex AI**,
-not the plain Gemini Developer API key, so the same call satisfies both the
-LLM requirement (*"must use the Gemini API for at least one LLM call"*) and
-the Google Cloud requirement (*"must use at least one product from Google
-Cloud"*) — confirmed by Google's own representative at the 2026-07-30
-innovation orientation workshop ("Does calling Gemini via Vertex AI satisfy
-the Gemini API requirement?" — "Correct.").
+`src/lib/vertex-provider.ts` (new) wraps `@google/genai` in **Vertex AI**
+mode — a dedicated GCP project (`sloane-pearl-xprize`), a service account
+with the `Agent Platform User` role (Google's current name for what the IAM
+role picker still resolves as `roles/aiplatform.user`, i.e. the classic
+"Vertex AI User" role), authenticated via a JSON service-account key set as
+an env var on both the web and worker Railway services. This is distinct
+from the platform's existing plain Gemini Developer API key
+(`GEMINI_API_KEY`), which is **not** a Google Cloud product on its own — the
+Vertex routing is what makes this call satisfy both hackathon requirements
+(*"at least one LLM call through Gemini"* and *"at least one product from
+Google Cloud"*) with the same call, per Google's own confirmation at the
+2026-07-30 workshop.
 
-Per DeepMind DevRel (2026-07-30 technical session), the switch from the
-existing (dormant, non-Vertex) Gemini code path to Vertex AI is a small
-client-config change (region ID + GCP project ID) using the same
-`google-genai` SDK, not a rewrite.
+`src/lib/ai-enhance.ts`'s `enhanceAndTranslate()` — the function that writes
+Sloane & Pearl's AI-generated product titles/descriptions/bullets at import
+time — now accepts an optional `provider: "anthropic" | "vertex"` param,
+defaulting to `"anthropic"` (zero behavior change for every existing caller
+and every other store). `src/lib/filler-import/run-collection-import.ts`
+passes `provider: "vertex"` only when the import's `storeId` matches Sloane
+& Pearl's `ConnectedStore.id` (`12a77c71-db85-43cf-8f74-64bfb23888b2`) —
+every other store keeps generating copy via Anthropic, unchanged.
 
-## Why this matters more than "one of three criteria"
+**Deviation from the original plan, disclosed:** the design spec named
+customer-service drafting as the intended surface. The surface actually
+shipped is catalog-copy generation instead. Reasoning: CS drafting would
+have meant modifying a live, already-autonomous send pipeline (draft → judge
+→ auto-send) shared across every store — a materially larger blast radius
+for a change whose only purpose is satisfying a narrow API-usage
+requirement. Catalog-copy generation is a single, already-isolated function
+with an existing multi-provider pattern (it swaps cleanly between two
+providers), scoped to one store via one id comparison, with no shared state
+touched. The requirement is satisfied identically either way — *"at least
+one LLM call through Gemini in the deployed application"* does not specify
+which call.
 
-Per the official rules, judging has a Stage One pass/fail gate: *"whether the
-ideas... reasonably apply the required APIs/SDKs featured in the Hackathon."*
-A missing or fake Gemini/Google Cloud integration risks the whole submission
-being filtered out before Business Viability is ever scored, regardless of how
-strong the revenue evidence is.
+## Real evidence
 
-## Once shipped
+**Production `ApiUsage` row** (query: `SELECT * FROM "ApiUsage" WHERE
+provider = 'gemini' ORDER BY timestamp DESC LIMIT 1`):
 
-Update this file with: the actual code location in `fashion-autopilot`, a
-sample real request/response (redacted of any customer PII), and the
-resulting cost figures for `financials/scripts/token-cost-allocation.md`. Also
-update `narrative/ai-native-operations.md` to move CS drafting from "planned"
-to "currently running."
+```
+provider: gemini
+model: gemini-2.5-flash
+inputTokens: 1412
+outputTokens: 248
+cost: 0
+purpose: product-enhancement-merged
+timestamp: 2026-08-12 16:58:34.935
+```
+
+**Real request/response**, captured by calling the actual deployed
+`enhanceAndTranslate()` function (not a standalone test script) against a
+real product description, immediately after the Vertex build was merged and
+deployed to production:
+
+- Input: title "Coastal Linen Wrap Dress", description "A breezy linen wrap
+  dress in a soft coastal print, perfect for warm-weather days."
+- Output (excerpt): names `["Sofia | Breezy Linen Wrap Dress", "Léa |
+  Printed Coastal Wrap Dress", "Camila | Soft Linen Midi Dress"]`;
+  heroDescription "Embrace effortless elegance with the Sofia dress, a breezy
+  linen wrap style adorned with a delicate coastal print. Perfect for
+  sun-drenched days, its relaxed silhouette transitions seamlessly from
+  beach strolls to al fresco dining."; productType "Wrap Dress".
+- Response metadata: `model: "gemini-2.5-flash"`, real `usageMetadata`
+  token counts from Google's own API response — the model identifier and
+  field shape (`candidatesTokenCount`, `promptTokenCount`) are Gemini's own,
+  not something authored by this codebase.
+
+**GCP Console usage/billing screenshot**: still to be captured (see
+`evidence/agent-logs/README.md`) — a straightforward screenshot once
+someone with Console access is available, not blocking.
+
+## Cost
+
+Negligible, as anticipated. One real call cost $0 at Flash-tier pricing
+(consistent with the ~0.001¢–1.3¢ per call range DeepMind DevRel demoed
+2026-07-30). This will not move `financials/scripts/token-cost-allocation.md`
+in any material way; it is intentionally not broken out as a separate line
+there — see that file's own methodology for why AI token spend is disclosed
+as a single allocated platform total, not per-provider.
+
+## Update needed elsewhere
+
+`narrative/ai-native-operations.md` should move Gemini/Vertex from "planned"
+to "currently running," scoped to catalog-copy generation, not customer
+service (the CS section's own "AI-assisted once the Gemini integration
+lands" framing still describes a genuinely unbuilt, separate piece of work —
+do not conflate the two).
