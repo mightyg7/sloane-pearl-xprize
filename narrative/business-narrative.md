@@ -1,90 +1,86 @@
 # Sloane & Pearl — Business Narrative
 
 Sloane & Pearl (sloaneandpearl.com) is a women's fashion storefront that
-opened for orders on 2026-06-09 and, in the roughly seven weeks since, has
-gone from zero revenue to $12,020.42 in independent sales in July alone —
-up from $1,958.76 in its first partial month, a 6.1x jump. Cumulative
-revenue to date is $13,979.18 across 154 revenue-bearing customer orders.
-It runs on fashion-autopilot, an AI-agent e-commerce platform that was
-already operating before the submission period began; what's new is the
-business itself — a distinct Shopify store (created 2026-06-03), its own
-branding and catalog, its own dedicated Meta ad account, its own customer
-base, and its own staffing. We're disclosing that platform reuse directly
-rather than obscuring it, because the rules explicitly allow reusing
-pre-existing infrastructure as long as the business running on it is
-genuinely new — and this one is.
+opened for orders on 2026-06-09 and, across the roughly two months since,
+generated $18,641.28 in cumulative independent sales across 204
+revenue-bearing customer orders — before the operator paused active
+operation of the store in early August. It runs on fashion-autopilot, an
+AI-agent e-commerce platform that was already operating before the
+submission period began; what's new is the business itself — a distinct
+Shopify store (created 2026-06-03), its own branding and catalog, its own
+dedicated Meta ad account, its own customer base, and its own staffing.
+We're disclosing that platform reuse directly rather than obscuring it,
+because the rules explicitly allow reusing pre-existing infrastructure as
+long as the business running on it is genuinely new — and this one is.
 
 Day to day, AI does the operational lifting that would otherwise need a
-merchandising team and a media buyer. The catalog — 2,529 products
-imported to date, 1,582 currently live — was populated by an AI import
-pipeline that writes original marketing copy for every listing rather than
-reusing the supplier's text: a pair of orthopedic sneakers becomes "Meet
-the Mamie sneaker — where orthopedic support meets effortless everyday
-style," a tie-dye dress becomes "The Celeste dress is a wearable work of
-art." The same pipeline computes every product's retail price at import
-time — FX conversion, charm pricing, discount-tier math — instead of a
-person pricing 2,529 SKUs by hand. On the marketing side, 127 real Meta ad
-campaigns have launched to Sloane & Pearl's ad account since the store went
-live, each one the output of an AI ad-creative pipeline (ad-clone,
-reimagine, and collage generation) that builds the creative before it
-ships; 32 are still active, 95 have already been auto-killed by the
-platform's own performance rules, and every live campaign runs in Meta's
-Dynamic Creative mode, so Meta's algorithm keeps testing creative and copy
-combinations inside each one on top of that.
+merchandising team and a media buyer, and it does so by making real
+decisions with no human in the loop, not just producing drafts for one. A
+Meta ad auto-kill engine evaluates every live campaign every five minutes
+against spend and conversion thresholds and pauses underperformers directly
+via the Graph API — real, dated events, dollar-specific, no approval step
+between the evaluation and the pause. A nightly job reads 30 days of this
+account's own ad performance and has an LLM write a fresh strategy brief —
+which creative angles to weight up or abandon — that feeds directly into
+the next batch of live ad copy with no human review; Sloane & Pearl is
+currently the only account on the platform this loop runs for. A vision-
+based judge inside the ad-creative pipeline compares generated video frames
+against the ad it's cloning, decides pass/fail per shot, and autonomously
+re-renders with AI-written fix instructions before a human ever picks the
+final asset. The catalog itself — 2,529 products imported to date — was
+populated by an AI import pipeline that writes original marketing copy for
+every listing rather than reusing the supplier's text, and as of 2026-08-13
+that pipeline runs through Gemini via Vertex AI specifically for this store,
+verified by a real production API-usage record, not just a code path.
 
 Those campaigns cost money, and the bottom line is a loss. Against
-$13,979.18 of retained revenue the business spent $20,201.62 — $15,721.49
-on Meta ads, $4,145.60 in real supplier invoices for merchandise, $188.26
-in allocated AI tokens, and $105.00 in verified CS-contractor pay for her
-first two weeks — for a **net loss of $6,222.44 at a blended ROAS of
-0.89x**. That is deliberate early-stage spend: 127 campaigns bought the 6.1x
-month-over-month curve above, and finding out which products and creatives
-work costs money before it earns any. The business is not yet profitable,
-and the real question for viability isn't product margin — the 130 fully
-paid orders with matched supplier invoices carry a 64.6% merchandise gross
-margin, about $56 of contribution per order before advertising — but whether ad
-efficiency improves as it scales, because each order currently costs around
-$102 in ad spend to win. That loss is a floor, not a ceiling: the CS
-contractor's August pay isn't in it yet (only her first invoice, through
-July 31, is), and payment-processing fee data is incomplete — it's known
-for only 14 of 160 orders, all processed via Shopify-native payment. The
-other 146 were processed through a different payment processor,
-OceanPayments, whose fees aren't available yet, so both gaps push the true
-loss wider by an amount not yet known. Full derivation, gaps included, is
-in `financials/pnl-methodology.md`.
+$18,641.28 of retained revenue the business spent $27,978.37 — $19,875.51
+on Meta ads, $6,222.82 in real supplier invoices for merchandise, $1,522.46
+in payment-processing fees, $252.57 in allocated AI tokens, and $105.00 in
+verified CS-contractor pay for her first two weeks — for a **net loss of
+$9,337.09 at a blended ROAS of 0.94x**. That is deliberate early-stage
+spend, not a hidden problem: 201 fully paid, fully invoiced orders carry a
+67.5% merchandise gross margin, about $62 of contribution per order before
+advertising, so the shortfall is an ad-efficiency problem, not a
+product-margin one — each order currently costs about $97 in ad spend to
+win against that $62 of contribution. Every figure above, including the
+payment-processing estimate for orders processed outside Shopify's native
+rails, is disclosed with its methodology and its caveats in
+`financials/pnl-methodology.md` rather than smoothed over.
 
-What AI does not do here is send a customer a reply or decide what to
-spend. Customer service today is fully human: a CS contractor, engaged
-through onlinejobs.ph, drafts and sends every reply to Sloane & Pearl's
-tickets herself — there is no AI drafting step live yet. A Gemini/Vertex AI
-integration is designed to draft and triage replies for her to review
-before sending, but as of this writing (2026-07-30) it is not built, and we
+What AI does not do here is send a customer a reply or make the final call
+on strategy. Customer service today is fully human: a CS contractor,
+engaged through onlinejobs.ph, drafts and sends every reply to Sloane &
+Pearl's tickets herself. A Gemini-based CS drafting assistant was the
+originally planned surface for this hackathon's Gemini requirement; it
+shipped instead on the catalog side, for reasons explained in
+`gemini-integration/write-up.md` — CS remains entirely human-run, and we
 are not claiming otherwise. Strategic calls — which collections to launch,
 pricing floors, ad budget approval above the operator's day-to-day
-discretion — are made by a person, not the pipeline. The honest split is:
-AI generates and operates the catalog and the ad creative at scale; a human
-decides strategy and owns every word that reaches a customer.
+discretion — are made by a person. The honest split is: AI executes real,
+consequential decisions at the operational layer — pausing spend, steering
+ad strategy, judging its own creative output, pricing product — while a
+human owns strategy and every word that reaches a customer.
 
-That CS contractor is also the clearest evidence of jobs this business has
+That CS contractor is also the clearest evidence of a job this business has
 created beyond its founders. She was engaged specifically for this work,
 with a documented, dated hiring conversation: an initial interview in June
 that did not lead to an engagement, then a second approach on 2026-07-16
 that did, with her first logged ticket work — eight tickets answered — that
 same day. Her role is not hypothetical; it exists because Sloane & Pearl
-generates support volume that needs a person answering it, alongside a
-second store on the same platform whose tickets she also covers. Scaling
-this model is a real next step: as order volume grows past what one
-contractor can comfortably handle, the next hire is a second CS contractor
-rather than added headcount on the founding team, and as supplier
-relationships mature past the initial import, sourcing and quality-control
-coordination is the next kind of role this business will need a dedicated
-person for.
+generated support volume that needed a person answering it, alongside a
+second store on the same platform whose tickets she also covers.
 
-The story of building it this way is less "we wrote an AI agent from
-scratch during the hackathon" and more "we pointed an operating AI-agent
-platform at a brand-new business and watched it run one." Sloane & Pearl
-did not exist before 2026-06-03. Seven weeks later: a live catalog nobody
-wrote copy for by hand, an ad engine nobody manually assembled creative
-for, a human owning judgment and every customer-facing word, one new job
-already created with the shape of the next one already visible — and a
-real, disclosed loss while it buys its first customers.
+We're disclosing the current state plainly rather than presenting only the
+growth curve: the operator paused active testing and new revenue generation
+for this store in early August, so the figures above are real, retained
+cash from real activity during the compliance window, not an ongoing or
+projected trajectory. The story of building it this way is less "we wrote
+an AI agent from scratch during the hackathon" and more "we pointed an
+operating AI-agent platform at a brand-new business and watched it make
+real decisions with real money." Sloane & Pearl did not exist before
+2026-06-03. In the two months since: a catalog and ad engine nobody
+manually assembled, autonomous systems that paused real spend and wrote
+real strategy with no one reviewing them first, one new job already
+created, a human owning judgment and every customer-facing word — and a
+real, disclosed loss while it bought its first customers.

@@ -10,21 +10,26 @@ Sloane & Pearl.
 allocate total platform AI spend for the hackathon window (2026-05-19 to
 2026-08-17) pro-rata by each store's share of orders placed in that same
 window. This is a disclosed estimate, not exact per-call accounting.
-All figures in USD, current as of 2026-07-30.
+All figures in USD, current as of **2026-08-13** (final regenerate).
 
-- Total platform `ApiUsage` cost, 2026-05-19–2026-08-17: $504.76 USD
-- Sloane & Pearl orders in window: 160
+**A third store has joined the platform since the prior snapshot:** Perla
+Madrid, with 1 order in the compliance window as of this run. The allocation
+below is now a three-way split, not two-way — updated accordingly rather
+than silently still dividing by two stores.
+
+- Total platform `ApiUsage` cost, 2026-05-19–2026-08-17: $571.21 USD
+- Sloane & Pearl orders in window: 214
 - NOVA Cape Town orders in window: 269
-- Sloane & Pearl's allocated share: 160 / (160 + 269) × $504.76 USD = $188.26 USD
+- Perla Madrid orders in window: 1
+- Sloane & Pearl's allocated share: 214 / (214 + 269 + 1) × $571.21 USD = **$252.56 USD**
 
-This allocated figure feeds `COGS_TOKENS_JSON` in Task 6's
-`fill-pnl-template.ts` run. The split between production-related AI calls
-(e.g. import/catalog enhancement, which would be COGS) and marketing-related
-ones (e.g. ad-creative generation, which would be SG&A) is **not** separable
-from `ApiUsage.purpose` strings, so the combined total is disclosed under
-**COGS Tokens only** (row 17) rather than inventing a precise split the data
-doesn't support. `SGA_TOKENS_JSON` is intentionally left unset, leaving row 21
-at $0/blank.
+This allocated figure feeds `COGS_TOKENS_JSON` in `fill-pnl-template.ts`. The
+split between production-related AI calls (e.g. import/catalog enhancement,
+which would be COGS) and marketing-related ones (e.g. ad-creative
+generation, which would be SG&A) is **not** separable from `ApiUsage.purpose`
+strings, so the combined total is disclosed under **COGS Tokens only** (row
+17) rather than inventing a precise split the data doesn't support.
+`SGA_TOKENS_JSON` is intentionally left unset, leaving row 21 at $0/blank.
 
 The allocation basis is **orders placed**, not the cash-basis
 revenue-bearing order count used for revenue (row 9). A refunded order still
@@ -39,7 +44,7 @@ SELECT SUM(cost) AS total_cost, COUNT(*) AS call_count
 FROM "ApiUsage"
 WHERE timestamp >= '2026-05-19' AND timestamp <= '2026-08-17';
 ```
-Result: $504.76 USD, 144,033 API calls
+Result: $571.21 USD, 163,086 API calls
 
 **Order counts by store (2026-05-19 to 2026-08-17):**
 ```sql
@@ -56,34 +61,43 @@ ORDER BY order_count DESC;
 ```
 
 Store mapping (ShopifyStore → ConnectedStore):
-- cmq6ky85j0001tzm81xqmvknx (pdmnf1-c0.myshopify.com) → Sloane & Pearl: 160 orders
 - cmobaoalm0001yiu7ieqhz4ka (whhsw6-ps.myshopify.com) → NOVA Cape Town: 269 orders
+- cmq6ky85j0001tzm81xqmvknx (pdmnf1-c0.myshopify.com) → Sloane & Pearl: 214 orders
+- cmshw289t0006n9m89hocelon → Perla Madrid: 1 order
 
-Total: 429 orders across both stores in the window.
+Total: 484 orders across three stores in the window.
 
-**Note on NOVA Cape Town's status:** Although NOVA Cape Town was marked as retired on 2026-06-15, it continues to have orders after that date up through 2026-08-17 (269 total in-window orders). Therefore, the allocation uses the actual pro-rata split by order count rather than treating NOVA as inactive for this period.
+**Note on NOVA Cape Town's status:** unchanged from the prior snapshot —
+although retired 2026-06-15, it continues to have real order volume through
+the compliance window, so it stays in the pro-rata split rather than being
+treated as inactive.
 
-## Monthly split for `COGS_TOKENS_JSON` (Task 6)
+**Note on Perla Madrid:** a newly-observed store on the platform as of this
+regenerate, with negligible order volume (1) in the window. Included for
+accuracy rather than omitted; its effect on Sloane & Pearl's allocated share
+is minor (dividing by 484 instead of 483 stores' worth of orders).
 
-The $188.26 USD figure above is a single hackathon-window total; Task 6's
-`fill-pnl-template.ts` needs it broken out per calendar month. That split
-is computed once, by hand, from Sloane & Pearl's OWN monthly order counts
-(not the platform-wide 160-vs-269 split above, which is a different,
-store-level pro-rata used only to derive the $188.26 total in the first
-place):
+## Monthly split for `COGS_TOKENS_JSON`
 
-- Sloane & Pearl orders by month: June 32, July 128 (160 total — matches
-  the total used above).
-- June: 32/160 × $188.26 = **$37.65**
-- July: 128/160 × $188.26 = **$150.61**
-- May: **$0** — Sloane & Pearl placed zero orders in May, so it gets zero
-  share under the same order-count basis, even though the compliance
-  window opens May 19.
-- Sum check: $37.65 + $150.61 = $188.26 exactly.
+The $252.56 USD figure above is a single hackathon-window total, broken out
+per calendar month by Sloane & Pearl's OWN monthly order counts (not the
+platform-wide three-way split above, which is a different, store-level
+pro-rata used only to derive the $252.56 total in the first place):
+
+- Sloane & Pearl orders by month: June 32, July 149, August 33 (214 total —
+  matches the total used above).
+- June: 32/214 × $252.56 = **$37.77**
+- July: 149/214 × $252.56 = **$175.85**
+- August: 33/214 × $252.56 = **$38.95**
+- May: **$0** — Sloane & Pearl placed zero orders in May, same basis as
+  before.
+- Sum check: $37.77 + $175.85 + $38.95 = $252.57 (Sloane & Pearl's exact
+  allocated share before this monthly split, 1¢ rounding).
 
 ## Re-running
 
-Both the platform `ApiUsage` total and both stores' order counts keep
-growing, so this whole allocation is a snapshot. Re-derive it — and re-pass
-`COGS_TOKENS_JSON` — close to the deadline, alongside the rest of
-`financials/pnl-methodology.md`'s "Regenerating" checklist.
+This is intended as the **final** regenerate before submission — the
+platform's total `ApiUsage` cost and each store's order counts will keep
+moving in general, but Sloane & Pearl's own order count is expected to hold
+steady given its current paused state. Re-derive only if something material
+changes before Aug 17.

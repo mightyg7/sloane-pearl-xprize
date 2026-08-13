@@ -24,67 +24,46 @@ Full context: `docs/superpowers/specs/2026-07-30-xprize-submission-design.md`.
     us to explain), and every known data gap.
   - `scripts/token-cost-allocation.md` — how platform-wide AI spend is
     allocated to this one store (rows 17/21).
-- `evidence/` — testing-access plan, customer-evidence methodology, agent logs.
+- `evidence/` — testing-access plan, customer-evidence methodology, agent logs
+  and screenshots (real, dated exports proving AI runs in production).
 - `video/` — the 3-minute demo video script.
-- `gemini-integration/` — write-up of the Gemini/Vertex AI integration (pending
-  the follow-on build in `fashion-autopilot`).
+- `gemini-integration/` — write-up of the Gemini/Vertex AI integration —
+  **shipped and live** as of 2026-08-13, with real production evidence.
 
 ## Where the business actually stands
 
-As of 2026-08-01: **$13,979.18** revenue, **$20,201.62** expenses, a **net loss
-of $6,222.44** at a blended ROAS of **0.89x**. Stated up front so nothing in
-this repo reads as a profitability claim. Derivation and caveats:
+**Final regenerate, 2026-08-13**: **$18,641.28** revenue, **$27,978.37**
+expenses, a **net loss of $9,337.09** at a blended ROAS of **0.94x**. Stated
+up front so nothing in this repo reads as a profitability claim. The store
+is not currently active (paused: no new product testing, no new revenue) —
+these figures reflect real, cash-basis activity through early August, not
+projected or ongoing activity. Derivation and caveats:
 `financials/pnl-methodology.md`.
 
 ## Open before submission
 
-Genuinely unresolved. None of these are blocked on writing — they need an
-external input, a build, or a recording session.
-
-- [ ] **VA pay for August** — July's invoice ($105.00, verified against the
-  real Airwallex payout, 100% Sloane & Pearl since NOVA had zero orders in
-  that window) is already in row 15. August's invoice hasn't been issued yet.
-  Once it arrives, allocate on the order-share basis in
-  `financials/scripts/token-cost-allocation.md` if NOVA has order volume that
-  month, pass the share as `COGS_PERSONNEL_JSON`, re-run `npm run fill-pnl`.
-  Widens the loss.
-- [ ] **Name-disclosure decision for the CS contractor** — anonymized
-  everywhere for now, which the official FAQ permits. Operator has not chosen
-  between her real name and an anonymized reference
-  (`disclosure/labor-attestation.md`). Until decided, do **not** put her name
-  in any doc, the narrative, or the video.
-- [ ] **Apply the OceanPayments fee estimate at final regenerate** — most
-  orders were processed via a different processor, OceanPayments, which
-  Shopify's fee sync never covers. The rate is now known (**7.835%
-  blended**, from real OceanPayments settlement data, cross-checked against
-  the operator's June transaction report — see `pnl-methodology.md`, row
-  23c) and `getSloanePearlPaymentFees()` / `npm run fill-pnl` already
-  support applying it via `OCEANPAY_FEE_RATE_PCT=7.835`. Deliberately **not
-  applied to the committed xlsx yet** — the gap-order count has moved past
-  the pinned 2026-07-30 snapshot, and applying it now would mix a live
-  figure into an otherwise-frozen file. Apply it as part of the single
-  final regenerate before submission, alongside fresh revenue/ad-spend/COGS.
-- [ ] **Shopify plan fee** — genuinely incremental to this store and not in
-  the P&L, because no invoice figure is recorded anywhere in the platform.
-  Pull the real Shopify charges from 2026-06-03 onward into row 16
-  (`disclosure/pre-existing-resources.md`).
-- [ ] **Merchandise COGS gap on 4 shipped orders** — #1075–#1078 shipped with
-  no matched supplier invoice line. Re-run `npm run cogs` closer to the
-  deadline; a later invoice closes this automatically.
-- [ ] **Gemini/Vertex AI build in `fashion-autopilot`** — a Stage One
-  pass/fail gate per `gemini-integration/write-up.md`. Designed, **not built**.
-  Until it ships, no doc, narrative or video frame may imply it is live.
-- [ ] **Record the actual video** — `video/script.md` is a script, not a
-  recording. Needs real screen captures (storefront, admin catalog, campaign
-  table, revenue figures), a chosen hook line, and the loss/ROAS beat at
-  1:00–1:45 kept in the cut.
+- [ ] **VA pay for August** — still not issued as of 2026-08-13 (re-checked;
+  consistent with the store's paused state). If it arrives before the
+  deadline, allocate per `financials/scripts/token-cost-allocation.md` and
+  re-run `npm run fill-pnl`. Widens the loss further.
+- [ ] **Shopify plan fee** — still not located as of this regenerate. Genuine
+  omission, not a $0 claim (`disclosure/pre-existing-resources.md`).
+- [ ] **Record the actual video** — `video/script.md` needs updating with
+  the final numbers above before recording (loss/ROAS beat, revenue figures)
+  — then real screen captures, a chosen hook line, recording itself.
 - [ ] **Real customer evidence for the Devpost form** — name/email/phone go
   straight into the form near the deadline, never into this repo. Method:
   `evidence/customer-evidence.md`.
-- [ ] **Populate `evidence/agent-logs/`** — currently a placeholder README.
-- [ ] **Re-run every figure near 2026-08-17** — ad spend accrues live, the
-  EUR→USD rate moves, orders and supplier invoices keep landing. See the
-  "Regenerating" checklist at the end of `financials/pnl-methodology.md`.
+- [ ] **Fill out and submit the actual Devpost form** — using this repo's
+  finalized content.
+
+**Resolved since the last checklist:** name-disclosure decision made
+(`disclosure/labor-attestation.md`); OceanPayments fee estimate now applied
+in the committed P&L; the 4-order merchandise-COGS gap closed on its own
+(204/204 shipped orders now have a matched invoice); Gemini/Vertex AI
+shipped and verified live in production, with real evidence in
+`evidence/agent-logs/` and `evidence/screenshots/`; agent-logs populated
+with real DB exports and admin screenshots.
 
 ## Running the financial scripts
 
@@ -107,8 +86,9 @@ read-only.
 
 ```bash
 export PL_TEMPLATE_PATH="/path/to/a freshly downloaded Build with Gemini XPRIZE - PL Template.xlsx"
-export COGS_TOKENS_JSON='{"2026-06":37.65,"2026-07":150.61}'   # see token-cost-allocation.md
-# export COGS_PERSONNEL_JSON='{...}'                            # once the VA invoice exists
+export OCEANPAY_FEE_RATE_PCT="7.835"                                        # see pnl-methodology.md row 23c
+export COGS_TOKENS_JSON='{"2026-06":37.77,"2026-07":175.85,"2026-08":38.95}' # see token-cost-allocation.md
+export COGS_PERSONNEL_JSON='{"2026-07":105.00}'                             # once an August invoice exists, add it
 npm run fill-pnl
 ```
 
