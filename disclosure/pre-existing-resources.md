@@ -52,33 +52,32 @@ inferring it from a blank cell:
 | LLM API subscriptions/keys | Keys no, **usage yes** | The credentials are account-level and shared. The token usage they generate does scale per store and is allocated as a real cost (row 17) — see `financials/scripts/token-cost-allocation.md`. |
 | Proxy infrastructure | No | No dedicated proxy is assigned to this store (`proxyIp` is null), so there is no cost to attribute. |
 | Operator/founder time | No | Not exclusive to this store, and not separable from platform development. |
-| **Shopify plan fee** | **No — and this one is a genuine omission** | See below. |
+| **Shopify plan fee** | **Resolved 2026-08-13 — real data, not an estimate** | See below. |
 
-**The Shopify plan fee is the honest exception.** Unlike Railway hosting, it
-is *not* fixed platform overhead: Sloane & Pearl is its own Shopify store
-(`pdmnf1-c0.myshopify.com`, created 2026-06-03) and therefore carries its own
-plan subscription. That subscription would not exist if this business did not
-exist, which makes it a genuinely incremental, recurring, store-specific
-cost — exactly the kind of thing that belongs in the P&L, most naturally in
-row 16 (COGS Software Subscriptions).
+**The Shopify plan fee gap is closed, with real invoice data — not a
+guess.** Sloane & Pearl's own Shopify billing invoices were located in the
+Shopify-billing notification emails Shopify sends to the store's connected
+mailbox account (found via a real search of AgentMail message history, not
+inferred). Two real findings:
 
-**Update, 2026-08-13:** the plan *tier* is now confirmed via Shopify's own
-Admin API (`GET /admin/api/2024-10/shop.json`, real API call against the
-store's own access token) — Sloane & Pearl is on the **Basic** plan. That
-rules out one source of invented precision (guessing the tier), but not the
-other: the store's per-store Admin API token exposes the plan name, not the
-actual dollar amount billed, and Shopify frequently runs promotional
-first-months pricing for new stores that a public list price would not
-reflect. Publishing a list-price guess risks being wrong in either
-direction — an unverified number dressed up as a real cash outflow, exactly
-what this methodology avoids everywhere else. The gap is therefore narrower
-and better-characterized than before, but still genuinely open: resolving it
-means pulling the operator's actual Shopify billing invoice for this store,
-not computing from the public pricing page. It remains listed as an open
-item in this repo's `README.md`. Its magnitude is small relative to the
-disclosed loss, and its direction is the same as the other gaps: including
-it makes the loss slightly **wider**, never narrower.
+1. **The base plan subscription itself costs $0 real cash.** Every invoice
+   shows a $1.00 "Subscription" charge immediately offset by a $1.00
+   "Subscription credit" — a promotional credit is genuinely covering it.
+   This confirms the earlier caution about guessing a public list price was
+   warranted: the real answer ($0, credit-covered) would have differed from
+   any list-price guess.
+2. **Real "Apps" charges exist and are now in the P&L**: $27.50 (Jul 2) +
+   $34.99 (Jul 11) = **$62.49**, row 16 (COGS Software Subscriptions). These
+   are Shopify App Store subscription charges, unrelated to payment
+   processing, so they carry no double-counting risk with any other line.
+
+**Deliberately still excluded: Shopify's "Transaction fees" charges**
+(~$372.56 across the same invoices) — these are Shopify's surcharge for
+using a non-Shopify-Payments gateway, which is the same real cost already
+captured inside Row 23c's OceanPayments blended rate (its "Shopify 3rd-party
+gateway surcharge, 2.000%" component). Adding both would double-count one
+real cost as two lines; only the OceanPayments blended-rate line carries it.
 
 None of this is disclosed to inflate the case for viability — it's disclosed
-because the rule requires it, and because every cost still outstanding
-increases the reported loss rather than reducing it.
+because the rule requires it, and because the one thing this resolution
+actually did was widen the loss slightly further ($62.49), not narrow it.

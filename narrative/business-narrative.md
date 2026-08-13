@@ -34,11 +34,12 @@ that pipeline runs through Gemini via Vertex AI specifically for this store,
 verified by a real production API-usage record, not just a code path.
 
 Those campaigns cost money, and the bottom line is a loss. Against
-$18,641.28 of retained revenue the business spent $27,978.37 — $19,875.51
+$18,641.28 of retained revenue the business spent $28,040.86 — $19,875.51
 on Meta ads, $6,222.82 in real supplier invoices for merchandise, $1,522.46
-in payment-processing fees, $252.57 in allocated AI tokens, and $105.00 in
-verified CS-contractor pay for her first two weeks — for a **net loss of
-$9,337.09 at a blended ROAS of 0.94x**. That is deliberate early-stage
+in payment-processing fees, $252.57 in allocated AI tokens, $105.00 in
+verified CS-contractor pay for her first two weeks, and $62.49 in real
+Shopify subscription charges (sourced from actual billing invoices, not
+estimated) — for a **net loss of $9,399.58 at a blended ROAS of 0.94x**. That is deliberate early-stage
 spend, not a hidden problem: 201 fully paid, fully invoiced orders carry a
 67.5% merchandise gross margin, about $62 of contribution per order before
 advertising, so the shortfall is an ad-efficiency problem, not a

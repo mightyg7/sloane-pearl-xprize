@@ -32,13 +32,14 @@ Full context: `docs/superpowers/specs/2026-07-30-xprize-submission-design.md`.
 
 ## Where the business actually stands
 
-**Final regenerate, 2026-08-13**: **$18,641.28** revenue, **$27,978.37**
-expenses, a **net loss of $9,337.09** at a blended ROAS of **0.94x**. Stated
+**Final regenerate, 2026-08-13**: **$18,641.28** revenue, **$28,040.86**
+expenses, a **net loss of $9,399.58** at a blended ROAS of **0.94x**. Stated
 up front so nothing in this repo reads as a profitability claim. The store
 is not currently active (paused: no new product testing, no new revenue) —
 these figures reflect real, cash-basis activity through early August, not
-projected or ongoing activity. Derivation and caveats:
-`financials/pnl-methodology.md`.
+projected or ongoing activity. Independently cross-checked three ways (a raw
+DB query, a raw Meta API call, and the platform's own internal `/profit`
+dashboard). Derivation and caveats: `financials/pnl-methodology.md`.
 
 ## Open before submission
 
@@ -46,23 +47,28 @@ projected or ongoing activity. Derivation and caveats:
   consistent with the store's paused state). If it arrives before the
   deadline, allocate per `financials/scripts/token-cost-allocation.md` and
   re-run `npm run fill-pnl`. Widens the loss further.
-- [ ] **Shopify plan fee** — still not located as of this regenerate. Genuine
-  omission, not a $0 claim (`disclosure/pre-existing-resources.md`).
 - [ ] **Record the actual video** — `video/script.md` needs updating with
   the final numbers above before recording (loss/ROAS beat, revenue figures)
   — then real screen captures, a chosen hook line, recording itself.
 - [ ] **Real customer evidence for the Devpost form** — name/email/phone go
   straight into the form near the deadline, never into this repo. Method:
   `evidence/customer-evidence.md`.
+- [ ] **Verifiable customer testimonial** — optional Devpost field; needs a
+  real, already-public review or mention (not a private message pulled
+  without the customer's knowledge it'd be shared), if one exists.
+- [ ] **Confirm the compliance-clarification email to organizers was sent** —
+  drafted earlier in this project; send status was never confirmed.
 - [ ] **Fill out and submit the actual Devpost form** — using this repo's
   finalized content.
 
 **Resolved since the last checklist:** name-disclosure decision made
 (`disclosure/labor-attestation.md`); OceanPayments fee estimate now applied
 in the committed P&L; the 4-order merchandise-COGS gap closed on its own
-(204/204 shipped orders now have a matched invoice); Gemini/Vertex AI
-shipped and verified live in production, with real evidence in
-`evidence/agent-logs/` and `evidence/screenshots/`; agent-logs populated
+(204/204 shipped orders now have a matched invoice); the Shopify plan-fee
+gap closed with real invoice data, not a guess (plan subscription = $0,
+real Apps charges of $62.49 added — `disclosure/pre-existing-resources.md`);
+Gemini/Vertex AI shipped and verified live in production, with real evidence
+in `evidence/agent-logs/` and `evidence/screenshots/`; agent-logs populated
 with real DB exports and admin screenshots.
 
 ## Running the financial scripts
@@ -89,6 +95,7 @@ export PL_TEMPLATE_PATH="/path/to/a freshly downloaded Build with Gemini XPRIZE 
 export OCEANPAY_FEE_RATE_PCT="7.835"                                        # see pnl-methodology.md row 23c
 export COGS_TOKENS_JSON='{"2026-06":37.77,"2026-07":175.85,"2026-08":38.95}' # see token-cost-allocation.md
 export COGS_PERSONNEL_JSON='{"2026-07":105.00}'                             # once an August invoice exists, add it
+export COGS_SOFTWARE_JSON='{"2026-07":62.49}'                               # real Shopify Apps charges, see pre-existing-resources.md
 npm run fill-pnl
 ```
 

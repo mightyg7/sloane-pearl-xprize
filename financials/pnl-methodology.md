@@ -22,17 +22,19 @@ reflect orders/spend that occurred before the pause, not ongoing activity.
 | Full 90 days (column G) | USD |
 | --- | --- |
 | TOTAL REVENUE (row 11) | 18,641.28 |
-| TOTAL EXPENSES (row 24) | 27,978.37 |
-| **PROFIT (LOSS)** (row 26) | **(9,337.09)** |
+| TOTAL EXPENSES (row 24) | 28,040.86 |
+| **PROFIT (LOSS)** (row 26) | **(9,399.58)** |
 
 Sloane & Pearl is **not profitable**. Blended ROAS (revenue ÷ Meta ad
 spend) is **0.94x** — ad spend alone exceeds revenue. That is stated here,
 in `narrative/business-narrative.md`, and in `video/script.md` rather than
 left for a judge to derive. The loss widened from the earlier snapshot's
 $6,222.44 mainly because ad spend and merchandise COGS kept accruing through
-early August while revenue growth did not keep pace, and because the
+early August while revenue growth did not keep pace, because the
 OceanPayments fee estimate (previously disclosed but not yet applied — see
-Row 23c) is now folded into the total.
+Row 23c) is now folded into the total, and because a genuinely new cost —
+real Shopify "Apps" billing charges (row 16, see below) — was located and
+added.
 
 ## Cash basis
 
@@ -87,10 +89,22 @@ recorded when cash is paid out."* Applied as:
   omission masked as zero, and consistent with the store's current paused
   state.
 
-- **COGS / SG&A Software Subscriptions** (rows 16, 20) — $0. See
-  `disclosure/pre-existing-resources.md` for what is excluded and why,
-  including the Shopify plan fee, still a known, unresolved omission (no
-  invoice figure has been located as of this regenerate either).
+- **COGS Software Subscriptions** (row 16) — **$62.49 in July**, real
+  Shopify "Apps" billing charges, sourced from the operator's actual
+  Shopify billing invoice emails (Jul 2: $27.50; Jul 11: $34.99). The
+  underlying **plan subscription** fee itself is confirmed **$0 real cash
+  cost** — every invoice shows a $1.00 subscription charge fully offset by
+  a $1.00 promotional subscription credit — so this line captures Apps
+  charges only, which have no such offset.
+
+  **Deliberately excludes Shopify's "Transaction fees" charges** (also
+  visible on the same invoices, ~$372.56 across the same period): these are
+  Shopify's surcharge for using a non-Shopify-Payments gateway, and that is
+  the same real cost already reflected in Row 23c's OceanPayments blended
+  rate (whose "Shopify 3rd-party gateway surcharge, 2.000%" component is
+  this exact fee). Adding both would double-count one real cost as two.
+  SG&A Software Subscriptions (row 20) stays $0 — no incremental SG&A
+  software cost has been identified.
 
 - **COGS / SG&A Tokens** (rows 17, 21) — see
   `financials/scripts/token-cost-allocation.md` for the full methodology.

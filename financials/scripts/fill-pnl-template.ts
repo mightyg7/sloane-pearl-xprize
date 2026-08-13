@@ -126,6 +126,12 @@ async function main() {
   const cogsTokens = parseMonthlyJson("COGS_TOKENS_JSON");
   const sgaTokens = parseMonthlyJson("SGA_TOKENS_JSON");
   const cogsPersonnel = parseMonthlyJson("COGS_PERSONNEL_JSON");
+  // Real Shopify "Apps" billing-invoice charges — see
+  // disclosure/pre-existing-resources.md. Deliberately excludes Shopify's
+  // "Transaction fees" line, which overlaps with the OceanPayments blended
+  // rate's own 2% "3rd-party gateway surcharge" component already applied
+  // in row 23c — including both would double-count the same real cost.
+  const cogsSoftware = parseMonthlyJson("COGS_SOFTWARE_JSON");
 
   const missing: string[] = [];
   if (Object.keys(cogsPersonnel).length === 0) {
@@ -207,9 +213,11 @@ async function main() {
     if (month in sgaTokens) {
       setInput(`${col}21`, sgaTokens[month]);
     }
-    // Software Subscriptions (rows 16, 20) intentionally left at $0 —
-    // no incremental cost, see disclosure/pre-existing-resources.md.
-    setInput(`${col}16`, 0);
+    // Row 16 (COGS Software Subscriptions): real Shopify "Apps" charges
+    // when provided via COGS_SOFTWARE_JSON, else $0 — see
+    // disclosure/pre-existing-resources.md. Row 20 (SG&A) stays $0; no
+    // incremental SG&A software cost has been identified.
+    setInput(`${col}16`, cogsSoftware[month] ?? 0);
     setInput(`${col}20`, 0);
   }
 
