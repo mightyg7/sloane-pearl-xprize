@@ -12,7 +12,18 @@ a mockup.
 - `treasury-topup-log.md` — real, settled Airwallex bank transfers funding
   the ad account autonomously.
 
-**Still to add** (needs an authenticated admin screenshot, not a DB export):
-GCP Console usage/billing screenshot for the Vertex AI integration once
-merged and fired for real; screenshots of `/ads-launcher/auto-kill` and
-`/schedules` for a visual cross-check against the DB exports above.
+See also `../screenshots/`:
+- `gcp-vertex-ai-metrics.png` — Vertex AI API traffic graph on the dedicated
+  `sloane-pearl-xprize` GCP project, showing real request activity (a 403
+  from initial IAM setup, then a 200 once the service-account role was
+  correctly attached).
+- `gcp-billing-cost-report.png` — GCP Cloud Billing report, filtered to the
+  `sloane-pearl-xprize` project only (isolated from the other project on the
+  same billing account), showing real spend: €0.01 for Aug 1–12, 2026.
+- `gcp-billing-vertex-ai-line-item.png` — the same report's service
+  breakdown, naming **Vertex AI** explicitly as the billed service — a
+  third-party (Google) record, not something this codebase generated.
+
+**Still to add** (needs an authenticated admin screenshot):
+screenshots of `/ads-launcher/auto-kill` and `/schedules` for a visual
+cross-check against the DB exports above.
