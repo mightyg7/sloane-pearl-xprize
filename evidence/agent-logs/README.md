@@ -23,7 +23,11 @@ See also `../screenshots/`:
 - `gcp-billing-vertex-ai-line-item.png` — the same report's service
   breakdown, naming **Vertex AI** explicitly as the billed service — a
   third-party (Google) record, not something this codebase generated.
+- `auto-kill-history-ui.png` / `auto-kill-history-ui-extended.png` — the
+  real admin Kill History table at `/ads-launcher/auto-kill`, matching the
+  same events documented in `auto-kill-log.md`. The table isn't store-scoped
+  by default (a couple of Perla Madrid rows appear alongside Sloane &
+  Pearl's), but every row's campaign name is tagged with its store, so
+  attribution stays unambiguous per row.
 
-**Still to add** (needs an authenticated admin screenshot):
-screenshots of `/ads-launcher/auto-kill` and `/schedules` for a visual
-cross-check against the DB exports above.
+**Still to add** (needs an authenticated admin screenshot): `/schedules`.
