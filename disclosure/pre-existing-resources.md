@@ -35,10 +35,11 @@ exist regardless of whether Sloane & Pearl specifically is running:
 Sloane & Pearl's ad spend, its merchandise cost of goods sold (from real
 supplier invoices), its payment-processing fees and its allocated AI tokens
 appear as non-zero line items in `financials/pnl-sloane-pearl.xlsx`. **VA
-labor does not yet** — row 15 (COGS Personnel) is still blank because her
-invoice has not been issued (see `disclosure/labor-attestation.md`). It will
-be added to row 15, and the P&L re-generated, once the figure exists. Row 15
-being blank is a pending input, not a claim that the cost is zero.
+labor partially does** — row 15 (COGS Personnel) carries her real, verified
+July pay ($105.00, see `disclosure/labor-attestation.md`); August's cell is
+still blank because no August invoice has been issued as of the 2026-08-13
+final regenerate. A blank cell there is a pending input, not a claim that
+the cost is zero.
 
 ## Recurring costs deliberately excluded, and why
 
@@ -61,17 +62,22 @@ exist, which makes it a genuinely incremental, recurring, store-specific
 cost — exactly the kind of thing that belongs in the P&L, most naturally in
 row 16 (COGS Software Subscriptions).
 
-It is currently excluded for one reason only: Shopify bills the plan to the
-operator's Shopify account, and the platform's own database holds no record
-of the plan tier or the amounts charged, so there is no figure here that
-isn't invented. Rather than estimate a plan price from Shopify's public
-pricing page and present it as an actual cash outflow, it is disclosed as a
-known gap. Resolving it means pulling the real Shopify invoices for
-2026-06-03 onward and entering the actual charged amounts in row 16 — it is
-listed as an open item in this repo's `README.md` alongside the VA pay
-figure. Its magnitude is small relative to the disclosed loss, and its
-direction is the same as the other gaps: including it makes the loss
-slightly **wider**, never narrower.
+**Update, 2026-08-13:** the plan *tier* is now confirmed via Shopify's own
+Admin API (`GET /admin/api/2024-10/shop.json`, real API call against the
+store's own access token) — Sloane & Pearl is on the **Basic** plan. That
+rules out one source of invented precision (guessing the tier), but not the
+other: the store's per-store Admin API token exposes the plan name, not the
+actual dollar amount billed, and Shopify frequently runs promotional
+first-months pricing for new stores that a public list price would not
+reflect. Publishing a list-price guess risks being wrong in either
+direction — an unverified number dressed up as a real cash outflow, exactly
+what this methodology avoids everywhere else. The gap is therefore narrower
+and better-characterized than before, but still genuinely open: resolving it
+means pulling the operator's actual Shopify billing invoice for this store,
+not computing from the public pricing page. It remains listed as an open
+item in this repo's `README.md`. Its magnitude is small relative to the
+disclosed loss, and its direction is the same as the other gaps: including
+it makes the loss slightly **wider**, never narrower.
 
 None of this is disclosed to inflate the case for viability — it's disclosed
 because the rule requires it, and because every cost still outstanding
