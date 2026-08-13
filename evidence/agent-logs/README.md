@@ -29,5 +29,19 @@ See also `../screenshots/`:
   by default (a couple of Perla Madrid rows appear alongside Sloane &
   Pearl's), but every row's campaign name is tagged with its store, so
   attribution stays unambiguous per row.
+- `schedules-overview.png` — `/schedules` summary: 23 registered cron
+  schedules (6 active, 17 paused), 5 real runs in the last 24h.
+- `schedules-list.png` / `schedules-list-crashguard.png` — individual
+  schedule health, real next-run/last-run timestamps. Includes an honest
+  detail worth keeping rather than cropping out: two schedules show
+  `AUTO-DISABLED` by the worker's own crash-loop guard, with the real
+  failing run id — evidence the automation fails safely rather than
+  silently, not just that it succeeds.
+- `schedules-run-history.png` — real completed runs from earlier today
+  (2026-08-13), each with a real dollar cost (e.g. $0.7280, $2.1149) and
+  phase-completion detail.
+- `schedules-worker-pool.png` — the 22-slot proxy worker pool backing the
+  research pipeline, for completeness on how the cron-driven scraping
+  infrastructure is provisioned.
 
-**Still to add** (needs an authenticated admin screenshot): `/schedules`.
+All screenshots complete for this evidence pass.
