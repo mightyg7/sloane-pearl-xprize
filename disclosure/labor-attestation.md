@@ -61,13 +61,21 @@ deadline) haven't been issued/paid yet — this is a live, ongoing cost, same
 treatment as the ad-spend figures elsewhere in this repo. Re-check before
 final submission.
 
-## Name-disclosure preference — still PENDING
+## Name-disclosure preference — decided 2026-08-13
 
 The official FAQ permits anonymizing names ("As for any names you are not
-able to share, feel free to cross them out or similarly anonymize"). The
-operator has not yet decided whether to use her real name or keep the
-anonymized reference ("a CS contractor" / "she") already used throughout this
-repo. This document and the rest of the repo use the anonymized form until
-that's explicitly decided — do not infer a decision from the fact that her
-real name now appears in the underlying Airwallex payment record; that's a
-financial system record, not a disclosure choice.
+able to share, feel free to cross them out or similarly anonymize"). Decision:
+disclose her real name, **Clarissa Condeza**, in this private compliance
+document only — visible solely to the two invited judge/testing accounts on
+this repo.
+
+**Deliberately scoped narrower than "everywhere":** the video (public once
+uploaded, per the submission rules) and the narrative docs
+(`narrative/business-narrative.md`, `video/script.md`) keep the anonymized
+"a CS contractor" / "she" framing. Public video exposure is a different kind
+of risk from private-repo access — it is permanent, searchable, and tied to a
+real person's employer indefinitely, with no compliance requirement forcing
+it. Do not extend this decision to those public-facing materials without a
+separate, explicit decision — and ideally not without asking her directly,
+since that's a basic courtesy question independent of what the hackathon
+rules permit.
