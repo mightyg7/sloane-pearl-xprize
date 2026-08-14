@@ -27,3 +27,40 @@ order data at that time.
   needs the customer's awareness that it's being shared, per the rule
   (*"Please ensure your users are aware that their information is being
   shared"*), which a private DB pull does not by itself satisfy.
+
+## Real testimonial secured, 2026-08-14
+
+No public review/comment existed to use (checked the storefront and the
+brand's Facebook page — the latter's organic-content permission is missing
+from the Meta app, a separate real gap, not this store's fault). A search
+across all 525 real inbound customer emails (filtered from ~1,800 total,
+scored for genuine positive sentiment via a two-pass LLM classification,
+every candidate cross-checked against real order data) surfaced exactly one
+genuine, verified, unprompted testimonial — everything else was either a
+business/marketing inquiry with no order on file, or too thin to use.
+
+**Consent obtained 2026-08-14**, operator to customer, via the operator's
+personal email (outside the platform) — she agreed to her feedback being
+shared, with attribution as **"Y. Young"** (not her full name).
+
+**The quote:** *"Wow, I didn't think I would hear from you. THANK YOU!! I
+love the sandal."* — real order #1152 ($54.95, paid, delivered, 2026-07-29),
+her first order with the store, unprompted follow-up after a support reply.
+
+**Verification, redacted for privacy before being saved anywhere:**
+- `evidence/screenshots/testimonial-order-1152.png` — the real order record
+  (order #, date, amount, item, fulfillment timeline). Customer
+  name/email/address/payment-card panels excluded entirely — not just
+  blurred — since she consented to "Y. Young" and the quote, not to her
+  full identity being exposed.
+- `evidence/screenshots/testimonial-message-thread.png` — the real,
+  timestamped email thread showing her exact words. Her email address is
+  redacted from the visible sender line; everything else (the quote, the
+  date, our reply) is real and unedited.
+
+Her real name, email, and full order detail are **not** in this repo —
+consistent with the same PII policy as the rest of this file. If the
+Devpost form asks for her full contact info as part of the "real customers"
+requirement (distinct from the testimonial itself), pull it fresh from the
+order record at submission time, same as every other customer-contact
+figure in this document.

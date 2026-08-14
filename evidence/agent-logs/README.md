@@ -43,5 +43,9 @@ See also `../screenshots/`:
 - `schedules-worker-pool.png` — the 22-slot proxy worker pool backing the
   research pipeline, for completeness on how the cron-driven scraping
   infrastructure is provisioned.
+- `testimonial-order-1152.png` / `testimonial-message-thread.png` — real,
+  redacted verification backing the customer testimonial documented in
+  `../customer-evidence.md`. Customer name/email/address/payment fields are
+  excluded or redacted, consistent with what she actually consented to.
 
 All screenshots complete for this evidence pass.
