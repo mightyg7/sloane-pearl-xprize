@@ -35,8 +35,8 @@ separate decision made on purpose, not an oversight. Refer to her only as
 "a CS contractor" / "she" / "our customer-service hire."
 
 **Never show a revenue figure without the loss beside it.** The business is
-not profitable — net loss $9,399.58 on $18,641.28 of revenue, blended ROAS
-0.94x (see `financials/pnl-methodology.md`, final regenerate 2026-08-13).
+not profitable — net loss $9,329.29 on $18,641.28 of revenue, blended ROAS
+0.94x (see `financials/pnl-methodology.md`, final regenerate 2026-08-14).
 The revenue numbers and the loss numbers travel together, in the same
 section, at 1:00–1:45. If a later edit cuts for time, the loss beat is
 **not** the thing to cut: the P&L judges receive states the loss plainly,
@@ -139,8 +139,8 @@ visible on screen, no staged or mocked data.
   figures, not gross order value).
 - On-screen caption: *"204 revenue-bearing customer orders since launch."*
 - **Then, immediately, the cost side — do not let the revenue bar stand
-  alone.** On-screen caption or a second graphic: *"$19,875.51 ad spend.
-  Net loss $9,399.58. Blended ROAS 0.94x. Not profitable yet."* This has to
+  alone.** On-screen caption or a second graphic: *"$19,932.95 ad spend.
+  Net loss $9,329.29. Blended ROAS 0.94x. Not profitable yet."* This has to
   appear in the same breath as the revenue graphic, not be dropped or
   buried in the close. A revenue-only chart would misrepresent the
   business, and the P&L judges receive states the loss plainly — the video
@@ -153,8 +153,8 @@ visible on screen, no staged or mocked data.
 
 **VO (optional, ~90 words / ~36s):** "This isn't a demo — it's a real
 business. Since launch: $18,641.28 in retained revenue across 204 real
-customer orders. It's also not profitable yet — $19,875.51 went out on ads
-to buy that growth, a net loss of $9,399.58 at a blended ROAS of 0.94.
+customer orders. It's also not profitable yet — $19,932.95 went out on ads
+to buy that growth, a net loss of $9,329.29 at a blended ROAS of 0.94.
 Merchandise margin is healthy, over 67 percent; what has to improve is ad
 efficiency. And the growth already created a real job: a customer-service
 contractor, brought on July 16th, who reviews and sends every reply

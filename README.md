@@ -32,14 +32,17 @@ Full context: `docs/superpowers/specs/2026-07-30-xprize-submission-design.md`.
 
 ## Where the business actually stands
 
-**Final regenerate, 2026-08-13**: **$18,641.28** revenue, **$28,040.86**
-expenses, a **net loss of $9,399.58** at a blended ROAS of **0.94x**. Stated
+**Final regenerate, 2026-08-14**: **$18,641.28** revenue, **$27,970.57**
+expenses, a **net loss of $9,329.29** at a blended ROAS of **0.94x**. Stated
 up front so nothing in this repo reads as a profitability claim. The store
 is not currently active (paused: no new product testing, no new revenue) —
 these figures reflect real, cash-basis activity through early August, not
-projected or ongoing activity. Independently cross-checked three ways (a raw
-DB query, a raw Meta API call, and the platform's own internal `/profit`
-dashboard). Derivation and caveats: `financials/pnl-methodology.md`.
+projected or ongoing activity. Every payment-processing fee is now real,
+exact data (OceanPayments' own transaction export, a real withdrawal
+report, real Shopify billing invoices) — no more estimated rate anywhere in
+the P&L. Independently cross-checked three ways (a raw DB query, a raw Meta
+API call, and the platform's own internal `/profit` dashboard). Derivation
+and caveats: `financials/pnl-methodology.md`.
 
 ## Open before submission
 
@@ -92,7 +95,7 @@ read-only.
 
 ```bash
 export PL_TEMPLATE_PATH="/path/to/a freshly downloaded Build with Gemini XPRIZE - PL Template.xlsx"
-export OCEANPAY_FEE_RATE_PCT="7.835"                                        # see pnl-methodology.md row 23c
+export REAL_FEES_JSON='{"2026-06":105.04,"2026-07":997.68,"2026-08":292.02}' # real fees, see pnl-methodology.md row 23c
 export COGS_TOKENS_JSON='{"2026-06":37.77,"2026-07":175.85,"2026-08":38.95}' # see token-cost-allocation.md
 export COGS_PERSONNEL_JSON='{"2026-07":105.00}'                             # once an August invoice exists, add it
 export COGS_SOFTWARE_JSON='{"2026-07":62.49}'                               # real Shopify Apps charges, see pre-existing-resources.md

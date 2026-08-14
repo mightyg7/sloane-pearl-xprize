@@ -180,14 +180,24 @@ async function main() {
   // which must be updated alongside any change here.
   const adSpend = await getSloanePearlSpendByMonth();
   const cogs = await getSloanePearlMerchandiseCogs();
-  // OCEANPAY_FEE_RATE_PCT is optional, off by default. Set it to apply
-  // the sourced OceanPayments blended true-cost rate (see
-  // financials/pnl-methodology.md for the rate and its derivation) to
-  // gap orders' gross revenue as a disclosed estimate, on top of the
-  // exact Shopify-native fee figure. Never invent a rate here.
+  // REAL_FEES_JSON: real, exact payment-processing fees by month, sourced
+  // directly from OceanPayments' own transaction-level export (real
+  // per-transaction Trans Fee / SaaS Fee / Per-Transaction Fee / Refund Fee
+  // columns), real withdrawal-report data ($45 flat per withdrawal), and
+  // Shopify's own billing-invoice "Transaction fees" line — see
+  // financials/pnl-methodology.md row 23c for the full derivation. Takes
+  // precedence over OCEANPAY_FEE_RATE_PCT's estimated blended rate, which
+  // was only ever a stand-in for real data that didn't exist yet.
+  const realFeesEnv = process.env.REAL_FEES_JSON;
+  const realFees = realFeesEnv ? (JSON.parse(realFeesEnv) as Record<string, number>) : null;
+
+  // OCEANPAY_FEE_RATE_PCT is optional, off by default, and ignored when
+  // REAL_FEES_JSON is set. Set it to apply the sourced OceanPayments
+  // blended true-cost rate (see financials/pnl-methodology.md) to gap
+  // orders' gross revenue as a disclosed estimate. Never invent a rate here.
   const oceanPayRateEnv = process.env.OCEANPAY_FEE_RATE_PCT;
   const oceanPayRate = oceanPayRateEnv ? Number(oceanPayRateEnv) : undefined;
-  const fees = await getSloanePearlPaymentFees(oceanPayRate);
+  const fees = realFees ? null : await getSloanePearlPaymentFees(oceanPayRate);
 
   const otherExpenses: Record<string, number> = {};
   const addOther = (month: string, amount: number) => {
@@ -195,7 +205,11 @@ async function main() {
   };
   for (const { month, spendUsd } of adSpend) addOther(month, spendUsd);
   for (const { month, cogsUsd } of cogs.byMonth) addOther(month, cogsUsd);
-  for (const { month, feesUsd } of fees.byMonth) addOther(month, feesUsd);
+  if (realFees) {
+    for (const [month, amount] of Object.entries(realFees)) addOther(month, amount);
+  } else if (fees) {
+    for (const { month, feesUsd } of fees.byMonth) addOther(month, feesUsd);
+  }
 
   for (const [month, amount] of Object.entries(otherExpenses)) {
     const col = MONTH_COLUMNS[month];
@@ -242,7 +256,9 @@ async function main() {
     rows.filter((r) => MONTH_COLUMNS[r.month]).reduce((a, r) => a + pick(r), 0);
   const adSpendTotal = sum(adSpend, (r) => r.spendUsd);
   const cogsTotal = sum(cogs.byMonth, (r) => r.cogsUsd);
-  const feesTotal = sum(fees.byMonth, (r) => r.feesUsd);
+  const feesTotal = realFees
+    ? Object.values(realFees).reduce((a, b) => a + b, 0)
+    : sum(fees!.byMonth, (r) => r.feesUsd);
   const revenueTotal = sum(revenue, (r) => r.revenueUsd);
   const byAddr = new Map(formulaCells.map((c) => [c.addr, c.result]));
 
@@ -270,20 +286,26 @@ async function main() {
         "run `npm run cogs` for detail"
     );
   }
-  if (fees.coverage.oceanPaymentEstimate) {
-    const e = fees.coverage.oceanPaymentEstimate;
+  if (realFees) {
+    warnings.push(
+      `row 23 payment-processing fees are REAL data (not an estimate): OceanPayments' ` +
+        `own transaction-level export + real withdrawal-report fees + Shopify's real ` +
+        `billing-invoice "Transaction fees" line — see financials/pnl-methodology.md row 23c`
+    );
+  } else if (fees!.coverage.oceanPaymentEstimate) {
+    const e = fees!.coverage.oceanPaymentEstimate;
     warnings.push(
       `row 23 includes a $${e.estimatedFeesUsd.toFixed(2)} OceanPayments fee ESTIMATE ` +
         `(${e.ratePct}% applied to $${e.gapOrdersGrossUsd.toFixed(2)} gross across ` +
         `${e.gapOrdersCount} gap orders) — sourced rate, not the exact Shopify-native ` +
         `figure; see financials/pnl-methodology.md`
     );
-  } else if (fees.coverage.ordersWithFeeData < fees.coverage.ordersTotal) {
+  } else if (fees!.coverage.ordersWithFeeData < fees!.coverage.ordersTotal) {
     warnings.push(
-      `payment fee data covers only ${fees.coverage.ordersWithFeeData} of ` +
-        `${fees.coverage.ordersTotal} orders, so row 23 UNDERSTATES real fee cost ` +
+      `payment fee data covers only ${fees!.coverage.ordersWithFeeData} of ` +
+        `${fees!.coverage.ordersTotal} orders, so row 23 UNDERSTATES real fee cost ` +
         `(observed rate on the covered orders: ` +
-        `${fees.coverage.observedFeeRatePct?.toFixed(2)}%) — set OCEANPAY_FEE_RATE_PCT ` +
+        `${fees!.coverage.observedFeeRatePct?.toFixed(2)}%) — set OCEANPAY_FEE_RATE_PCT ` +
         `to apply the sourced OceanPayments estimate instead`
     );
   }
