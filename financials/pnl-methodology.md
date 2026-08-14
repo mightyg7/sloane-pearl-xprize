@@ -25,18 +25,22 @@ reflect orders/spend that occurred before the pause, not ongoing activity.
 | Full 90 days (column G) | USD |
 | --- | --- |
 | TOTAL REVENUE (row 11) | 18,641.28 |
-| TOTAL EXPENSES (row 24) | 27,970.57 |
-| **PROFIT (LOSS)** (row 26) | **(9,329.29)** |
+| TOTAL EXPENSES (row 24) | 27,971.34 |
+| **PROFIT (LOSS)** (row 26) | **(9,330.06)** |
 
 Sloane & Pearl is **not profitable**. Blended ROAS (revenue ÷ Meta ad
 spend) is **0.94x** — ad spend alone exceeds revenue. That is stated here,
 in `narrative/business-narrative.md`, and in `video/script.md` rather than
 left for a judge to derive. Versus the prior day's snapshot ($9,399.58),
-the loss **narrowed slightly** — the real payment-fee data came in $127.72
-lower than the estimate it replaced, and that is the honest direction real
-data happened to move it. This is disclosed the same way every other
-change in this document has been: because it is true, not because it is
-flattering.
+the loss **narrowed to $9,330.06** — net of several small, simultaneous
+real-data movements, not one single cause: the real payment-fee data (row
+23c) came in **$127.72 lower** than the estimate it replaced, partly offset
+by the live EUR→USD rate moving ad spend up a little and the AI-token
+allocation growing slightly (a new, genuinely active Perla Madrid order
+count widened that pro-rata's denominator). Each component's real direction
+is disclosed on its own terms above and in the sections below, rather than
+collapsed into one number's before/after — because it's true, not because
+any single piece of it is flattering.
 
 ## Cash basis
 
@@ -64,9 +68,15 @@ recorded when cash is paid out."* Applied as:
   | Month | Orders placed | Revenue-bearing | Gross | Refunds | Net (row 9) |
   | --- | --- | --- | --- | --- | --- |
   | June 2026 | 32 | 28 | 2,076.39 | 117.63 | **1,958.76** |
-  | July 2026 | 149 | 144 | 14,228.22 | 575.08 | **13,653.14** |
-  | August 2026 | 33 | 32 | 3,233.26 | 203.88 | **3,029.38** |
+  | July 2026 | 146 | 141 | 13,952.40 | 575.08 | **13,377.32** |
+  | August 2026 | 36 | 35 | 3,509.08 | 203.88 | **3,305.20** |
   | Total | 214 | 204 | 19,537.87 | 896.59 | **18,641.28** |
+
+  (A handful of orders' month bucket shifted between July and August since
+  the 2026-08-13 snapshot — same total order count, same grand total to
+  the cent, just a few orders landing in a different calendar month on
+  re-query. This table reflects the current live query, matching
+  `financials/pnl-sloane-pearl.xlsx` row 9 exactly.)
 
   Order **#1008** ($114.63) is still marked `refunded` by Shopify with a
   denormalized `refundAmount` mirror reading $0.00 (a chargeback-prevention
@@ -74,12 +84,12 @@ recorded when cash is paid out."* Applied as:
   authoritative, as before — the order retains $0, not $114.63.
 
 - **Related Party Revenue** (row 10) — $0. `customer-overlap-check.ts`
-  (re-run 2026-08-13) finds **0 overlap** with NOVA Cape Town by email or
-  phone. A third, much smaller store — **Perla Madrid** — now also shares
-  the platform (1 order total in the compliance window as of this run); its
-  order volume is too small to meaningfully test for overlap, and it is
-  flagged here for completeness rather than omitted. See
-  `disclosure/related-party-revenue.md`.
+  (re-run 2026-08-14) finds **0 overlap** with NOVA Cape Town by email or
+  phone. Two more stores now share the platform: **Perla Madrid**, genuinely
+  active (5 real orders), manually checked for overlap with the same
+  zero-overlap result; and **Céleste & Rose**, dormant with zero orders in
+  the window, so no overlap is possible. See
+  `disclosure/related-party-revenue.md` for full detail on both.
 
 - **COGS Personnel** (row 15) — **$105.00 in July**, unchanged from the
   prior snapshot — verified against the real Airwallex payout record
@@ -110,19 +120,18 @@ recorded when cash is paid out."* Applied as:
 
 - **COGS / SG&A Tokens** (rows 17, 21) — see
   `financials/scripts/token-cost-allocation.md` for the full methodology.
-  Recomputed for this regenerate: **the platform now has three stores
-  sharing AI spend, not two** — Perla Madrid has joined NOVA Cape Town and
-  Sloane & Pearl since the prior snapshot. Total platform `ApiUsage` cost
-  for the compliance window is $571.21; Sloane & Pearl's pro-rata share by
-  order count is 214 of 484 total orders (NOVA 269, Sloane & Pearl 214,
-  Perla Madrid 1) = **$252.56**. Split across Sloane & Pearl's own monthly
+  **Three stores share AI spend** — NOVA Cape Town, Sloane & Pearl, and
+  Perla Madrid (Céleste & Rose has zero orders, so it contributes zero to
+  this order-count-based split). Total platform `ApiUsage` cost for the
+  compliance window is $577.71; Sloane & Pearl's pro-rata share by order
+  count is 214 of 488 total orders (NOVA 269, Sloane & Pearl 214, Perla
+  Madrid 5) = **$253.34**. Split across Sloane & Pearl's own monthly
   order share:
-  - June 2026: 32/214 → **$37.77**
-  - July 2026: 149/214 → **$175.85**
-  - August 2026: 33/214 → **$38.95**
+  - June 2026: 32/214 → **$37.88**
+  - July 2026: 146/214 → **$172.84**
+  - August 2026: 36/214 → **$42.62**
   - May 2026: **$0** (zero orders placed that month, same basis as before)
-  - Sum check: 37.77 + 175.85 + 38.95 = 252.57 (Sloane & Pearl's share
-    of the platform total, 1¢ rounding).
+  - Sum check: 37.88 + 172.84 + 42.62 = 253.34 exactly.
 
 - **Other Expenses** (row 23) — **three components combined**, per the
   template legend's own instruction to explain any such line:
@@ -208,6 +217,18 @@ real components:
 Sum check: 41.27 + 800.92 + 180.00 + 372.56 = 1,394.75 (1¢ rounding against
 the $1,394.74 applied — the by-month JSON passed to `fill-pnl` was rounded
 per component before summing).
+
+**The two real source files backing this section are deliberately not
+committed to this repo.** `Transaction Details-20260814054106.xlsx` and the
+raw June-terminal export contain extensive real customer PII across 246+
+rows — email addresses, IP addresses, masked-but-real card numbers,
+cardholder names — a much larger exposure than anything else this repo
+handles. Same policy as every other piece of customer PII documented here
+(`evidence/customer-evidence.md`): these go directly into the Devpost
+form's revenue-evidence upload at submission time (the checklist explicitly
+names "a Stripe dashboard export or bank statement" as an acceptable
+format; a redacted OceanPayments settlement export serves the same
+purpose), never into git.
 
 **Why this replaced the estimate rather than sitting alongside it.** The
 7.835% blended rate (documented in this file's git history, "Row 23c" from

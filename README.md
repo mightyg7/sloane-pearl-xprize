@@ -3,9 +3,15 @@
 This repo is the **submission package** for Sloane & Pearl (sloaneandpearl.com)'s
 entry to the Build with Gemini XPRIZE hackathon (Category: Entrepreneurship &
 Job Creation). It is not a copy of the product code — the actual code that runs
-Sloane & Pearl (customer-service agent, ad-creative pipeline, import pipeline)
-lives in the private `fashion-autopilot` repo, shared separately and privately
-with judges.
+Sloane & Pearl lives in a much larger private platform repo (`fashion-autopilot`)
+that also runs unrelated stores/business lines, so it is **not** shared with
+judges wholesale. Instead, a second, separate, curated repo —
+[`mightyg7/sloane-pearl-code-evidence`](https://github.com/mightyg7/sloane-pearl-code-evidence)
+(private) — contains real, unmodified source excerpts of the specific
+mechanisms this submission cites as evidence (auto-kill, Angle Loop,
+ad-clone judge loop, Airwallex treasury top-up, supplier size-chart
+automation, the Gemini/Vertex integration). It's shared with
+`testing@devpost.com` and `judging@hacker.fund`, same as this repo.
 
 Full context: `docs/superpowers/specs/2026-07-30-xprize-submission-design.md`.
 
@@ -32,8 +38,8 @@ Full context: `docs/superpowers/specs/2026-07-30-xprize-submission-design.md`.
 
 ## Where the business actually stands
 
-**Final regenerate, 2026-08-14**: **$18,641.28** revenue, **$27,970.57**
-expenses, a **net loss of $9,329.29** at a blended ROAS of **0.94x**. Stated
+**Final regenerate, 2026-08-14**: **$18,641.28** revenue, **$27,971.34**
+expenses, a **net loss of $9,330.06** at a blended ROAS of **0.94x**. Stated
 up front so nothing in this repo reads as a profitability claim. The store
 is not currently active (paused: no new product testing, no new revenue) —
 these figures reflect real, cash-basis activity through early August, not
@@ -46,33 +52,45 @@ and caveats: `financials/pnl-methodology.md`.
 
 ## Open before submission
 
-- [ ] **VA pay for August** — still not issued as of 2026-08-13 (re-checked;
+- [ ] **VA pay for August** — still not issued as of 2026-08-14 (re-checked;
   consistent with the store's paused state). If it arrives before the
   deadline, allocate per `financials/scripts/token-cost-allocation.md` and
   re-run `npm run fill-pnl`. Widens the loss further.
-- [ ] **Record the actual video** — `video/script.md` needs updating with
-  the final numbers above before recording (loss/ROAS beat, revenue figures)
-  — then real screen captures, a chosen hook line, recording itself.
+- [ ] **Record the actual video** — `video/script.md` is fully finalized
+  against the current numbers; needs real screen captures, a chosen hook
+  line, and the recording/upload itself.
 - [ ] **Real customer evidence for the Devpost form** — name/email/phone go
   straight into the form near the deadline, never into this repo. Method:
   `evidence/customer-evidence.md`.
-- [ ] **Verifiable customer testimonial** — optional Devpost field; needs a
-  real, already-public review or mention (not a private message pulled
-  without the customer's knowledge it'd be shared), if one exists.
+- [ ] **Revenue-evidence file for the Devpost form's upload slot** — the
+  checklist wants "a Stripe dashboard export or bank statement" alongside
+  the P&L. The real OceanPayments settlement exports and withdrawal report
+  behind row 23c exist (see `financials/pnl-methodology.md`) but are
+  deliberately not committed here (real customer PII across 246+ rows) —
+  upload them (or a redacted version) directly to the form.
 - [ ] **Confirm the compliance-clarification email to organizers was sent** —
   drafted earlier in this project; send status was never confirmed.
+- [ ] **Confirm `fashion-autopilot` doesn't need to be shared after all** —
+  current plan is the curated `sloane-pearl-code-evidence` repo satisfies
+  "the repository must contain all necessary source code"; revisit only if
+  that turns out to be insufficient.
+- [ ] **Corporate ID, if one exists** — the checklist asks for it "if
+  available"; not addressed anywhere in this repo. Confirm whether one
+  applies and where it goes on the form.
 - [ ] **Fill out and submit the actual Devpost form** — using this repo's
   finalized content.
 
 **Resolved since the last checklist:** name-disclosure decision made
-(`disclosure/labor-attestation.md`); OceanPayments fee estimate now applied
-in the committed P&L; the 4-order merchandise-COGS gap closed on its own
-(204/204 shipped orders now have a matched invoice); the Shopify plan-fee
-gap closed with real invoice data, not a guess (plan subscription = $0,
-real Apps charges of $62.49 added — `disclosure/pre-existing-resources.md`);
-Gemini/Vertex AI shipped and verified live in production, with real evidence
-in `evidence/agent-logs/` and `evidence/screenshots/`; agent-logs populated
-with real DB exports and admin screenshots.
+(`disclosure/labor-attestation.md`); payment-processing fees are now real,
+exact data, not an estimate (`financials/pnl-methodology.md` row 23c); the
+4-order merchandise-COGS gap closed on its own (204/204 shipped orders now
+have a matched invoice); the Shopify plan-fee gap closed with real invoice
+data, not a guess (plan subscription = $0, real Apps charges of $62.49
+added — `disclosure/pre-existing-resources.md`); Gemini/Vertex AI shipped
+and verified live in production, with real evidence in
+`evidence/agent-logs/` and `evidence/screenshots/`; a real, consented,
+verified customer testimonial secured (`evidence/customer-evidence.md`);
+agent-logs populated with real DB exports and admin screenshots.
 
 ## Running the financial scripts
 
@@ -96,7 +114,7 @@ read-only.
 ```bash
 export PL_TEMPLATE_PATH="/path/to/a freshly downloaded Build with Gemini XPRIZE - PL Template.xlsx"
 export REAL_FEES_JSON='{"2026-06":105.04,"2026-07":997.68,"2026-08":292.02}' # real fees, see pnl-methodology.md row 23c
-export COGS_TOKENS_JSON='{"2026-06":37.77,"2026-07":175.85,"2026-08":38.95}' # see token-cost-allocation.md
+export COGS_TOKENS_JSON='{"2026-06":37.77,"2026-07":172.31,"2026-08":42.49}' # see token-cost-allocation.md
 export COGS_PERSONNEL_JSON='{"2026-07":105.00}'                             # once an August invoice exists, add it
 export COGS_SOFTWARE_JSON='{"2026-07":62.49}'                               # real Shopify Apps charges, see pre-existing-resources.md
 npm run fill-pnl

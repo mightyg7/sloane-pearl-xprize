@@ -12,7 +12,7 @@ order data at that time.
   `financials/scripts/revenue-by-month.ts`'s underlying order data (e.g. most
   recent N paid orders, or a spread across the order history) — script to be
   extended with a `--sample` flag when needed, not built speculatively now.
-- **Aggregate summary (safe to commit):** as of the **2026-08-13 final
+- **Aggregate summary (safe to commit):** as of the **2026-08-14 final
   regenerate**, Sloane & Pearl has **204 unique customer emails** across
   **214 orders** placed (source: `financials/scripts/customer-overlap-check.ts`).
   Of those 214, **204 are revenue-bearing** on a cash basis. The metric is
@@ -43,20 +43,28 @@ business/marketing inquiry with no order on file, or too thin to use.
 personal email (outside the platform) — she agreed to her feedback being
 shared, with attribution as **"Y. Young"** (not her full name).
 
-**The quote:** *"Wow, I didn't think I would hear from you. THANK YOU!! I
-love the sandal."* — real order #1152 ($54.95, paid, delivered, 2026-07-29),
-her first order with the store, unprompted follow-up after a support reply.
+**The quote, verbatim, exactly as she wrote it** (visible in full in
+`testimonial-message-thread.png`, so quoting it any other way here would
+just create a mismatch a judge could spot by opening the screenshot):
+*"Wow..i didnt think I would hear from you. THANK YOU!!. I love the
+sandal."* [continues into a real sizing follow-up — "I wear a 7...these
+look like an 11..." — omitted here as off-topic for a testimonial, not
+because it says anything negative; the full message is visible unedited in
+the screenshot]. Real order #1152 ($54.95, paid, delivered, 2026-07-29),
+her first order with the store, unprompted follow-up after a support reply
+about a sizing issue on that same order — genuine context, not hidden.
 
 **Verification, redacted for privacy before being saved anywhere:**
 - `evidence/screenshots/testimonial-order-1152.png` — the real order record
   (order #, date, amount, item, fulfillment timeline). Customer
-  name/email/address/payment-card panels excluded entirely — not just
-  blurred — since she consented to "Y. Young" and the quote, not to her
-  full identity being exposed.
+  name/email/address panels are excluded entirely (cropped out of the
+  screenshot, not merely blurred). The order's payment method still shows
+  as a masked "Visa ••9183" badge — last-4-digits only, the same level of
+  disclosure a receipt shows, not full card data — left visible rather than
+  additionally redacted since it identifies nothing about her personally.
 - `evidence/screenshots/testimonial-message-thread.png` — the real,
-  timestamped email thread showing her exact words. Her email address is
-  redacted from the visible sender line; everything else (the quote, the
-  date, our reply) is real and unedited.
+  timestamped email thread showing her exact words, unedited. Her email
+  address is redacted from the visible sender line.
 
 Her real name, email, and full order detail are **not** in this repo —
 consistent with the same PII policy as the rest of this file. If the

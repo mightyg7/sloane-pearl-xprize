@@ -1,5 +1,13 @@
 # Build with Gemini XPRIZE — Sloane & Pearl Submission Design
 
+**Historical planning document — not the current state.** Written at the
+start of this project, before the final numbers, the real testimonial, the
+real Gemini/Vertex build, or the decision to share a curated code-evidence
+repo instead of the full `fashion-autopilot` platform repo. For current,
+authoritative content, see the repo root `README.md` and
+`financials/pnl-methodology.md`. Kept here as a record of the original
+plan, not updated line-by-line as reality diverged from it.
+
 **Date:** 2026-07-30
 **Deadline:** August 17, 2026, 1:00pm PDT
 **Prize:** $2,000,000 pool (1st: $500k, 2nd: $200k, 3rd–5th: $100k each, 15 runner-ups: $50k each, 5 category winners: $50k each)
@@ -14,15 +22,20 @@ orders 2026-06-09 — after the hackathon's May 19, 2026 "New Projects Only" cut
 AI-agent e-commerce platform (import pipeline, ad-creative pipeline, customer-service
 agent, order/fulfillment tracking, financial ops). Sloane & Pearl is a new brand/
 storefront launched on top of that platform, not a new platform itself. This is
-explicitly allowed under the "New Projects Only" rule as confirmed by the organizer
-(email correspondence, 2026-07-30): *"If you used pre-existing templates, frameworks,
+explicitly allowed under the "New Projects Only" rule per the official FAQ
+(not a bespoke organizer confirmation — a compliance-clarification email was
+drafted but its send status was never confirmed, see the repo README's open
+items): *"If you used pre-existing templates, frameworks,
 boilerplates, or code to build the final project, please explain how the project
 utilized that pre-existing work."* We disclose this rather than obscure it.
 
 **Category:** Entrepreneurship & Job Creation — *"Fueling the tools that help new
 founders and economies thrive."* Framing: an AI agent platform autonomously launched
-and operates a real, profitable retail business from near-zero human headcount — a
-blueprint for what a founder can do without a team.
+and operates a real retail business from near-zero human headcount — a
+blueprint for what a founder can do without a team. (Not profitable yet as of
+the final numbers — see `financials/pnl-methodology.md`; that's disclosed
+plainly throughout, not something this early planning note should imply
+otherwise.)
 
 **What "new" means here (official FAQ, xprize.devpost.com/rules):** it's the
 *business* that must be newly created after May 19, 2026 — not the GitHub repo,

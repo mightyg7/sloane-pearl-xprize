@@ -52,7 +52,7 @@ inferring it from a blank cell:
 | LLM API subscriptions/keys | Keys no, **usage yes** | The credentials are account-level and shared. The token usage they generate does scale per store and is allocated as a real cost (row 17) — see `financials/scripts/token-cost-allocation.md`. |
 | Proxy infrastructure | No | No dedicated proxy is assigned to this store (`proxyIp` is null), so there is no cost to attribute. |
 | Operator/founder time | No | Not exclusive to this store, and not separable from platform development. |
-| **Shopify plan fee** | **Resolved 2026-08-13 — real data, not an estimate** | See below. |
+| **Shopify plan fee** | **Resolved 2026-08-14 — real data, not an estimate** | See below. |
 
 **The Shopify plan fee gap is closed, with real invoice data — not a
 guess.** Sloane & Pearl's own Shopify billing invoices were located in the
@@ -71,13 +71,20 @@ inferred). Two real findings:
    are Shopify App Store subscription charges, unrelated to payment
    processing, so they carry no double-counting risk with any other line.
 
-**Deliberately still excluded: Shopify's "Transaction fees" charges**
-(~$372.56 across the same invoices) — these are Shopify's surcharge for
-using a non-Shopify-Payments gateway, which is the same real cost already
-captured inside Row 23c's OceanPayments blended rate (its "Shopify 3rd-party
-gateway surcharge, 2.000%" component). Adding both would double-count one
-real cost as two lines; only the OceanPayments blended-rate line carries it.
+**Update, 2026-08-14: Shopify's "Transaction fees" charges are now
+included, not excluded.** (~$372.56 across the same invoices) — these are
+Shopify's surcharge for using a non-Shopify-Payments gateway. As of the
+2026-08-13 regenerate this was deliberately excluded, on the reasoning that
+it duplicated a component of the OceanPayments *estimated blended rate*
+(7.835%) already applied to row 23c. That estimate has since been fully
+replaced with real, exact fee data (see `financials/pnl-methodology.md`
+row 23c) — a real per-transaction export from OceanPayments itself, which
+naturally does not include Shopify's own separate surcharge (charged by a
+different party, never something OceanPayments' own fee columns would
+carry). With the estimate gone, the double-counting risk is gone too, so
+this real charge is now included on its own merits.
 
 None of this is disclosed to inflate the case for viability — it's disclosed
-because the rule requires it, and because the one thing this resolution
-actually did was widen the loss slightly further ($62.49), not narrow it.
+because the rule requires it, and it's why the loss moved the small amount
+it did (partly wider from the Apps charge, partly narrower from the real
+fee data coming in lower than the estimate it replaced).

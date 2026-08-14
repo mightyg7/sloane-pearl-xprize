@@ -1,7 +1,9 @@
 # Gemini / Google Cloud Integration
 
-**Status: shipped and live (2026-08-13).** Real Gemini calls now run through
-Vertex AI, in production, for Sloane & Pearl's catalog-copy generation.
+**Status: shipped and live (2026-08-12/13, UTC vs local date — the real
+`ApiUsage` row below timestamps at 2026-08-12 16:58 UTC).** Real Gemini
+calls now run through Vertex AI, in production, for Sloane & Pearl's
+catalog-copy generation.
 
 ## What was actually built (differs from the original plan — see below)
 
@@ -73,9 +75,11 @@ deployed to production:
   field shape (`candidatesTokenCount`, `promptTokenCount`) are Gemini's own,
   not something authored by this codebase.
 
-**GCP Console usage/billing screenshot**: still to be captured (see
-`evidence/agent-logs/README.md`) — a straightforward screenshot once
-someone with Console access is available, not blocking.
+**GCP Console usage/billing screenshots**: captured 2026-08-14 — real
+Vertex AI API traffic graph, a real Cloud Billing cost report isolated to
+this project (€0.01), and Google's own billing table naming Vertex AI
+explicitly as the billed service. See `evidence/agent-logs/README.md` and
+`evidence/screenshots/gcp-*.png`.
 
 ## Cost
 
@@ -86,10 +90,7 @@ in any material way; it is intentionally not broken out as a separate line
 there — see that file's own methodology for why AI token spend is disclosed
 as a single allocated platform total, not per-provider.
 
-## Update needed elsewhere
-
-`narrative/ai-native-operations.md` should move Gemini/Vertex from "planned"
-to "currently running," scoped to catalog-copy generation, not customer
-service (the CS section's own "AI-assisted once the Gemini integration
-lands" framing still describes a genuinely unbuilt, separate piece of work —
-do not conflate the two).
+`narrative/ai-native-operations.md` reflects this as "currently running,"
+scoped to catalog-copy generation only — customer service stays fully
+human, a separate and still-unbuilt piece of work; see that doc's "What's
+exclusively human" section.

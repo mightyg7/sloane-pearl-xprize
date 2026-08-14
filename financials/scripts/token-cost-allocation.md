@@ -10,18 +10,23 @@ Sloane & Pearl.
 allocate total platform AI spend for the hackathon window (2026-05-19 to
 2026-08-17) pro-rata by each store's share of orders placed in that same
 window. This is a disclosed estimate, not exact per-call accounting.
-All figures in USD, current as of **2026-08-13** (final regenerate).
+All figures in USD, current as of **2026-08-14** (final regenerate).
 
 **A third store has joined the platform since the prior snapshot:** Perla
-Madrid, with 1 order in the compliance window as of this run. The allocation
-below is now a three-way split, not two-way — updated accordingly rather
-than silently still dividing by two stores.
+Madrid — genuinely active and growing (5 real orders as of this run, up
+from 1 at the last check), not a placeholder. A fourth store, Céleste &
+Rose, is also now on the platform but has zero orders in the window (a
+dormant/pre-launch store, `debuf1-qa.myshopify.com`) — excluded from the
+order-count denominator for the same reason May contributes zero to Sloane
+& Pearl's own monthly split below: zero orders means zero share under this
+methodology's own basis, not an oversight. The allocation is a three-way
+split (NOVA, Sloane & Pearl, Perla Madrid), not two-way.
 
-- Total platform `ApiUsage` cost, 2026-05-19–2026-08-17: $571.21 USD
+- Total platform `ApiUsage` cost, 2026-05-19–2026-08-17: $577.71 USD
 - Sloane & Pearl orders in window: 214
 - NOVA Cape Town orders in window: 269
-- Perla Madrid orders in window: 1
-- Sloane & Pearl's allocated share: 214 / (214 + 269 + 1) × $571.21 USD = **$252.56 USD**
+- Perla Madrid orders in window: 5
+- Sloane & Pearl's allocated share: 214 / (214 + 269 + 5) × $577.71 USD = **$253.34 USD**
 
 This allocated figure feeds `COGS_TOKENS_JSON` in `fill-pnl-template.ts`. The
 split between production-related AI calls (e.g. import/catalog enhancement,
@@ -44,7 +49,7 @@ SELECT SUM(cost) AS total_cost, COUNT(*) AS call_count
 FROM "ApiUsage"
 WHERE timestamp >= '2026-05-19' AND timestamp <= '2026-08-17';
 ```
-Result: $571.21 USD, 163,086 API calls
+Result: $577.71 USD, 164,830 API calls
 
 **Order counts by store (2026-05-19 to 2026-08-17):**
 ```sql
@@ -63,41 +68,46 @@ ORDER BY order_count DESC;
 Store mapping (ShopifyStore → ConnectedStore):
 - cmobaoalm0001yiu7ieqhz4ka (whhsw6-ps.myshopify.com) → NOVA Cape Town: 269 orders
 - cmq6ky85j0001tzm81xqmvknx (pdmnf1-c0.myshopify.com) → Sloane & Pearl: 214 orders
-- cmshw289t0006n9m89hocelon → Perla Madrid: 1 order
+- cmshw289t0006n9m89hocelon → Perla Madrid: 5 orders
 
-Total: 484 orders across three stores in the window.
+Total: 488 orders across three order-bearing stores in the window (a fourth,
+Céleste & Rose, has zero orders and is excluded from this count for the same
+reason — see `disclosure/related-party-revenue.md`).
 
 **Note on NOVA Cape Town's status:** unchanged from the prior snapshot —
 although retired 2026-06-15, it continues to have real order volume through
 the compliance window, so it stays in the pro-rata split rather than being
 treated as inactive.
 
-**Note on Perla Madrid:** a newly-observed store on the platform as of this
-regenerate, with negligible order volume (1) in the window. Included for
-accuracy rather than omitted; its effect on Sloane & Pearl's allocated share
-is minor (dividing by 484 instead of 483 stores' worth of orders).
+**Note on Perla Madrid:** genuinely active and growing on the platform —
+5 real orders as of this regenerate, up from 1 at the prior check. Its
+effect on Sloane & Pearl's allocated share is still minor (dividing by 488
+instead of 483 stores' worth of orders) but real and included, not omitted.
 
 ## Monthly split for `COGS_TOKENS_JSON`
 
-The $252.56 USD figure above is a single hackathon-window total, broken out
+The $253.34 USD figure above is a single hackathon-window total, broken out
 per calendar month by Sloane & Pearl's OWN monthly order counts (not the
 platform-wide three-way split above, which is a different, store-level
-pro-rata used only to derive the $252.56 total in the first place):
+pro-rata used only to derive the $253.34 total in the first place):
 
-- Sloane & Pearl orders by month: June 32, July 149, August 33 (214 total —
-  matches the total used above).
-- June: 32/214 × $252.56 = **$37.77**
-- July: 149/214 × $252.56 = **$175.85**
-- August: 33/214 × $252.56 = **$38.95**
+- Sloane & Pearl orders by month: June 32, July 146, August 36 (214 total —
+  matches the total used above; a handful of orders' month bucket shifted
+  between July and August since the prior snapshot — see
+  `financials/pnl-methodology.md`'s revenue table note for the same effect
+  on row 9).
+- June: 32/214 × $253.34 = **$37.88**
+- July: 146/214 × $253.34 = **$172.84**
+- August: 36/214 × $253.34 = **$42.62**
 - May: **$0** — Sloane & Pearl placed zero orders in May, same basis as
   before.
-- Sum check: $37.77 + $175.85 + $38.95 = $252.57 (Sloane & Pearl's exact
-  allocated share before this monthly split, 1¢ rounding).
+- Sum check: $37.88 + $172.84 + $42.62 = $253.34 (Sloane & Pearl's exact
+  allocated share before this monthly split, exact to the cent).
 
 ## Re-running
 
-This is intended as the **final** regenerate before submission — the
-platform's total `ApiUsage` cost and each store's order counts will keep
-moving in general, but Sloane & Pearl's own order count is expected to hold
-steady given its current paused state. Re-derive only if something material
-changes before Aug 17.
+This is intended as the **final** regenerate before submission — Sloane &
+Pearl's own order count is expected to hold steady given its current
+paused state, but the platform's total `ApiUsage` cost and the other
+stores' order counts (Perla Madrid especially, which is still actively
+growing) may keep moving. Re-derive close to the deadline if material.

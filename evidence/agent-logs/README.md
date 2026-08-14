@@ -37,8 +37,9 @@ See also `../screenshots/`:
   `AUTO-DISABLED` by the worker's own crash-loop guard, with the real
   failing run id — evidence the automation fails safely rather than
   silently, not just that it succeeds.
-- `schedules-run-history.png` — real completed runs from earlier today
-  (2026-08-13), each with a real dollar cost (e.g. $0.7280, $2.1149) and
+- `schedules-run-history.png` — real completed runs, dated on screen
+  (Aug 6, 2026, "10h ago" relative to when the screenshot was captured
+  ~Aug 7), each with a real dollar cost (e.g. $0.7280, $2.1149) and
   phase-completion detail.
 - `schedules-worker-pool.png` — the 22-slot proxy worker pool backing the
   research pipeline, for completeness on how the cron-driven scraping

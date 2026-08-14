@@ -113,7 +113,7 @@ customer-facing action happens with nobody reviewing it first.
   omitted: this is the honest state of a real, working mechanism that isn't
   currently armed, not a claim that it's live today.
 
-## Human-handled today, AI-assisted once the Gemini integration lands
+## What's exclusively human
 
 - **Customer service** — currently handled manually by a CS contractor (VA,
   hired via onlinejobs.ph, engagement start 2026-07-16 — see
@@ -122,15 +122,11 @@ customer-facing action happens with nobody reviewing it first.
   originally planned surface for this hackathon's Gemini requirement;
   `gemini-integration/write-up.md` explains why catalog-copy generation
   shipped instead. CS drafting/triage automation remains **not built** —
-  do not claim this is live.
-
-## What's exclusively human
-
+  do not claim this is live. The VA reviews and sends every reply herself;
+  there is no autonomous send-without-review for this store, and no plan
+  to add one — the Gemini call that shipped is on the catalog side, not CS.
 - Strategic decisions (pricing floors, which collections to launch, ad
   budget approval above the operator's discretionary threshold).
-- Customer-service sending — the VA reviews and sends every reply herself;
-  there is no autonomous send-without-review for this store, before or after
-  the Gemini integration lands.
 
 ## Query evidence (run against production, 2026-07-30)
 
