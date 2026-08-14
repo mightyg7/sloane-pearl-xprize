@@ -68,15 +68,14 @@ and caveats: `financials/pnl-methodology.md`.
   behind row 23c exist (see `financials/pnl-methodology.md`) but are
   deliberately not committed here (real customer PII across 246+ rows) —
   upload them (or a redacted version) directly to the form.
-- [ ] **Confirm the compliance-clarification email to organizers was sent** —
-  drafted earlier in this project; send status was never confirmed.
+- [ ] **Post the compliance-clarification question to organizers** — an
+  earlier email draft was never sent; a Discord Q&A-appropriate version is
+  ready to post (covers both the pre-existing-platform question and the
+  curated-repo-vs-full-repo code-sharing scope).
 - [ ] **Confirm `fashion-autopilot` doesn't need to be shared after all** —
   current plan is the curated `sloane-pearl-code-evidence` repo satisfies
   "the repository must contain all necessary source code"; revisit only if
   that turns out to be insufficient.
-- [ ] **Corporate ID, if one exists** — the checklist asks for it "if
-  available"; not addressed anywhere in this repo. Confirm whether one
-  applies and where it goes on the form.
 - [ ] **Fill out and submit the actual Devpost form** — using this repo's
   finalized content.
 
@@ -90,7 +89,9 @@ added — `disclosure/pre-existing-resources.md`); Gemini/Vertex AI shipped
 and verified live in production, with real evidence in
 `evidence/agent-logs/` and `evidence/screenshots/`; a real, consented,
 verified customer testimonial secured (`evidence/customer-evidence.md`);
-agent-logs populated with real DB exports and admin screenshots.
+agent-logs populated with real DB exports and admin screenshots; corporate
+ID confirmed real (IHOUMI LIMITED, HK BR No. 79710264, Live —
+`disclosure/pre-existing-platform.md`).
 
 ## Running the financial scripts
 
