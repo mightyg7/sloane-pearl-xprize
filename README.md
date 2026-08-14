@@ -115,7 +115,7 @@ read-only.
 ```bash
 export PL_TEMPLATE_PATH="/path/to/a freshly downloaded Build with Gemini XPRIZE - PL Template.xlsx"
 export REAL_FEES_JSON='{"2026-06":105.04,"2026-07":997.68,"2026-08":292.02}' # real fees, see pnl-methodology.md row 23c
-export COGS_TOKENS_JSON='{"2026-06":37.77,"2026-07":172.31,"2026-08":42.49}' # see token-cost-allocation.md
+export COGS_TOKENS_JSON='{"2026-06":37.88,"2026-07":172.84,"2026-08":42.62}' # see token-cost-allocation.md
 export COGS_PERSONNEL_JSON='{"2026-07":105.00}'                             # once an August invoice exists, add it
 export COGS_SOFTWARE_JSON='{"2026-07":62.49}'                               # real Shopify Apps charges, see pre-existing-resources.md
 npm run fill-pnl
