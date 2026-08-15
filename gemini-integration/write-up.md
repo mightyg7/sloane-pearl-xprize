@@ -81,6 +81,15 @@ this project (€0.01), and Google's own billing table naming Vertex AI
 explicitly as the billed service. See `evidence/agent-logs/README.md` and
 `evidence/screenshots/gcp-*.png`.
 
+**GCP billing evidence for the Devpost form's upload slot**: no formal
+invoice PDF exists yet for August (GCP invoices post ~5 business days after
+month-end, after the deadline), so per the form's own fallback language —
+*"If you used GCP Free Tier or credits, export the zero-dollar monthly
+invoice or cost table statement"* — the real Cost Table CSV export is used
+instead: `evidence/agent-logs/gcp-cost-table-august-2026.csv`, downloaded
+directly from Console → Billing → Reports, naming Vertex AI and the exact
+€0.006251 unrounded subtotal.
+
 ## Cost
 
 Negligible, as anticipated. One real call cost $0 at Flash-tier pricing

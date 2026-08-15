@@ -91,7 +91,11 @@ and verified live in production, with real evidence in
 verified customer testimonial secured (`evidence/customer-evidence.md`);
 agent-logs populated with real DB exports and admin screenshots; corporate
 ID confirmed real (IHOUMI LIMITED, HK BR No. 79710264, Live —
-`disclosure/pre-existing-platform.md`).
+`disclosure/pre-existing-platform.md`); GCP billing evidence for the
+Devpost form's "evidence of the project running" upload slot resolved — no
+invoice PDF exists yet for August (posts after the deadline), so the
+form's own named fallback is used: a real Cost Table CSV export
+(`evidence/agent-logs/gcp-cost-table-august-2026.csv`).
 
 ## Running the financial scripts
 

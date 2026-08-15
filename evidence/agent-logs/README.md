@@ -12,6 +12,17 @@ a mockup.
 - `treasury-topup-log.md` — real, settled Airwallex bank transfers funding
   the ad account autonomously.
 
+- `gcp-cost-table-august-2026.csv` — real GCP Billing "Cost table" export
+  (Console → Billing → Reports → Download CSV), scoped to the
+  `sloane-pearl-xprize` project, August 2026. No formal invoice PDF exists
+  for this month yet — GCP invoices post ~5 business days after month-end,
+  which falls after the submission deadline — so this is the documented
+  fallback the Devpost form itself names: *"If you used GCP Free Tier or
+  credits, export the zero-dollar monthly invoice or cost table statement."*
+  Names **Vertex AI** as the service (ID `C7E2-9256-1C43`), unrounded
+  subtotal €0.006251, rounding to the €0.01 shown elsewhere — a judge can
+  reconcile this exact number against the screenshots below.
+
 See also `../screenshots/`:
 - `gcp-vertex-ai-metrics.png` — Vertex AI API traffic graph on the dedicated
   `sloane-pearl-xprize` GCP project, showing real request activity (a 403
