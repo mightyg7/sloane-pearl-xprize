@@ -50,6 +50,18 @@ the P&L. Independently cross-checked three ways (a raw DB query, a raw Meta
 API call, and the platform's own internal `/profit` dashboard). Derivation
 and caveats: `financials/pnl-methodology.md`.
 
+## STOP EDITING AFTER THE DEVPOST FORM IS SUBMITTED
+
+Organizer, verbatim, from the Submission Success Workshop: *"Are you allowed
+to change add features and bug fixes after the submission date on
+GitHub?... that is a no. Please avoid any edits to anything after the
+deadline... if we are getting pointed to that repo and we see edits we'll
+have to raise flags."* This applies to **all three repos** judges may end up
+looking at: this one (`sloane-pearl-xprize`), `sloane-pearl-code-evidence`,
+and (if it ever comes up) `fashion-autopilot`. Once the form is submitted,
+**no further commits to any of them** — not a typo fix, not a "just one more
+number," nothing — until judging is fully over.
+
 ## Open before submission
 
 - [ ] **VA pay for August** — still not issued as of 2026-08-14 (re-checked;
@@ -57,27 +69,16 @@ and caveats: `financials/pnl-methodology.md`.
   deadline, allocate per `financials/scripts/token-cost-allocation.md` and
   re-run `npm run fill-pnl`. Widens the loss further.
 - [ ] **Record the actual video** — `video/script.md` is fully finalized
-  against the current numbers; needs real screen captures, a chosen hook
-  line, and the recording/upload itself.
+  against the current numbers; recording is in progress as of 2026-08-16.
 - [ ] **Real customer evidence for the Devpost form** — name/email/phone go
   straight into the form near the deadline, never into this repo. Method:
   `evidence/customer-evidence.md`.
-- [ ] **Revenue-evidence file for the Devpost form's upload slot** — the
-  checklist wants "a Stripe dashboard export or bank statement" alongside
-  the P&L. The real OceanPayments settlement exports and withdrawal report
-  behind row 23c exist (see `financials/pnl-methodology.md`) but are
-  deliberately not committed here (real customer PII across 246+ rows) —
-  upload them (or a redacted version) directly to the form.
 - [ ] **Post the compliance-clarification question to organizers** — an
   earlier email draft was never sent; a Discord Q&A-appropriate version is
   ready to post (covers both the pre-existing-platform question and the
   curated-repo-vs-full-repo code-sharing scope).
-- [ ] **Confirm `fashion-autopilot` doesn't need to be shared after all** —
-  current plan is the curated `sloane-pearl-code-evidence` repo satisfies
-  "the repository must contain all necessary source code"; revisit only if
-  that turns out to be insufficient.
-- [ ] **Fill out and submit the actual Devpost form** — using this repo's
-  finalized content.
+- [ ] **Fill out and submit the actual Devpost form** — in progress as of
+  2026-08-16; most fields filled directly from this repo's content.
 
 **Resolved since the last checklist:** name-disclosure decision made
 (`disclosure/labor-attestation.md`); payment-processing fees are now real,
@@ -95,7 +96,14 @@ ID confirmed real (IHOUMI LIMITED, HK BR No. 79710264, Live —
 Devpost form's "evidence of the project running" upload slot resolved — no
 invoice PDF exists yet for August (posts after the deadline), so the
 form's own named fallback is used: a real Cost Table CSV export
-(`evidence/agent-logs/gcp-cost-table-august-2026.csv`).
+(`evidence/agent-logs/gcp-cost-table-august-2026.csv`); revenue-evidence
+file built and uploaded to the form (real OceanPayments transaction/
+withdrawal data compiled into a single PDF, not committed here — real
+customer PII); `fashion-autopilot` will **not** be shared — the curated
+`sloane-pearl-code-evidence` repo satisfies "the repository must contain
+all necessary source code," with an explicit disclosure note added to that
+repo's own README explaining why, so it reads as a deliberate, disclosed
+choice rather than a gap.
 
 ## Running the financial scripts
 

@@ -20,3 +20,4 @@ evidence/customer-evidence-export*.md
 # Scratch space for local probe scripts. The committed, reusable queries
 # live in financials/scripts/.
 .tmp-probe/
+.DS_Store
