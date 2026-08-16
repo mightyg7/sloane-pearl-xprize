@@ -13,8 +13,6 @@ ad-clone judge loop, Airwallex treasury top-up, supplier size-chart
 automation, the Gemini/Vertex integration). It's shared with
 `testing@devpost.com` and `judging@hacker.fund`, same as this repo.
 
-Full context: `docs/superpowers/specs/2026-07-30-xprize-submission-design.md`.
-
 ## Layout
 
 - `disclosure/` — compliance narratives (pre-existing platform, related-party
