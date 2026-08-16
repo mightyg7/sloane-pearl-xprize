@@ -4,7 +4,7 @@ node_modules/
 *.local.csv
 evidence/customer-evidence-export*.md
 
-# The BLANK official P&L template must never be committed — its own header
+# The BLANK official P&L template must never be committed. Its own header
 # says "Download this form - do not make a copy in the cloud or else it
 # could be shared with others". Only the FILLED output
 # (financials/pnl-sloane-pearl.xlsx) belongs in git.

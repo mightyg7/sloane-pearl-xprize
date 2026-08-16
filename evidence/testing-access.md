@@ -5,7 +5,7 @@ an Entrant's working Project for judging and testing by providing a link to a
 website, functioning demo, or a test build."*
 
 **Plan: public storefront only.** sloaneandpearl.com is a live, public
-storefront — no login required. This is the testable link provided on the
+storefront, no login required. This is the testable link provided on the
 submission form.
 
 **Not provided:** live admin/dashboard access to the multi-store
@@ -18,5 +18,5 @@ of proving AI is live in production, rather than requiring judges to poke
 around internal tooling that also exposes other stores' data.
 
 Revisit this if the operator decides the story is stronger with a live
-walkthrough — that would need a scoped, read-only demo view, not raw admin
+walkthrough: that would need a scoped, read-only demo view, not raw admin
 access, and is out of scope for this repo.

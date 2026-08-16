@@ -55,7 +55,7 @@ async function main() {
     console.log(`Overlap with NOVA Cape Town by phone: ${overlapByPhone.length}`);
     if (overlapByEmail.length > 0 || overlapByPhone.length > 0) {
       console.log(
-        "WARNING: overlap found — these orders must be flagged as related-party " +
+        "WARNING: overlap found, these orders must be flagged as related-party " +
           "revenue in disclosure/related-party-revenue.md, not counted as independent revenue."
       );
     }

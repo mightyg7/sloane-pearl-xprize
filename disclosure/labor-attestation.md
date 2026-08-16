@@ -17,7 +17,7 @@ time and pay are not exclusive to Sloane & Pearl.
 **Confirmed clean.** Timeline, reconstructed from the hiring conversation:
 
 - 2026-06-23: initial outreach / role posting.
-- 2026-06-24: interviewed. Explicitly **not hired** at this point — the
+- 2026-06-24: interviewed. Explicitly **not hired** at this point, the
   candidate was told the role was filled by someone else (2026-06-25 message:
   "we've decided to move forward with another candidate").
 - 2026-07-16: re-approached ("are you still available for a small task?"),
@@ -25,7 +25,7 @@ time and pay are not exclusive to Sloane & Pearl.
   customer support tickets for Sloane & Pearl").
 
 Actual engagement start: **2026-07-16**, well after the 2026-05-19 cutoff.
-This is well-documented (dated chat log) — the initial June interview did not
+This is well-documented (dated chat log): the initial June interview did not
 result in an engagement, so there is no ambiguity about pre-cutoff work.
 
 ## Pay disclosure
@@ -33,16 +33,16 @@ result in an engagement, so there is no ambiguity about pre-cutoff work.
 **Rate:** $7.00 USD/hour.
 
 **First invoice, verified against the real Airwallex payout record** (not
-just the operator's word — cross-checked in `AirwallexPayout`):
+just the operator's word, cross-checked in `AirwallexPayout`):
 
 - Invoice #01, covering CS support for 2026-07-16 through 2026-07-31.
 - Amount: **$105.00 USD**.
 - Paid via Airwallex, settled **2026-08-01**.
-- At $7.00/hour, $105.00 implies ~15 hours over the 16-day period —
+- At $7.00/hour, $105.00 implies ~15 hours over the 16-day period,
   consistent with a part-time ramp-up in her first two weeks.
 
 **Allocation between Sloane & Pearl and NOVA Cape Town:** she handles CS for
-both stores, so her pay is not automatically a Sloane & Pearl-only cost — the
+both stores, so her pay is not automatically a Sloane & Pearl-only cost, the
 same principle as the AI token allocation in
 `financials/scripts/token-cost-allocation.md`. For *this specific invoice*,
 though, the allocation isn't a blended estimate: NOVA Cape Town had **zero**
@@ -53,29 +53,29 @@ later invoice covering a period where both stores have order volume would
 need the pro-rata split; this one doesn't.
 
 This feeds `COGS_PERSONNEL_JSON` in Task 6's `fill-pnl-template.ts` as
-`{"2026-07": 105.00}` (no June or May component — her engagement genuinely
+`{"2026-07": 105.00}` (no June or May component, her engagement genuinely
 starts mid-July, per the attestation above).
 
 **Still open:** any invoices covering August work (through the Aug 17
-deadline) haven't been issued/paid yet — this is a live, ongoing cost, same
+deadline) haven't been issued/paid yet. This is a live, ongoing cost, same
 treatment as the ad-spend figures elsewhere in this repo. Re-check before
 final submission.
 
-## Name-disclosure preference — decided 2026-08-13
+## Name-disclosure preference: decided 2026-08-13
 
 The official FAQ permits anonymizing names ("As for any names you are not
 able to share, feel free to cross them out or similarly anonymize"). Decision:
 disclose her real name, **Clarissa Condeza**, in this private compliance
-document only — visible solely to the two invited judge/testing accounts on
+document only, visible solely to the two invited judge/testing accounts on
 this repo.
 
 **Deliberately scoped narrower than "everywhere":** the video (public once
 uploaded, per the submission rules) and the narrative docs
 (`narrative/business-narrative.md`, `video/script.md`) keep the anonymized
 "a CS contractor" / "she" framing. Public video exposure is a different kind
-of risk from private-repo access — it is permanent, searchable, and tied to a
+of risk from private-repo access: it is permanent, searchable, and tied to a
 real person's employer indefinitely, with no compliance requirement forcing
 it. Do not extend this decision to those public-facing materials without a
-separate, explicit decision — and ideally not without asking her directly,
+separate, explicit decision, and ideally not without asking her directly,
 since that's a basic courtesy question independent of what the hackathon
 rules permit.

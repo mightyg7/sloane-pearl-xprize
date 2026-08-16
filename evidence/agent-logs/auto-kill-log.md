@@ -1,10 +1,10 @@
-# Meta ad auto-kill — real, autonomous campaign pauses (Sloane & Pearl)
+# Meta ad auto-kill: real, autonomous campaign pauses (Sloane & Pearl)
 
 **Mechanism:** a Railway cron (`cron-ticker-auto-kill`, every 5 minutes)
 evaluates every live Sloane & Pearl Meta campaign against spend/conversion
 thresholds and, when a rule fires, calls the Meta Graph API directly to set
-`status: PAUSED` on the campaign — **no human approval between evaluation
-and the pause**. Source: `src/lib/meta-ads/auto-kill.ts`.
+`status: PAUSED` on the campaign, with **no human approval between
+evaluation and the pause**. Source: `src/lib/meta-ads/auto-kill.ts`.
 
 Source table: `MetaAutoKillLog`. Query:
 ```sql
@@ -29,6 +29,6 @@ ORDER BY "createdAt" DESC LIMIT 8;
 | 29/7 - ABO - [Sloane & Pearl] - Matching Sets › Hot Wedding Guest No Outfit | abo_cpv | $23.13 | $23.13 spend, 0 visitors | 2026-07-29 14:46:14 |
 
 This directly explains the "95 auto-killed of 127 launched campaigns" figure
-already cited in `narrative/ai-native-operations.md` — these are eight of
+already cited in `narrative/ai-native-operations.md`: these are eight of
 those real events, with real dollar amounts and Meta-attributed reasons, not
 a summary statistic standing alone.

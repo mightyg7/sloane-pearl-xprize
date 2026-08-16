@@ -1,13 +1,13 @@
-# Sloane & Pearl — Build with Gemini XPRIZE Submission
+# Sloane & Pearl: Build with Gemini XPRIZE Submission
 
 This repo is the **submission package** for Sloane & Pearl (sloaneandpearl.com)'s
 entry to the Build with Gemini XPRIZE hackathon (Category: Entrepreneurship &
-Job Creation). It is not a copy of the product code — the actual code that runs
+Job Creation). It is not a copy of the product code: the actual code that runs
 Sloane & Pearl lives in a much larger private platform repo (`fashion-autopilot`)
 that also runs unrelated stores/business lines, so it is **not** shared with
-judges wholesale. Instead, a second, separate, curated repo —
-[`mightyg7/sloane-pearl-code-evidence`](https://github.com/mightyg7/sloane-pearl-code-evidence)
-(private) — contains real, unmodified source excerpts of the specific
+judges wholesale. Instead, a second, separate, curated repo,
+[`mightyg7/sloane-pearl-code-evidence`](https://github.com/mightyg7/sloane-pearl-code-evidence),
+(private), contains real, unmodified source excerpts of the specific
 mechanisms this submission cites as evidence (auto-kill, Angle Loop,
 ad-clone judge loop, Airwallex treasury top-up, supplier size-chart
 automation, the Gemini/Vertex integration). It's shared with
@@ -15,23 +15,23 @@ automation, the Gemini/Vertex integration). It's shared with
 
 ## Layout
 
-- `disclosure/` — compliance narratives (pre-existing platform, related-party
+- `disclosure/`: compliance narratives (pre-existing platform, related-party
   revenue, pre-existing resources, labor attestation).
-- `narrative/` — the 500–1000 word submission writeup and the AI-native-operations
+- `narrative/`: the 500–1000 word submission writeup and the AI-native-operations
   evidence enumeration.
-- `financials/` — the filled P&L (`pnl-sloane-pearl.xlsx`), the scripts that
+- `financials/`: the filled P&L (`pnl-sloane-pearl.xlsx`), the scripts that
   produced its numbers, and the two docs a judge needs in order to read the
   spreadsheet:
-  - `pnl-methodology.md` — where every line comes from, the cash-basis rules
-    applied, the full breakdown of row 23 "Other Expenses" (ad spend +
-    merchandise COGS + payment fees, which the template's own legend requires
-    us to explain), and every known data gap.
-  - `scripts/token-cost-allocation.md` — how platform-wide AI spend is
+  - `pnl-methodology.md`: where every line comes from, the cash-basis rules
+    applied, the full breakdown of row 23 "Other Expenses" (ad spend,
+    merchandise COGS, and payment fees, which the template's own legend
+    requires us to explain), and every known data gap.
+  - `scripts/token-cost-allocation.md`: how platform-wide AI spend is
     allocated to this one store (rows 17/21).
-- `evidence/` — testing-access plan, customer-evidence methodology, agent logs
+- `evidence/`: testing-access plan, customer-evidence methodology, agent logs
   and screenshots (real, dated exports proving AI runs in production).
-- `video/` — the 3-minute demo video script.
-- `gemini-integration/` — write-up of the Gemini/Vertex AI integration —
+- `video/`: the 3-minute demo video script.
+- `gemini-integration/`: write-up of the Gemini/Vertex AI integration,
   **shipped and live** as of 2026-08-13, with real production evidence.
 
 ## Where the business actually stands
@@ -39,11 +39,11 @@ automation, the Gemini/Vertex integration). It's shared with
 **Final regenerate, 2026-08-14**: **$18,641.28** revenue, **$27,971.34**
 expenses, a **net loss of $9,330.06** at a blended ROAS of **0.94x**. Stated
 up front so nothing in this repo reads as a profitability claim. The store
-is not currently active (paused: no new product testing, no new revenue) —
+is not currently active (paused: no new product testing, no new revenue);
 these figures reflect real, cash-basis activity through early August, not
 projected or ongoing activity. Every payment-processing fee is now real,
 exact data (OceanPayments' own transaction export, a real withdrawal
-report, real Shopify billing invoices) — no more estimated rate anywhere in
+report, real Shopify billing invoices), no more estimated rate anywhere in
 the P&L. Independently cross-checked three ways (a raw DB query, a raw Meta
 API call, and the platform's own internal `/profit` dashboard). Derivation
 and caveats: `financials/pnl-methodology.md`.
@@ -57,26 +57,27 @@ deadline... if we are getting pointed to that repo and we see edits we'll
 have to raise flags."* This applies to **all three repos** judges may end up
 looking at: this one (`sloane-pearl-xprize`), `sloane-pearl-code-evidence`,
 and (if it ever comes up) `fashion-autopilot`. Once the form is submitted,
-**no further commits to any of them** — not a typo fix, not a "just one more
-number," nothing — until judging is fully over.
+**no further commits to any of them**: not a typo fix, not a "just one more
+number," nothing, until judging is fully over.
 
 ## Open before submission
 
-- [ ] **VA pay for August** — still not issued as of 2026-08-14 (re-checked;
+- [ ] **VA pay for August**: still not issued as of 2026-08-14 (re-checked;
   consistent with the store's paused state). If it arrives before the
   deadline, allocate per `financials/scripts/token-cost-allocation.md` and
   re-run `npm run fill-pnl`. Widens the loss further.
-- [ ] **Record the actual video** — `video/script.md` is fully finalized
-  against the current numbers; recording is in progress as of 2026-08-16.
-- [ ] **Real customer evidence for the Devpost form** — name/email/phone go
+- [x] **Record the actual video**: recorded and included in the submission
+  as of 2026-08-17.
+- [ ] **Real customer evidence for the Devpost form**: name/email/phone go
   straight into the form near the deadline, never into this repo. Method:
   `evidence/customer-evidence.md`.
-- [ ] **Post the compliance-clarification question to organizers** — an
+- [ ] **Post the compliance-clarification question to organizers**: an
   earlier email draft was never sent; a Discord Q&A-appropriate version is
   ready to post (covers both the pre-existing-platform question and the
   curated-repo-vs-full-repo code-sharing scope).
-- [ ] **Fill out and submit the actual Devpost form** — in progress as of
-  2026-08-16; most fields filled directly from this repo's content.
+- [x] **Fill out and submit the actual Devpost form**: submitted as of
+  2026-08-17. The deadline itself hasn't passed yet, so edits here remain
+  fine until then, per the edit-freeze note above.
 
 **Resolved since the last checklist:** name-disclosure decision made
 (`disclosure/labor-attestation.md`); payment-processing fees are now real,
@@ -84,20 +85,20 @@ exact data, not an estimate (`financials/pnl-methodology.md` row 23c); the
 4-order merchandise-COGS gap closed on its own (204/204 shipped orders now
 have a matched invoice); the Shopify plan-fee gap closed with real invoice
 data, not a guess (plan subscription = $0, real Apps charges of $62.49
-added — `disclosure/pre-existing-resources.md`); Gemini/Vertex AI shipped
+added, `disclosure/pre-existing-resources.md`); Gemini/Vertex AI shipped
 and verified live in production, with real evidence in
 `evidence/agent-logs/` and `evidence/screenshots/`; a real, consented,
 verified customer testimonial secured (`evidence/customer-evidence.md`);
 agent-logs populated with real DB exports and admin screenshots; corporate
-ID confirmed real (IHOUMI LIMITED, HK BR No. 79710264, Live —
+ID confirmed real (IHOUMI LIMITED, HK BR No. 79710264, Live,
 `disclosure/pre-existing-platform.md`); GCP billing evidence for the
-Devpost form's "evidence of the project running" upload slot resolved — no
+Devpost form's "evidence of the project running" upload slot resolved: no
 invoice PDF exists yet for August (posts after the deadline), so the
-form's own named fallback is used: a real Cost Table CSV export
+form's own named fallback is used, a real Cost Table CSV export
 (`evidence/agent-logs/gcp-cost-table-august-2026.csv`); revenue-evidence
 file built and uploaded to the form (real OceanPayments transaction/
-withdrawal data compiled into a single PDF, not committed here — real
-customer PII); `fashion-autopilot` will **not** be shared — the curated
+withdrawal data compiled into a single PDF, not committed here, real
+customer PII); `fashion-autopilot` will **not** be shared. The curated
 `sloane-pearl-code-evidence` repo satisfies "the repository must contain
 all necessary source code," with an explicit disclosure note added to that
 repo's own README explaining why, so it reads as a deliberate, disclosed
@@ -116,7 +117,7 @@ npm run overlap    # related-party / cross-store customer overlap
 ```
 
 Get `DATABASE_URL`'s password from `railway variables --service fashion-autopilot --kv`
-in the `fashion-autopilot` checkout — never commit it. Get `META_ACCESS_TOKEN`
+in the `fashion-autopilot` checkout, never commit it. Get `META_ACCESS_TOKEN`
 the same way (`META_ACCESS_TOKEN` var on the same service). All queries are
 read-only.
 
@@ -132,7 +133,7 @@ npm run fill-pnl
 ```
 
 Writes `financials/pnl-sloane-pearl.xlsx` (committed) from a **fresh, local**
-copy of the template — never commit the blank template itself, only the
+copy of the template, never commit the blank template itself, only the
 filled output. `.gitignore` blocks the blank one under several filename
 variants; the script prints the resulting revenue/expense/loss totals plus
 every data-quality warning it found, so read its output rather than assuming

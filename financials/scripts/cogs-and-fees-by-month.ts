@@ -14,7 +14,7 @@ import { withDb, storeIdFor, STORES } from "./lib/db.js";
  *      to the other store on the platform (NOVA Cape Town). Every one
  *      of Sloane & Pearl's 87 distinct ordered products, and therefore
  *      all 243 of its order line items, joins to nothing.
- *   2. Those 42 rows carry `source = 'estimated'` — a modelled guess
+ *   2. Those 42 rows carry `source = 'estimated'`, a modelled guess
  *      used by the ad-scaling break-even calculator, not a supplier
  *      invoice. Even with coverage it would not be evidence.
  *
@@ -23,7 +23,7 @@ import { withDb, storeIdFor, STORES } from "./lib/db.js";
  * `DiscordInvoice` / `DiscordInvoiceLine`. Each line carries the
  * product title, quantity, and unit price already broken out in USD,
  * and joins to our order on `shopifyOrderId`. That is a real invoiced
- * amount actually paid to the supplier — strictly better evidence than
+ * amount actually paid to the supplier, strictly better evidence than
  * a per-product estimate, and it is the same source the platform's own
  * realized-COGS resolver prefers (`src/lib/pricing/realized-cogs.ts`
  * in fashion-autopilot).
@@ -31,9 +31,9 @@ import { withDb, storeIdFor, STORES } from "./lib/db.js";
  * MONTH ATTRIBUTION is by supplier invoice date, not order date,
  * because the template mandates cash basis and the invoice is the
  * cash-out event. `DiscordInvoice.paidAt` would be the strictly
- * correct key but is not trustworthy — one invoice records a `paidAt`
+ * correct key but is not trustworthy: one invoice records a `paidAt`
  * after today's date and another records one BEFORE its own invoice
- * date — so `invoiceDate` is used as the clean proxy and
+ * date, so `invoiceDate` is used as the clean proxy and
  * `orderMonthMismatches` reports any order whose invoice month differs
  * from its order month, so a future re-run surfaces cross-month lag
  * instead of hiding it.
@@ -53,7 +53,7 @@ export type CogsCoverage = {
   shippedOrders: number;
   /** Shipped orders with at least one matched supplier invoice line. */
   shippedOrdersMatched: number;
-  /** Shipped orders with no matched invoice line — the genuine data gap. */
+  /** Shipped orders with no matched invoice line: the genuine data gap. */
   shippedOrdersUnmatched: { orderNumber: string; date: string; revenueUsd: number }[];
   /**
    * Invoiced by the supplier although our own `fulfillmentStatus` does not
@@ -84,7 +84,7 @@ export type MonthFees = {
    * Estimated OceanPayments fee for this month's gap orders, only
    * present when a rate was supplied to getSloanePearlPaymentFees.
    * Kept separate from `feesUsd` (the exact Shopify-native figure) so
-   * callers can report — and the P&L can disclose — evidenced vs.
+   * callers can report, and the P&L can disclose, evidenced vs.
    * estimated amounts distinctly rather than blending them silently.
    */
   estimatedOceanPaymentFeesUsd?: number;
@@ -338,7 +338,7 @@ export async function getSloanePearlUnitEconomics(): Promise<UnitEconomics> {
  *   ESTIMATE, kept separate from the exact Shopify-native figure.
  *   Sourced from a real, independently-run OceanPayments settlement-export
  *   analysis (see financials/pnl-methodology.md for the derivation and
- *   validation) — never invent a rate here. Omit to get exact-only
+ *   validation). Never invent a rate here. Omit to get exact-only
  *   behavior (the historical default): gap orders contribute $0, and the
  *   caller is responsible for disclosing the resulting understatement.
  */
@@ -467,7 +467,7 @@ async function main() {
       `refunded before shipping (no cost ever): ${c.refundedUnshippedOrders}`
   );
   console.log(
-    `  buckets reconcile to order total: ${c.bucketsReconcile ? "yes" : "NO — investigate"}`
+    `  buckets reconcile to order total: ${c.bucketsReconcile ? "yes" : "NO, investigate"}`
   );
   console.log(
     `  supplier invoices: ${c.invoicesTotal} (${c.invoicesUnpaid} not marked paid, ` +
@@ -475,7 +475,7 @@ async function main() {
   );
   if (c.shippedOrdersUnmatched.length > 0) {
     console.warn(
-      "\n  WARNING: shipped orders with NO matched supplier invoice line — real " +
+      "\n  WARNING: shipped orders with NO matched supplier invoice line, real " +
         "merchandise cost exists for these and is NOT in the figure above:"
     );
     for (const u of c.shippedOrdersUnmatched) {
@@ -506,7 +506,7 @@ async function main() {
       `contribution/order $${ue.contributionPerOrderUsd.toFixed(2)} (before ad spend)`
   );
 
-  // OCEANPAY_FEE_RATE_PCT is optional and OFF by default — see
+  // OCEANPAY_FEE_RATE_PCT is optional and OFF by default, see
   // financials/pnl-methodology.md for the sourced rate and its
   // derivation. Never invented here; if unset, fees.byMonth carries only
   // the exact Shopify-native figure and the gap stays visibly $0.
@@ -548,7 +548,7 @@ async function main() {
     console.warn(
       "\n  WARNING: fee data is incomplete, so the total above UNDERSTATES real " +
         "payment-processing cost. It is reported as-is rather than extrapolated " +
-        "from the observed rate — see financials/pnl-methodology.md. Set " +
+        "from the observed rate, see financials/pnl-methodology.md. Set " +
         "OCEANPAY_FEE_RATE_PCT to apply the sourced OceanPayments estimate instead."
     );
   }

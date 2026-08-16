@@ -1,10 +1,10 @@
-# Airwallex autonomous treasury top-up — real, settled money (Sloane & Pearl)
+# Airwallex autonomous treasury top-up: real, settled money (Sloane & Pearl)
 
 **Mechanism:** a worker interval tick forecasts Sloane & Pearl's dedicated
 Meta ad account's (`act_1115325060591696`) burn rate against its remaining
 balance and, when projected runway drops below threshold, autonomously
-initiates a real Airwallex bank transfer to top it up — **no human approval
-per transfer**, bounded by per-tick/day/week caps. Source:
+initiates a real Airwallex bank transfer to top it up, with **no human
+approval per transfer**, bounded by per-tick/day/week caps. Source:
 `src/lib/airwallex/topup-tick.ts`, `topup-executor.ts`.
 
 Source tables: `AirwallexTopupFire` joined to `AirwallexPayout` (for real
@@ -33,9 +33,9 @@ ORDER BY f."firedAt" DESC LIMIT 10;
 | 10,000.00 | HKD | 2026-07-05 21:20:12 | settled |
 
 Every row above has `payout_status = settled`, meaning the money genuinely
-moved — this table only records a `FIRED` decision, but the join to
+moved: this table only records a `FIRED` decision, but the join to
 `AirwallexPayout` confirms it wasn't just an intent that stalled. (A parallel
 `SKIPPED`/`STUCK` population also exists in this table, including a real
-2026-07-25 HKD-balance-shortfall incident — the system fails loudly rather
+2026-07-25 HKD-balance-shortfall incident. The system fails loudly rather
 than silently when it can't fund a top-up, which is itself evidence this
 isn't a rubber-stamp loop.)

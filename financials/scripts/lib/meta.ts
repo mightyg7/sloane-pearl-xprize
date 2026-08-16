@@ -11,7 +11,7 @@ type InsightRow = {
 
 /**
  * The Meta Insights API's `spend` field is denominated in the ad
- * account's OWN currency, not USD — confirmed 2026-07-30 via
+ * account's OWN currency, not USD. Confirmed 2026-07-30 via
  * GET /act_.../?fields=currency that act_1115325060591696 bills in EUR.
  * Fetched live (not hardcoded) so a currency change on the account
  * doesn't silently go stale.
@@ -57,7 +57,7 @@ export async function getSloanePearlSpendByMonth(): Promise<
   }
   const json = (await res.json()) as { data: InsightRow[] };
 
-  // Convert native-currency spend to real USD before returning — see
+  // Convert native-currency spend to real USD before returning, see
   // getAccountCurrency's comment above. Uses the platform's own cached
   // FX rate (financials/scripts/lib/fx.ts), so this stays consistent
   // with what the main fashion-autopilot business uses for its own

@@ -14,7 +14,7 @@ const MONTH_COLUMNS: Record<string, string> = {
 };
 const COLUMNS = ["C", "D", "E", "F"] as const;
 
-// Sourced from disclosure/related-party-revenue.md — update together.
+// Sourced from disclosure/related-party-revenue.md, update together.
 const RELATED_PARTY_REVENUE_BY_MONTH: Record<string, number> = {};
 
 function parseMonthlyJson(envVar: string): Record<string, number> {
@@ -43,8 +43,8 @@ const at = (inputs: Inputs, addr: string) => inputs[addr] ?? 0;
  * verbatim, and in the blank official template every one of them is
  * `<v>0</v>`. `fullCalcOnLoad` makes Excel and Google Sheets recompute
  * on open, but anything that reads the stored values instead of
- * evaluating the formulas — macOS Quick Look, most xlsx-to-PDF
- * converters, an automated parser a judge might run — would show
+ * evaluating the formulas (macOS Quick Look, most xlsx-to-PDF
+ * converters, an automated parser a judge might run) would show
  * TOTAL REVENUE, TOTAL EXPENSES and PROFIT (LOSS) as $0. Writing the
  * real computed value alongside the formula fixes the file itself
  * rather than relying on the reader to recalculate.
@@ -113,22 +113,22 @@ async function main() {
   const templatePath = process.env.PL_TEMPLATE_PATH;
   if (!templatePath) {
     throw new Error(
-      "PL_TEMPLATE_PATH is required — point it at a freshly downloaded local " +
+      "PL_TEMPLATE_PATH is required, point it at a freshly downloaded local " +
         "copy of the official template, per the header's own warning against " +
         "duplicating the blank form."
     );
   }
 
-  // These come from the human-decided methodology docs, not a live query —
+  // These come from the human-decided methodology docs, not a live query,
   // see financials/scripts/token-cost-allocation.md and
   // disclosure/labor-attestation.md. Pass as JSON env vars, e.g.:
   //   COGS_TOKENS_JSON='{"2026-06":37.88,"2026-07":172.84,"2026-08":42.62}'
   const cogsTokens = parseMonthlyJson("COGS_TOKENS_JSON");
   const sgaTokens = parseMonthlyJson("SGA_TOKENS_JSON");
   const cogsPersonnel = parseMonthlyJson("COGS_PERSONNEL_JSON");
-  // Real Shopify "Apps" billing-invoice charges — see
+  // Real Shopify "Apps" billing-invoice charges, see
   // disclosure/pre-existing-resources.md. Excludes Shopify's "Transaction
-  // fees" line — that real cost is carried instead as row 23c's real
+  // fees" line: that real cost is carried instead as row 23c's real
   // component 4 (REAL_FEES_JSON below), not here; counting it in both
   // places would double-count the same real cost.
   const cogsSoftware = parseMonthlyJson("COGS_SOFTWARE_JSON");
@@ -136,7 +136,7 @@ async function main() {
   const missing: string[] = [];
   if (Object.keys(cogsPersonnel).length === 0) {
     missing.push(
-      "COGS_PERSONNEL_JSON (VA pay, see disclosure/labor-attestation.md — still pending as of design time)"
+      "COGS_PERSONNEL_JSON (VA pay, see disclosure/labor-attestation.md, still pending as of design time)"
     );
   }
   if (Object.keys(cogsTokens).length === 0 && Object.keys(sgaTokens).length === 0) {
@@ -150,9 +150,9 @@ async function main() {
   const sheet = workbook.getWorksheet("Template");
   if (!sheet) {
     throw new Error(
-      `Sheet "Template" not found in ${templatePath} — the template's layout ` +
+      `Sheet "Template" not found in ${templatePath}. The template's layout ` +
         "may have changed since this script was written; re-verify the row/" +
-        "column mapping in this plan's Task 6 before proceeding."
+        "column mapping below before proceeding."
     );
   }
 
@@ -174,7 +174,7 @@ async function main() {
   // Row 23 "Other Expenses" carries THREE components. The official
   // template's COGS block only offers Personnel / Software / Tokens, so
   // it has no home for merchandise cost of goods sold or for payment
-  // processing — and the legend's instruction for row 23 is exactly
+  // processing, and the legend's instruction for row 23 is exactly
   // this case: "you must explain each expense line in your Devpost
   // submission". That explanation lives in financials/pnl-methodology.md,
   // which must be updated alongside any change here.
@@ -184,7 +184,7 @@ async function main() {
   // directly from OceanPayments' own transaction-level export (real
   // per-transaction Trans Fee / SaaS Fee / Per-Transaction Fee / Refund Fee
   // columns), real withdrawal-report data ($45 flat per withdrawal), and
-  // Shopify's own billing-invoice "Transaction fees" line — see
+  // Shopify's own billing-invoice "Transaction fees" line, see
   // financials/pnl-methodology.md row 23c for the full derivation. Takes
   // precedence over OCEANPAY_FEE_RATE_PCT's estimated blended rate, which
   // was only ever a stand-in for real data that didn't exist yet.
@@ -228,7 +228,7 @@ async function main() {
       setInput(`${col}21`, sgaTokens[month]);
     }
     // Row 16 (COGS Software Subscriptions): real Shopify "Apps" charges
-    // when provided via COGS_SOFTWARE_JSON, else $0 — see
+    // when provided via COGS_SOFTWARE_JSON, else $0, see
     // disclosure/pre-existing-resources.md. Row 20 (SG&A) stays $0; no
     // incremental SG&A software cost has been identified.
     setInput(`${col}16`, cogsSoftware[month] ?? 0);
@@ -282,7 +282,7 @@ async function main() {
     warnings.push(
       `merchandise COGS is missing for ${cogs.coverage.shippedOrdersUnmatched.length} ` +
         `shipped order(s) with no matched supplier invoice ` +
-        `(${cogs.coverage.shippedOrdersUnmatched.map((o) => o.orderNumber).join(", ")}) — ` +
+        `(${cogs.coverage.shippedOrdersUnmatched.map((o) => o.orderNumber).join(", ")}), ` +
         "run `npm run cogs` for detail"
     );
   }
@@ -290,14 +290,14 @@ async function main() {
     warnings.push(
       `row 23 payment-processing fees are REAL data (not an estimate): OceanPayments' ` +
         `own transaction-level export + real withdrawal-report fees + Shopify's real ` +
-        `billing-invoice "Transaction fees" line — see financials/pnl-methodology.md row 23c`
+        `billing-invoice "Transaction fees" line, see financials/pnl-methodology.md row 23c`
     );
   } else if (fees!.coverage.oceanPaymentEstimate) {
     const e = fees!.coverage.oceanPaymentEstimate;
     warnings.push(
       `row 23 includes a $${e.estimatedFeesUsd.toFixed(2)} OceanPayments fee ESTIMATE ` +
         `(${e.ratePct}% applied to $${e.gapOrdersGrossUsd.toFixed(2)} gross across ` +
-        `${e.gapOrdersCount} gap orders) — sourced rate, not the exact Shopify-native ` +
+        `${e.gapOrdersCount} gap orders), sourced rate, not the exact Shopify-native ` +
         `figure; see financials/pnl-methodology.md`
     );
   } else if (fees!.coverage.ordersWithFeeData < fees!.coverage.ordersTotal) {
@@ -305,7 +305,7 @@ async function main() {
       `payment fee data covers only ${fees!.coverage.ordersWithFeeData} of ` +
         `${fees!.coverage.ordersTotal} orders, so row 23 UNDERSTATES real fee cost ` +
         `(observed rate on the covered orders: ` +
-        `${fees!.coverage.observedFeeRatePct?.toFixed(2)}%) — set OCEANPAY_FEE_RATE_PCT ` +
+        `${fees!.coverage.observedFeeRatePct?.toFixed(2)}%), set OCEANPAY_FEE_RATE_PCT ` +
         `to apply the sourced OceanPayments estimate instead`
     );
   }
@@ -325,7 +325,7 @@ async function main() {
   if (missing.length > 0) {
     console.warn(
       "\nWARNING: the following inputs were not provided and their cells were " +
-        "left untouched (not zeroed) — this P&L is NOT submission-ready:"
+        "left untouched (not zeroed): this P&L is NOT submission-ready:"
     );
     for (const m of missing) console.warn(`  - ${m}`);
   }

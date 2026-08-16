@@ -14,7 +14,7 @@ export type MonthRevenue = {
   revenueUsd: number;
 };
 
-/** Orders whose stated status and refund mirror disagree — surfaced, not silently absorbed. */
+/** Orders whose stated status and refund mirror disagree: surfaced, not silently absorbed. */
 export type RefundDiscrepancy = {
   orderNumber: string;
   totalPriceUsd: number;
@@ -23,7 +23,7 @@ export type RefundDiscrepancy = {
 
 export type RevenueResult = {
   byMonth: MonthRevenue[];
-  /** Statuses seen, for the record — proves what the filter did and didn't drop. */
+  /** Statuses seen, for the record: proves what the filter did and didn't drop. */
   excludedOrders: { pending: number; voided: number };
   refundDiscrepancies: RefundDiscrepancy[];
 };
@@ -35,23 +35,23 @@ export type RevenueResult = {
  * Three rules follow from that, all of which the first version of this
  * script got wrong:
  *
- *  1. `pending` orders are excluded — the cash has not been received.
+ *  1. `pending` orders are excluded: the cash has not been received.
  *     `voided` too (it never will be).
  *  2. Refunds are netted out of the month they belong to. A refunded
  *     order's cash did not stay with the business, so counting it at
  *     full value overstates revenue.
  *  3. The status filter is NULL-safe. `"financialStatus" != 'voided'`
- *     evaluates to NULL — not TRUE — for a NULL status in Postgres, so
+ *     evaluates to NULL, not TRUE, for a NULL status in Postgres, so
  *     a status-less order would have been silently dropped from
  *     revenue entirely. `IS NULL OR NOT IN (...)` keeps it.
  *
  * On refund amounts: `Order.refundAmount` is denominated in the STORE's
  * currency, not USD (fashion-autopilot compares it against
- * `Order.totalPrice`, the store-currency total — see
+ * `Order.totalPrice`, the store-currency total, see
  * `src/lib/orders/refund.ts`), so it gets the same `exchangeRate`
  * treatment `totalPriceUsd` already had applied at sync time.
  * Sloane & Pearl bills in USD at rate 1.0, so this is currently a
- * no-op — it is here so the script stays correct if that changes.
+ * no-op, it is here so the script stays correct if that changes.
  *
  * On `financialStatus = 'refunded'`: Shopify uses `refunded` only for a
  * FULLY refunded order (a partial refund reads `partially_refunded`),

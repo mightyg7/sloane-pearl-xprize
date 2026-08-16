@@ -9,7 +9,7 @@ export async function withDb<T>(fn: (client: Client) => Promise<T>): Promise<T> 
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
     throw new Error(
-      "DATABASE_URL is required — use the public Railway proxy URL " +
+      "DATABASE_URL is required, use the public Railway proxy URL " +
         "(tramway.proxy.rlwy.net:27107), not the internal Postgres.railway.internal host."
     );
   }
@@ -23,7 +23,7 @@ export async function withDb<T>(fn: (client: Client) => Promise<T>): Promise<T> 
 }
 
 /**
- * `ShopifyStore.id` — the id space used by `Order`, `OrderLineItem`,
+ * `ShopifyStore.id`: the id space used by `Order`, `OrderLineItem`,
  * `Refund` and `ProductCogs`.
  *
  * NOT interchangeable with `connectedStoreIdFor()` below. See that
@@ -43,13 +43,13 @@ export async function storeIdFor(client: Client, shopDomain: string): Promise<st
 }
 
 /**
- * `ConnectedStore.id` — a DIFFERENT id space from `ShopifyStore.id`,
+ * `ConnectedStore.id`: a DIFFERENT id space from `ShopifyStore.id`,
  * used by `ShopifyProduct.storeId` (and the rest of the merchant-side
  * tables) even though both tables key off the same `pdmnf1-c0.myshopify.com`
  * shop domain.
  *
  * The two ids never collide and neither table errors on a wrong-space
- * lookup — `WHERE "storeId" = <ShopifyStore.id>` against
+ * lookup: `WHERE "storeId" = <ShopifyStore.id>` against
  * `ShopifyProduct` just returns 0 rows. This helper exists so the
  * gotcha documented in prose in `narrative/ai-native-operations.md`
  * has a reusable fix: pick the function named after the table you are
