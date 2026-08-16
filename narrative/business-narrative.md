@@ -53,7 +53,10 @@ than smoothed over.
 What AI does not do here is send a customer a reply or make the final call
 on strategy. Customer service today is fully human: a CS contractor,
 engaged through onlinejobs.ph, drafts and sends every reply to Sloane &
-Pearl's tickets herself. A Gemini-based CS drafting assistant was the
+Pearl's tickets herself. The platform assists rather than replaces her —
+it surfaces the order, shipment and supplier context alongside each
+ticket, so her time goes to judgment and the customer rather than to
+gathering data across systems. A Gemini-based CS drafting assistant was the
 originally planned surface for this hackathon's Gemini requirement; it
 shipped instead on the catalog side, for reasons explained in
 `gemini-integration/write-up.md` — CS remains entirely human-run, and we
