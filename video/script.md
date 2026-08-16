@@ -45,44 +45,49 @@ as of early August) — say so plainly if the video references present-tense
 activity anywhere; the figures shown are real historical activity during
 the compliance window, not an ongoing trajectory.
 
-## Structure (target: ~2:45 to leave margin)
+## Structure (target: ~2:55 to leave margin)
 
-Timings below sum to 2:45. VO word counts are sized to roughly 150 words/min
-so a section's spoken line doesn't outrun its screen time — some sections
-have visual-only beats (numbers/graphics on screen with no VO), which is
-intentional headroom, not a gap to fill with more talking.
+Timings below sum to ~2:55. VO word counts are sized to roughly 150
+words/min so a section's spoken line doesn't outrun its screen time — some
+sections have visual-only beats (numbers/graphics on screen with no VO),
+which is intentional headroom, not a gap to fill with more talking.
 
-### 0:00–0:15 — Hook
+This version has **two on-camera segments bookending an otherwise
+footage-driven middle** — the founder speaks directly to camera at the
+open and close (real face, real voice: "a real human knowing who is behind
+this"), but the evidence-dense core (AI decisions, real numbers) stays
+undiluted by narration-over-b-roll, per the Farza advice that the demo
+itself should carry the proof, not a talking-head explaining it.
 
-**Shot:** Open cold on the live storefront, sloaneandpearl.com — real product
-grid, then a real product page. No logo card or title screen first; the hook
-has to land inside the first 15 seconds, not after a branded intro. The URL
+### 0:00–0:12 — Founder, on camera (12s)
+
+**Shot:** You, on camera, direct to lens. Not the storefront yet — this
+opens the video, before any screen recording.
+
+**Line (~26 words / ~11s):** "I'm [name], and two months ago, this store
+didn't exist. Today it's a real business — and most of the decisions
+running it aren't made by me."
+
+Adjust the exact wording once you're recording against camera — the point
+of this line is the pivot from "founder talking" to "so who's making the
+decisions," which the hard cut below answers.
+
+**On-screen caption (small, lower third, not covering your face):**
+"Founder, Sloane & Pearl"
+
+### 0:12–0:27 — Hook (15s)
+
+**Shot:** Hard cut from your face straight into the live storefront,
+sloaneandpearl.com — real product grid, then a real product page. The URL
 should be visible in the browser bar at least once in this shot.
 
-**Hook line candidates** (pick one against the actual footage — this is the
-"stops the scroll" line per the Farza advice, not finalized on paper):
+**On-screen caption (always show, regardless of VO):** "sloaneandpearl.com
+— launched 2026-06-09."
 
-- A. *"Two months ago, this store didn't exist. Since then: $18,641.28 in
-  real sales, 2,529 products, and an AI that pauses its own ad spend."*
-- B. *"This is a real fashion brand. AI doesn't just write its product
-  copy — it decides which ads to kill, which ones to keep funding, and
-  writes its own ad strategy every night. And it already created a real
-  job."*
-- C. *"$18,641.28 in sales. 127 ad campaigns, dozens auto-killed by AI with
-  no human approval. One new employee. This is what an AI-run business
-  actually looks like."*
+**Footage needed:** 5–8s storefront homepage scroll, 5–7s product page /
+add to cart. Live capture, not a screenshot slideshow.
 
-A and C lead with scale; B leads with the job-creation angle that matches this
-submission's category (Entrepreneurship & Job Creation) most directly —
-default to B if the category framing needs to be obvious from second one.
-
-**On-screen caption (always show, regardless of VO):** "Sloane & Pearl —
-sloaneandpearl.com. Launched 2026-06-09."
-
-**Footage needed:** 5–8s storefront homepage scroll, 5–7s product page / add
-to cart. Live capture, not a screenshot slideshow.
-
-### 0:15–1:00 — AI in production (45s)
+### 0:27–1:10 — AI in production (43s)
 
 Two beats, chosen for the strongest evidence of *executing decisions*, not
 just producing output — this directly targets the judging criterion's own
@@ -127,7 +132,7 @@ via Vertex AI."
 **Footage needed:** real admin screen recordings only, timestamps/dates
 visible on screen, no staged or mocked data.
 
-### 1:00–1:45 — The business is real (45s)
+### 1:10–1:50 — The business is real (40s)
 
 - On-screen graphic: three-bar revenue chart, June $1,958.76, July
   $13,377.32, August $3,305.20 (partial month, before the store paused),
@@ -164,7 +169,7 @@ caption. No identifiable footage of the contractor — video stays
 anonymized per the name-disclosure decision (real name is used only in the
 private compliance doc).
 
-### 1:45–2:30 — The story (45s)
+### 1:50–2:25 — The story (35s)
 
 Ties back to the Entrepreneurship & Job Creation category framing from
 `disclosure/pre-existing-platform.md`.
@@ -174,50 +179,91 @@ Ties back to the Entrepreneurship & Job Creation category framing from
 - B-roll: admin dashboard overview (non-sensitive view), or continue on the
   storefront.
 
-**VO (optional, ~104 words / ~42s):** "Sloane & Pearl runs on an AI-agent
+**VO (optional, ~87 words / ~35s):** "Sloane & Pearl runs on an AI-agent
 platform that existed before this business did — the rules allow that, as
-long as what's built on top is genuinely new. And this is: its own store,
-catalog, ad account, and customers, created from zero on June 3rd, 2026.
-What's next is more human roles, not fewer — the next hire is a second
+long as what's built on top is genuinely new. This is: its own store,
+catalog, ad account, and customers, created from zero on June 3rd. What's
+next is more human roles, not fewer — the next hire is a second
 customer-service contractor, then someone for supplier sourcing and quality
-control. Customer service today is fully human — she reviews and sends
-every reply herself. AI executes the operational decisions: pausing spend,
-writing strategy, pricing product; a person still owns every judgment call
-and every word a customer reads."
+control. Today, customer service is fully human — she reviews and sends
+every reply herself. AI executes the operational decisions; a person still
+owns every judgment call a customer sees."
 
 **Footage needed:** none new required beyond b-roll already captured; this
 section can run mostly on caption + VO over continued storefront/admin
 footage.
 
-### 2:30–2:45 — Close (15s)
+### 2:25–2:40 — Real customer, real words (15s)
 
-- Restate whichever hook line was chosen at 0:00.
-- On-screen: URL card — "sloaneandpearl.com".
+**Shot:** Text card / clean graphic (not a raw screenshot, to keep her
+unredacted email out of frame even though it's already cropped) built from
+the real testimonial: her exact words, over a subtle product-photo
+background of the sandal she ordered. Per `evidence/customer-evidence.md`,
+this is a genuine, unprompted, verified, consented testimonial — real order
+#1152, consent obtained 2026-08-14, attributed as "Y. Young" only, not her
+full name.
+
+**On-screen text (verbatim):** *"Wow..i didnt think I would hear from
+you. THANK YOU!! I love the sandal."* — Y. Young, verified customer
+
+No VO needed here — let it sit on screen for the full 15s. This is the
+"proof a real stranger is really happy," placed right before the founder
+returns, so the close lands on people, not just numbers.
+
+### 2:40–2:55 — Founder, on camera (15s)
+
+**Shot:** Back to you, on camera, direct to lens — same setup as the open,
+so it reads as a clean bookend.
+
+**Line (~28 words / ~12s):** "I built this to prove AI can run a real
+business, not just assist one. It's not perfect yet, and it's not
+profitable yet — but it's real, and you can go see it for yourself."
+
+**On-screen close card (last 2–3s, after you finish speaking):**
+"sloaneandpearl.com"
+
 - Reminder: no trademarked or unlicensed music under this or any other
   section of the video.
 
-**VO (optional, ~22 words / ~9s):** "Two months ago, this store didn't
-exist. Today it's a real business that runs on AI making real decisions.
-See it live: sloaneandpearl.com."
+## Recording checklist (this is the final shooting script)
 
-## Still needed before recording
+**Two on-camera segments (record these first — everything else cuts around them):**
+- 0:00–0:12 open line and 2:40–2:55 close line. Plain background, good
+  light on your face, phone/webcam is fine at 1080p+. Do a few takes of
+  each — the open needs to land in one breath, the close needs to sound
+  genuine, not read.
+- Fill in `[name]` in the open line before recording, or drop the name
+  entirely if you'd rather ("I'm the founder of Sloane & Pearl" also works).
 
-- Final hook line — pick one of the three candidates above (or a close
-  variant) once real footage is in hand; the "stops the scroll" test only
-  means something against actual footage, not on paper.
-- Real screen recordings of: the live storefront (home + PDP + cart), the
-  `/ads-launcher/auto-kill` history table, the Angle Loop brief (or a clean
-  text card built from `evidence/agent-logs/angle-loop-briefs.md`), the
-  admin product list/detail view showing AI-generated copy live in the CMS,
-  and the revenue figures (graph or xlsx capture).
-- Confirm no third-party trademarked content or unlicensed music appears in
-  any B-roll.
-- If any beat uses footage of the CS contractor's workspace or voice, get her
-  explicit consent first and keep her un-named/un-identifiable — this stays
-  true even though her real name is now used in the private compliance doc;
-  that was a deliberately separate decision (see `disclosure/labor-attestation.md`).
-- **This script is now grounded in the 2026-08-14 final regenerate** — the
-  figures above should not need updating again unless something changes
-  before Aug 17 (the store is currently paused, so this is expected to be
-  the last regenerate). If anything does change, re-check against
-  `financials/pnl-methodology.md` before recording.
+**Screen recordings needed (real capture, not staged):**
+- Storefront home + a product page + add-to-cart (0:12–0:27)
+- `/ads-launcher/auto-kill` history table, real rows visible
+  (0:27–~0:50) — evidence already at `evidence/screenshots/auto-kill-history-ui.png`
+  if you want to frame the live capture the same way
+- Angle Loop brief text — either screen-record the real admin view or build
+  a clean text card from `evidence/agent-logs/angle-loop-briefs.md`
+  (~0:50–1:10)
+- Revenue graphic and loss/ROAS graphic (1:10–1:50) — build these as clean
+  graphics from the real numbers rather than a raw spreadsheet screenshot,
+  they'll read better on camera
+- Testimonial text card (2:25–2:40) — build from the verbatim quote above,
+  do not screenshot `testimonial-message-thread.png` directly (keeps her
+  redacted email fully out of frame, not just cropped in a screenshot)
+
+**Before you hit export:**
+- Confirm no third-party trademarked content or unlicensed music appears
+  anywhere, including under the on-camera segments.
+- No footage of the CS contractor's workspace, face, or voice — she's
+  referred to only as "a CS contractor" / "she," never named, even though
+  her real name is used in the private compliance doc
+  (`disclosure/labor-attestation.md`) — that's a deliberately separate
+  decision.
+- Total runtime under 3:00 — this script targets ~2:55, leaving ~5s of
+  margin; if a take runs long, trim from the "story" section (1:50–2:25)
+  first, not the loss/ROAS beat or the testimonial.
+- Figures are grounded in the 2026-08-14 final regenerate and the store is
+  currently paused, so nothing here should need updating — if anything
+  material changes before you record, re-check against
+  `financials/pnl-methodology.md` first.
+- Upload publicly to YouTube/Vimeo/Youku once exported — start this early,
+  processing/availability can lag.
