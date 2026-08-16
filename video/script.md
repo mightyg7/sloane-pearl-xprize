@@ -203,8 +203,9 @@ this is a genuine, unprompted, verified, consented testimonial — real order
 #1152, consent obtained 2026-08-14, attributed as "Y. Young" only, not her
 full name.
 
-**On-screen text (verbatim):** *"Wow..i didnt think I would hear from
-you. THANK YOU!! I love the sandal."* — Y. Young, verified customer
+**On-screen text (verbatim, matches the screenshot exactly, including the
+period after "!!"):** *"Wow..i didnt think I would hear from you. THANK
+YOU!!. I love the sandal."* — Y. Young, verified customer
 
 No VO needed here — let it sit on screen for the full 15s. This is the
 "proof a real stranger is really happy," placed right before the founder

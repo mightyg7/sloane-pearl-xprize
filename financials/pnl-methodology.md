@@ -109,12 +109,11 @@ recorded when cash is paid out."* Applied as:
   a $1.00 promotional subscription credit — so this line captures Apps
   charges only, which have no such offset.
 
-  **Deliberately excludes Shopify's "Transaction fees" charges** (also
-  visible on the same invoices, ~$372.56 across the same period): these are
-  Shopify's surcharge for using a non-Shopify-Payments gateway, and that is
-  the same real cost already reflected in Row 23c's OceanPayments blended
-  rate (whose "Shopify 3rd-party gateway surcharge, 2.000%" component is
-  this exact fee). Adding both would double-count one real cost as two.
+  **Excludes Shopify's "Transaction fees" charges** (also visible on the
+  same invoices, ~$372.56 across the same period): these are Shopify's
+  surcharge for using a non-Shopify-Payments gateway, and they're carried
+  instead as row 23c's real component 4 (see below), not here — counting
+  them in both places would double-count one real cost as two.
   SG&A Software Subscriptions (row 20) stays $0 — no incremental SG&A
   software cost has been identified.
 

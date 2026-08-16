@@ -20,7 +20,7 @@ exist regardless of whether Sloane & Pearl specifically is running:
   purchased dedicated proxy, so there is no proxy cost specifically attributable
   to this store. If a dedicated proxy is assigned to it later, that would become
   a real incremental cost requiring disclosure and a line item at that time.
-- **LLM API keys** — Anthropic, OpenAI, and (once wired in, see
+- **LLM API keys** — Anthropic, OpenAI, and (since 2026-08-13, see
   `gemini-integration/write-up.md`) Gemini/Vertex AI credentials are
   account-level, shared across the platform, not provisioned per store. Unlike
   hosting, the *usage* this generates does scale and is allocated as a real
@@ -37,9 +37,9 @@ supplier invoices), its payment-processing fees and its allocated AI tokens
 appear as non-zero line items in `financials/pnl-sloane-pearl.xlsx`. **VA
 labor partially does** — row 15 (COGS Personnel) carries her real, verified
 July pay ($105.00, see `disclosure/labor-attestation.md`); August's cell is
-still blank because no August invoice has been issued as of the 2026-08-13
-final regenerate. A blank cell there is a pending input, not a claim that
-the cost is zero.
+a genuine $0 in the filed P&L, since no August invoice has been issued as
+of the 2026-08-14 final regenerate — see `financials/pnl-methodology.md`
+for how that's treated.
 
 ## Recurring costs deliberately excluded, and why
 

@@ -31,7 +31,8 @@ cutoff:
 - Its own dedicated Meta ad account (`act_1115325060591696`) and ad campaigns,
   all launched after the cutoff.
 - Its own customer base — zero overlap confirmed against fashion-autopilot's
-  other store (NOVA Cape Town), see `disclosure/related-party-revenue.md`.
+  other stores (NOVA Cape Town et al.), see
+  `disclosure/related-party-revenue.md`.
 - Its own customer-service staffing — a VA engaged specifically for this
   operation starting 2026-07-16, see `disclosure/labor-attestation.md`.
 

@@ -122,15 +122,15 @@ async function main() {
   // These come from the human-decided methodology docs, not a live query —
   // see financials/scripts/token-cost-allocation.md and
   // disclosure/labor-attestation.md. Pass as JSON env vars, e.g.:
-  //   COGS_TOKENS_JSON='{"2026-06":37.65,"2026-07":150.61}'
+  //   COGS_TOKENS_JSON='{"2026-06":37.88,"2026-07":172.84,"2026-08":42.62}'
   const cogsTokens = parseMonthlyJson("COGS_TOKENS_JSON");
   const sgaTokens = parseMonthlyJson("SGA_TOKENS_JSON");
   const cogsPersonnel = parseMonthlyJson("COGS_PERSONNEL_JSON");
   // Real Shopify "Apps" billing-invoice charges — see
-  // disclosure/pre-existing-resources.md. Deliberately excludes Shopify's
-  // "Transaction fees" line, which overlaps with the OceanPayments blended
-  // rate's own 2% "3rd-party gateway surcharge" component already applied
-  // in row 23c — including both would double-count the same real cost.
+  // disclosure/pre-existing-resources.md. Excludes Shopify's "Transaction
+  // fees" line — that real cost is carried instead as row 23c's real
+  // component 4 (REAL_FEES_JSON below), not here; counting it in both
+  // places would double-count the same real cost.
   const cogsSoftware = parseMonthlyJson("COGS_SOFTWARE_JSON");
 
   const missing: string[] = [];

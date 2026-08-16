@@ -1,5 +1,13 @@
 # Sloane & Pearl XPRIZE Submission Package Implementation Plan
 
+> **Historical planning document — not the current state.** This was the
+> build plan as of 2026-07-30 and includes draft language (e.g. an early
+> assumption that Gemini would power customer-service drafting) that was
+> later superseded. For the actual, current state of the submission, see
+> the repo's own `README.md` and `gemini-integration/write-up.md` — customer
+> service is, and always has been, fully human; Gemini shipped on
+> catalog-copy generation instead.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Build the `sloane-pearl-xprize` repo into a complete Build with Gemini XPRIZE submission package for Sloane & Pearl — disclosure docs, financial evidence scripts + filled P&L, narrative, video script, and evidence/testing-access docs — per the design at `docs/superpowers/specs/2026-07-30-xprize-submission-design.md`.
